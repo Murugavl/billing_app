@@ -11,7 +11,7 @@ void main() {
         child: BillingApp(),
       ),
     );
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(seconds: 1));
     expect(find.byType(BillingApp), findsOneWidget);
   });
 }

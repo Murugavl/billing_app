@@ -7,7 +7,9 @@ import 'package:google_fonts/google_fonts.dart';
 abstract final class AppColors {
   // --- Brand / Primary ---
   static const primaryBlue = Color(0xFF1E3A5F); // Deep slate blue
+  static const primaryNavy = Color(0xFF1E3A5F); // Alias for primaryBlue
   static const primaryBlueMid = Color(0xFF2C5282); // Medium slate blue
+  static const primarySlate = Color(0xFF2C5282); // Alias for primaryBlueMid
   static const primaryBlueLight = Color(0xFF4A90D9); // Accent blue
 
   // --- Secondary / Accent ---
@@ -26,7 +28,9 @@ abstract final class AppColors {
 
   // --- Text ---
   static const textDarkPrimary = Color(0xFF1A202C);
+  static const textPrimary = Color(0xFF1A202C); // Alias
   static const textDarkSecondary = Color(0xFF4A5568);
+  static const textSecondary = Color(0xFF4A5568); // Alias
   static const textLightPrimary = Color(0xFFF7FAFC);
   static const textLightSecondary = Color(0xFFCBD5E0);
 

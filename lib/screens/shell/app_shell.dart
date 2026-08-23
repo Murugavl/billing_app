@@ -1,4 +1,4 @@
-// AppShell — 4-tab NavigationBar shell (Dashboard, Invoices, Estimates, More)
+// AppShell — 5-tab NavigationBar shell (Dashboard, Invoices, Estimates, Purchases, More)
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -29,6 +29,12 @@ class AppShell extends StatelessWidget {
       label: 'Estimates',
     ),
     _TabItem(
+      route: AppRoutes.purchases,
+      icon: Icons.shopping_bag_outlined,
+      activeIcon: Icons.shopping_bag_rounded,
+      label: 'Purchases',
+    ),
+    _TabItem(
       route: AppRoutes.more,
       icon: Icons.more_horiz_rounded,
       activeIcon: Icons.more_horiz_rounded,
@@ -39,7 +45,8 @@ class AppShell extends StatelessWidget {
   int _indexFromLocation(String location) {
     if (location.startsWith(AppRoutes.invoices)) return 1;
     if (location.startsWith(AppRoutes.estimates)) return 2;
-    if (location.startsWith(AppRoutes.more)) return 3;
+    if (location.startsWith(AppRoutes.purchases)) return 3;
+    if (location.startsWith(AppRoutes.more)) return 4;
     return 0;
   }
 

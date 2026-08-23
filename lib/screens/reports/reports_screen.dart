@@ -1,4 +1,4 @@
-// Reports & Analytics Screen — Sales by date range, Outstanding payments, Top Customers, CSV/PDF export
+// Reports & Analytics Screen — Sales vs Purchases, Outstanding payments, Top Customers, CSV/PDF export
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -34,6 +34,7 @@ class ReportsScreen extends ConsumerWidget {
     final dateFilter = ref.watch(reportDateFilterProvider);
     final activeRange = ref.watch(activeDateRangeProvider);
     final salesReportAsync = ref.watch(salesReportProvider);
+    final purchaseReportAsync = ref.watch(purchaseReportProvider);
     final topCustomersAsync = ref.watch(topCustomersProvider);
     final outstandingAsync = ref.watch(outstandingReportProvider);
 
@@ -153,6 +154,84 @@ class ReportsScreen extends ConsumerWidget {
                       const SizedBox(height: 8),
                       Text(
                         'Avg Invoice Value: ${CurrencyFormatter.format(sales.averageInvoiceValue)}',
+                        style: theme.textTheme.bodySmall,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 16),
+
+            // ── Purchase Report Card ─────────────────────────────────────────
+            purchaseReportAsync.when(
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (err, _) => Text('Error loading purchase report: $err'),
+              data: (purchase) => Card(
+                elevation: 0,
+                color: Colors.purple.withAlpha(15),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  side: BorderSide(color: Colors.purple.withAlpha(60)),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              const Icon(Icons.shopping_bag_outlined, color: Colors.purple),
+                              const SizedBox(width: 8),
+                              Text('Purchase Summary', style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 16)),
+                            ],
+                          ),
+                          ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.purple,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                              minimumSize: Size.zero,
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            ),
+                            onPressed: purchase.bills.isEmpty
+                                ? null
+                                : () => CsvService.sharePurchaseReport(purchase.bills, dateFilter.name),
+                            icon: const Icon(Icons.file_download_outlined, size: 14),
+                            label: const Text('Export CSV', style: TextStyle(fontSize: 11)),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 14),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Total Purchase Outlay', style: theme.textTheme.bodySmall),
+                              Text(
+                                CurrencyFormatter.format(purchase.totalPurchases),
+                                style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.purple),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text('Purchase Bills', style: theme.textTheme.bodySmall),
+                              Text('${purchase.billCount}', style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.bold)),
+                            ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Avg Bill Value: ${CurrencyFormatter.format(purchase.averageBillValue)}',
                         style: theme.textTheme.bodySmall,
                       ),
                     ],

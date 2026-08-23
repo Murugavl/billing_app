@@ -11,6 +11,10 @@ import '../../screens/invoices/invoices_screen.dart';
 import '../../screens/invoices/invoice_form_screen.dart';
 import '../../screens/estimates/estimates_screen.dart';
 import '../../screens/estimates/estimate_form_screen.dart';
+import '../../screens/purchases/purchases_list_screen.dart';
+import '../../screens/purchases/purchase_bill_form_screen.dart';
+import '../../screens/purchases/purchase_bill_detail_screen.dart';
+import '../../screens/suppliers/suppliers_list_screen.dart';
 import '../../screens/more/more_screen.dart';
 import '../../screens/settings/settings_screen.dart';
 
@@ -29,6 +33,10 @@ abstract final class AppRoutes {
   static const estimates = '/estimates';
   static const estimateDetail = '/estimates/:id';
   static const newEstimate = '/estimates/new';
+  static const purchases = '/purchases';
+  static const newPurchase = '/purchases/new';
+  static const purchaseDetail = '/purchases/:id';
+  static const suppliers = '/suppliers';
   static const more = '/more';
   static const settings = '/settings';
   static const customers = '/customers';
@@ -76,6 +84,30 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const EstimateFormScreen(),
       ),
 
+      // ── New Purchase Bill ──────────────────────────────────────────────────
+      GoRoute(
+        path: AppRoutes.newPurchase,
+        name: 'newPurchase',
+        builder: (context, state) => const PurchaseBillFormScreen(),
+      ),
+
+      // ── Purchase Detail ────────────────────────────────────────────────────
+      GoRoute(
+        path: AppRoutes.purchaseDetail,
+        name: 'purchaseDetail',
+        builder: (context, state) {
+          final id = int.parse(state.pathParameters['id']!);
+          return PurchaseBillDetailScreen(billId: id);
+        },
+      ),
+
+      // ── Suppliers Directory ────────────────────────────────────────────────
+      GoRoute(
+        path: AppRoutes.suppliers,
+        name: 'suppliers',
+        builder: (context, state) => const SuppliersListScreen(),
+      ),
+
       // ── Customers ──────────────────────────────────────────────────────────
       GoRoute(
         path: AppRoutes.customers,
@@ -108,6 +140,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             path: AppRoutes.estimates,
             name: 'estimates',
             builder: (context, state) => const EstimatesScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.purchases,
+            name: 'purchases',
+            builder: (context, state) => const PurchasesListScreen(),
           ),
           GoRoute(
             path: AppRoutes.more,

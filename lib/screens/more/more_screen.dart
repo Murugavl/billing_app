@@ -1,4 +1,4 @@
-// More tab — hub for Customers, Items, Settings, and app info
+// More tab — hub for Customers, Suppliers, Items, Settings, and app info
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -34,14 +34,21 @@ class MoreScreen extends ConsumerWidget {
           const SizedBox(height: 20),
 
           // ── Catalogue section ──────────────────────────────────────────────
-          _SectionHeader('CATALOGUE'),
+          _SectionHeader('CATALOGUE & MASTERS'),
           const SizedBox(height: 8),
           _MenuTile(
             icon: Icons.people_rounded,
             label: 'Customers',
-            subtitle: 'Manage your customer list',
+            subtitle: 'Manage customer directory',
             iconColor: const Color(0xFF3182CE),
             onTap: () => context.push('/customers'),
+          ),
+          _MenuTile(
+            icon: Icons.storefront_rounded,
+            label: 'Suppliers',
+            subtitle: 'Manage supplier directory',
+            iconColor: Colors.purple,
+            onTap: () => context.push('/suppliers'),
           ),
           _MenuTile(
             icon: Icons.inventory_2_rounded,
@@ -58,7 +65,7 @@ class MoreScreen extends ConsumerWidget {
           _MenuTile(
             icon: Icons.analytics_rounded,
             label: 'Reports & Analytics',
-            subtitle: 'Sales, top customers, outstanding balances',
+            subtitle: 'Sales vs Purchases, supplier reports, CSV export',
             iconColor: const Color(0xFFD69E2E),
             onTap: () {
               Navigator.of(context).push(
@@ -88,7 +95,7 @@ class MoreScreen extends ConsumerWidget {
           _MenuTile(
             icon: Icons.info_outline_rounded,
             label: 'About',
-            subtitle: 'Ponsri Billing v1.0.0',
+            subtitle: 'Billwise v1.0.0',
             iconColor: cs.onSurface.withAlpha(120),
             onTap: () => _showAbout(context),
           ),
@@ -101,9 +108,9 @@ class MoreScreen extends ConsumerWidget {
   void _showAbout(BuildContext context) {
     showAboutDialog(
       context: context,
-      applicationName: 'Ponsri Billing',
+      applicationName: 'Billwise',
       applicationVersion: '1.0.0',
-      applicationLegalese: '© 2025 Ponsri Enterprises',
+      applicationLegalese: '© 2026 Billwise Invoicing',
     );
   }
 }

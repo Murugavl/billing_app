@@ -1,4 +1,4 @@
-// Home / Dashboard screen — Live dashboard summary cards & recent activity
+// Home / Dashboard screen — Live dashboard summary cards & Sales vs Purchases Net Margin analytics
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -24,12 +24,13 @@ class HomeScreen extends ConsumerWidget {
     final cs = theme.colorScheme;
     final profileAsync = ref.watch(businessProfileProvider);
     final statsAsync = ref.watch(dashboardStatsProvider);
+    final selectedRange = ref.watch(dashboardDateRangeProvider);
     final docsDao = ref.watch(documentsDaoProvider);
 
     final businessName = profileAsync.when(
-      data: (p) => p?.businessName ?? 'Ponsri Enterprises',
-      loading: () => 'Ponsri Enterprises',
-      error: (_, __) => 'Ponsri Enterprises',
+      data: (p) => p?.businessName ?? 'Billwise',
+      loading: () => 'Billwise',
+      error: (_, __) => 'Billwise',
     );
 
     return Scaffold(
@@ -65,42 +66,65 @@ class HomeScreen extends ConsumerWidget {
             _GreetingCard(businessName: businessName, date: DateTime.now()),
             const SizedBox(height: 20),
 
-            // ── Dashboard Summary Cards ─────────────────────────────────────
-            Text('Dashboard Summary', style: theme.textTheme.titleMedium),
+            // ── Date Range Filter Bar ───────────────────────────────────────
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Financial Overview', style: theme.textTheme.titleMedium),
+                DropdownButton<DashboardDateRange>(
+                  value: selectedRange,
+                  underline: const SizedBox(),
+                  icon: const Icon(Icons.calendar_month_outlined, size: 18),
+                  items: const [
+                    DropdownMenuItem(
+                        value: DashboardDateRange.today, child: Text('Today')),
+                    DropdownMenuItem(
+                        value: DashboardDateRange.thisWeek, child: Text('This Week')),
+                    DropdownMenuItem(
+                        value: DashboardDateRange.thisMonth, child: Text('This Month')),
+                    DropdownMenuItem(
+                        value: DashboardDateRange.thisYear, child: Text('This Year')),
+                    DropdownMenuItem(
+                        value: DashboardDateRange.all, child: Text('All Time')),
+                  ],
+                  onChanged: (val) {
+                    if (val != null) {
+                      ref.read(dashboardDateRangeProvider.notifier).setDateRange(val);
+                    }
+                  },
+                ),
+              ],
+            ),
             const SizedBox(height: 12),
 
+            // ── Sales vs Purchases Net Margin Card ──────────────────────────
             statsAsync.when(
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (err, _) => Text('Error loading stats: $err'),
               data: (stats) => Column(
                 children: [
-                  // Total Outstanding Card
-                  _BigStatCard(
-                    label: 'Total Outstanding Balance',
-                    value: CurrencyFormatter.format(stats.totalOutstanding),
-                    subtitle: 'Sum of unpaid invoice balances',
-                    icon: Icons.account_balance_wallet_rounded,
-                    color: AppColors.error,
-                  ),
-                  const SizedBox(height: 12),
+                  // Sales vs Purchases Card
+                  _SalesVsPurchasesCard(stats: stats),
+                  const SizedBox(height: 16),
+
+                  // Total Outstanding & Draft Estimates
                   Row(
                     children: [
-                      // This Month Sales
                       Expanded(
                         child: _SmallStatCard(
-                          label: "This Month Sales",
-                          value: CurrencyFormatter.format(stats.thisMonthSales),
-                          icon: Icons.trending_up_rounded,
-                          color: AppColors.success,
+                          label: "Unpaid Sales",
+                          value: CurrencyFormatter.format(stats.totalOutstanding),
+                          subtitle: 'Due from customers',
+                          icon: Icons.account_balance_wallet_rounded,
+                          color: AppColors.error,
                         ),
                       ),
                       const SizedBox(width: 12),
-                      // Draft Estimates
                       Expanded(
                         child: _SmallStatCard(
                           label: "Draft Estimates",
                           value: '${stats.draftEstimatesCount}',
-                          subtitle: 'Awaiting response',
+                          subtitle: 'Pending quote',
                           icon: Icons.request_quote_rounded,
                           color: AppColors.amberDark,
                         ),
@@ -126,7 +150,6 @@ class HomeScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 8),
 
-            // Recent Documents List from Database
             FutureBuilder<List<Document>>(
               future: docsDao.getAllDocuments(),
               builder: (ctx, snapshot) {
@@ -135,7 +158,6 @@ class HomeScreen extends ConsumerWidget {
                   return const _EmptyDocumentsCard();
                 }
 
-                // Show top 5 recent documents
                 final recent = list.take(5).toList();
 
                 return ListView.separated(
@@ -247,8 +269,8 @@ class _GreetingCard extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            AppColors.primaryBlue,
-            AppColors.primaryBlue.withAlpha(220),
+            AppColors.primaryNavy,
+            AppColors.primaryNavy.withAlpha(220),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -288,56 +310,161 @@ class _GreetingCard extends StatelessWidget {
   }
 }
 
-class _BigStatCard extends StatelessWidget {
-  const _BigStatCard({
-    required this.label,
-    required this.value,
-    required this.subtitle,
-    required this.icon,
-    required this.color,
-  });
+class _SalesVsPurchasesCard extends StatelessWidget {
+  final DashboardStats stats;
 
-  final String label;
-  final String value;
-  final String subtitle;
-  final IconData icon;
-  final Color color;
+  const _SalesVsPurchasesCard({required this.stats});
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final cs = theme.colorScheme;
+    final isProfit = stats.netMargin >= 0;
+    final totalVolume = stats.totalSales + stats.totalPurchases;
+    final salesRatio = totalVolume == 0 ? 0.5 : (stats.totalSales / totalVolume);
+    final purchasesRatio = totalVolume == 0 ? 0.5 : (stats.totalPurchases / totalVolume);
 
     return Card(
       elevation: 0,
-      color: color.withAlpha(15),
+      color: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: color.withAlpha(60)),
+        side: BorderSide(color: Colors.grey.shade300),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
+        padding: const EdgeInsets.all(18),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: color.withAlpha(30),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(icon, color: color, size: 24),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Sales vs Purchases',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.primaryNavy,
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: isProfit ? Colors.green.withOpacity(0.12) : Colors.red.withOpacity(0.12),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    isProfit ? 'PROFIT' : 'LOSS',
+                    style: TextStyle(
+                      color: isProfit ? Colors.green.shade800 : Colors.red.shade800,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 11,
+                    ),
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(label, style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w500, color: cs.onSurface.withAlpha(160))),
-                  const SizedBox(height: 2),
-                  Text(value, style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.bold, color: color)),
-                  Text(subtitle, style: theme.textTheme.bodySmall),
-                ],
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Row(
+                        children: [
+                          Icon(Icons.arrow_upward, color: Colors.green, size: 16),
+                          SizedBox(width: 4),
+                          Text('Total Sales', style: TextStyle(fontSize: 12, color: AppColors.textSecondary)),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        CurrencyFormatter.format(stats.totalSales),
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.green,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(height: 36, width: 1, color: Colors.grey.shade300),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Row(
+                          children: [
+                            Icon(Icons.arrow_downward, color: Colors.red, size: 16),
+                            SizedBox(width: 4),
+                            Text('Total Purchases', style: TextStyle(fontSize: 12, color: AppColors.textSecondary)),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          CurrencyFormatter.format(stats.totalPurchases),
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 16),
+
+            // Visual Comparison Bar Chart
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: SizedBox(
+                height: 12,
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: (salesRatio * 100).round().clamp(1, 99),
+                      child: Container(color: Colors.green),
+                    ),
+                    const SizedBox(width: 2),
+                    Expanded(
+                      flex: (purchasesRatio * 100).round().clamp(1, 99),
+                      child: Container(color: Colors.red),
+                    ),
+                  ],
+                ),
               ),
+            ),
+
+            const SizedBox(height: 16),
+            const Divider(height: 1),
+            const SizedBox(height: 12),
+
+            // Net Margin Row
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Net Margin (Sales − Purchases):',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
+                ),
+                Text(
+                  CurrencyFormatter.format(stats.netMargin),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    color: isProfit ? Colors.green.shade800 : Colors.red.shade800,
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -470,8 +597,6 @@ class _StatusBadge extends StatelessWidget {
   }
 }
 
-// ── Bottom sheet ──────────────────────────────────────────────────────────────
-
 class _CreateBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -499,7 +624,7 @@ class _CreateBottomSheet extends StatelessWidget {
             Text('Create New', style: theme.textTheme.titleLarge),
             const SizedBox(height: 4),
             Text(
-              'Choose a document type to create',
+              'Choose a transaction type to create',
               style: theme.textTheme.bodySmall?.copyWith(color: cs.onSurface.withAlpha(150)),
             ),
             const SizedBox(height: 20),
@@ -509,7 +634,7 @@ class _CreateBottomSheet extends StatelessWidget {
                   child: _CreateOption(
                     icon: Icons.receipt_long_rounded,
                     label: 'Invoice',
-                    subtitle: 'Bill for completed work',
+                    subtitle: 'Bill customer',
                     color: AppColors.primaryBlue,
                     onTap: () {
                       Navigator.pop(context);
@@ -517,16 +642,29 @@ class _CreateBottomSheet extends StatelessWidget {
                     },
                   ),
                 ),
-                const SizedBox(width: 14),
+                const SizedBox(width: 10),
                 Expanded(
                   child: _CreateOption(
                     icon: Icons.description_rounded,
                     label: 'Estimate',
-                    subtitle: 'Quote for upcoming work',
+                    subtitle: 'Quote customer',
                     color: AppColors.amberDark,
                     onTap: () {
                       Navigator.pop(context);
                       context.push('/estimates/new');
+                    },
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: _CreateOption(
+                    icon: Icons.shopping_bag_rounded,
+                    label: 'Purchase',
+                    subtitle: 'Supplier bill',
+                    color: Colors.purple,
+                    onTap: () {
+                      Navigator.pop(context);
+                      context.push('/purchases/new');
                     },
                   ),
                 ),
@@ -562,7 +700,7 @@ class _CreateOption extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: color.withAlpha(15),
           borderRadius: BorderRadius.circular(16),
@@ -572,19 +710,21 @@ class _CreateOption extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: color.withAlpha(30),
                 shape: BoxShape.circle,
               ),
-              child: Icon(icon, color: color, size: 24),
+              child: Icon(icon, color: color, size: 20),
             ),
-            const SizedBox(height: 12),
-            Text(label, style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 16)),
+            const SizedBox(height: 10),
+            Text(label, style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 14)),
             const SizedBox(height: 2),
             Text(
               subtitle,
-              style: TextStyle(fontSize: 11, color: cs.onSurface.withAlpha(150)),
+              style: TextStyle(fontSize: 10, color: cs.onSurface.withAlpha(150)),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),

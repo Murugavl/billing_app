@@ -1,4 +1,4 @@
-// Riverpod providers for Reports & Analytics
+// Riverpod providers for Reports & Analytics — Sales vs Purchases, Suppliers, CSV Export
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../db/app_database.dart';
@@ -30,19 +30,31 @@ class CustomerRevenue {
   });
 }
 
-class ItemSalesSummary {
-  final int? itemId;
-  final String itemName;
-  final double totalQuantity;
-  final String unit;
-  final double totalRevenue;
+class SalesReportData {
+  final double totalSales;
+  final int invoiceCount;
+  final double averageInvoiceValue;
+  final List<Document> invoices;
 
-  const ItemSalesSummary({
-    this.itemId,
-    required this.itemName,
-    required this.totalQuantity,
-    required this.unit,
-    required this.totalRevenue,
+  const SalesReportData({
+    required this.totalSales,
+    required this.invoiceCount,
+    required this.averageInvoiceValue,
+    required this.invoices,
+  });
+}
+
+class PurchaseReportData {
+  final double totalPurchases;
+  final int billCount;
+  final double averageBillValue;
+  final List<PurchaseBill> bills;
+
+  const PurchaseReportData({
+    required this.totalPurchases,
+    required this.billCount,
+    required this.averageBillValue,
+    required this.bills,
   });
 }
 
@@ -59,20 +71,6 @@ class OutstandingCustomerReport {
     this.customerPhone,
     required this.totalOutstanding,
     required this.unpaidInvoicesCount,
-  });
-}
-
-class SalesReportData {
-  final double totalSales;
-  final int invoiceCount;
-  final double averageInvoiceValue;
-  final List<Document> invoices;
-
-  const SalesReportData({
-    required this.totalSales,
-    required this.invoiceCount,
-    required this.averageInvoiceValue,
-    required this.invoices,
   });
 }
 
@@ -153,6 +151,33 @@ final salesReportProvider = FutureProvider<SalesReportData>((ref) async {
     invoiceCount: count,
     averageInvoiceValue: double.parse(avg.toStringAsFixed(2)),
     invoices: filtered,
+  );
+});
+
+/// Purchase Report Provider
+final purchaseReportProvider = FutureProvider<PurchaseReportData>((ref) async {
+  final purchasesDao = ref.watch(purchaseBillsDaoProvider);
+  final range = ref.watch(activeDateRangeProvider);
+
+  final bills = await purchasesDao.getAllPurchaseBills();
+  final filtered = bills.where((b) {
+    return b.date.isAfter(range.start.subtract(const Duration(seconds: 1))) &&
+        b.date.isBefore(range.end.add(const Duration(seconds: 1)));
+  }).toList();
+
+  double totalPurchases = 0.0;
+  for (final bill in filtered) {
+    totalPurchases += bill.grandTotal;
+  }
+
+  final count = filtered.length;
+  final avg = count > 0 ? totalPurchases / count : 0.0;
+
+  return PurchaseReportData(
+    totalPurchases: double.parse(totalPurchases.toStringAsFixed(2)),
+    billCount: count,
+    averageBillValue: double.parse(avg.toStringAsFixed(2)),
+    bills: filtered,
   );
 });
 

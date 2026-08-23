@@ -29,6 +29,30 @@ class CsvService {
     await _shareCsvFile(buffer.toString(), 'sales_report_$rangeLabel.csv');
   }
 
+  /// Export Purchase Report to CSV
+  static Future<void> sharePurchaseReport(List<PurchaseBill> bills, String rangeLabel) async {
+    final buffer = StringBuffer();
+    buffer.writeln('Purchase Report ($rangeLabel)');
+    buffer.writeln('Bill Number,Date,Supplier ID,Subtotal,Total Tax,Grand Total,Amount Paid,Balance Due,Status');
+
+    for (final bill in bills) {
+      final line = [
+        '"${bill.billNumber}"',
+        '"${DateFormatter.display(bill.date)}"',
+        bill.supplierId,
+        bill.subtotal.toStringAsFixed(2),
+        bill.totalTax.toStringAsFixed(2),
+        bill.grandTotal.toStringAsFixed(2),
+        bill.amountPaid.toStringAsFixed(2),
+        bill.balanceDue.toStringAsFixed(2),
+        '"${bill.status}"',
+      ].join(',');
+      buffer.writeln(line);
+    }
+
+    await _shareCsvFile(buffer.toString(), 'purchase_report_$rangeLabel.csv');
+  }
+
   /// Export Outstanding Payments Report to CSV
   static Future<void> shareOutstandingReport(List<OutstandingCustomerReport> report) async {
     final buffer = StringBuffer();

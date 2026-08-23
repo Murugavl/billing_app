@@ -9,6 +9,7 @@ import '../../core/theme/app_theme.dart';
 import '../../db/app_database.dart';
 import '../../db/daos/documents_dao.dart';
 import '../../providers/business_profile_provider.dart';
+import '../../providers/estimates_provider.dart';
 import '../../services/database_provider.dart';
 import '../../utils/currency_formatter.dart';
 import '../../utils/date_formatter.dart';
@@ -43,7 +44,7 @@ class _EstimateFormScreenState extends ConsumerState<EstimateFormScreen> {
   bool _isLoading = true;
   bool _isSaving = false;
 
-  bool get _isEditing => widget.documentWithLines != null;
+  bool get _isEditing => widget.documentWithLines != null && widget.documentWithLines!.document.id > 0;
 
   @override
   void initState() {
@@ -55,7 +56,7 @@ class _EstimateFormScreenState extends ConsumerState<EstimateFormScreen> {
     final docsDao = ref.read(documentsDaoProvider);
     final custDao = ref.read(customersDaoProvider);
 
-    if (_isEditing) {
+    if (widget.documentWithLines != null) {
       final doc = widget.documentWithLines!.document;
       final lines = widget.documentWithLines!.lineItems;
 
@@ -334,6 +335,8 @@ class _EstimateFormScreenState extends ConsumerState<EstimateFormScreen> {
           lines: linesCompanions,
         );
       }
+
+      ref.invalidate(estimatesStreamProvider);
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

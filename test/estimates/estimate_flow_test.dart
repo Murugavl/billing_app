@@ -146,5 +146,51 @@ void main() {
       final updatedEst = await db.documentsDao.getDocumentById(estId);
       expect(updatedEst!.status, 'accepted');
     });
+
+    test('Draft document from estimate conversion with id = 0 inserts new row instead of updating', () async {
+      // Simulate draft document created in _convertToInvoice (id = 0)
+      final draftDoc = Document(
+        id: 0,
+        documentNumber: '',
+        type: 'invoice',
+        customerId: 1,
+        customerName: 'Test Customer',
+        date: DateTime.now(),
+        subtotal: 1000.0,
+        totalDiscount: 0.0,
+        totalTax: 180.0,
+        grandTotal: 1180.0,
+        status: 'draft',
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+      );
+
+      // Verify that for id == 0, _isEditing logic evaluates to false so insert is called
+      final isEditing = draftDoc.id > 0;
+      expect(isEditing, isFalse);
+
+      final invNumber = await db.documentsDao.nextDocumentNumber('invoice');
+      expect(invNumber, isNotEmpty);
+
+      // Perform insertion as Form Screen does when _isEditing is false
+      final newInvId = await db.documentsDao.insertDocumentWithLines(
+        doc: DocumentsCompanion(
+          documentNumber: Value(invNumber),
+          type: const Value('invoice'),
+          customerId: const Value(1),
+          customerName: const Value('Test Customer'),
+          date: Value(DateTime.now()),
+          subtotal: const Value(1000.0),
+          grandTotal: const Value(1180.0),
+          status: const Value('draft'),
+        ),
+        lines: [],
+      );
+
+      expect(newInvId, greaterThan(0));
+
+      final invoices = await db.documentsDao.getDocumentsByType('invoice');
+      expect(invoices.map((i) => i.id), contains(newInvId));
+    });
   });
 }

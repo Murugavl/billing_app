@@ -10,6 +10,7 @@ import '../../core/theme/app_theme.dart';
 import '../../db/app_database.dart';
 import '../../db/daos/documents_dao.dart';
 import '../../providers/business_profile_provider.dart';
+import '../../providers/invoices_provider.dart';
 import '../../services/database_provider.dart';
 import '../../utils/currency_formatter.dart';
 import '../../utils/date_formatter.dart';
@@ -44,7 +45,7 @@ class _InvoiceFormScreenState extends ConsumerState<InvoiceFormScreen> {
   bool _isLoading = true;
   bool _isSaving = false;
 
-  bool get _isEditing => widget.documentWithLines != null;
+  bool get _isEditing => widget.documentWithLines != null && widget.documentWithLines!.document.id > 0;
 
   @override
   void initState() {
@@ -56,7 +57,7 @@ class _InvoiceFormScreenState extends ConsumerState<InvoiceFormScreen> {
     final docsDao = ref.read(documentsDaoProvider);
     final custDao = ref.read(customersDaoProvider);
 
-    if (_isEditing) {
+    if (widget.documentWithLines != null) {
       final doc = widget.documentWithLines!.document;
       final lines = widget.documentWithLines!.lineItems;
 
@@ -271,6 +272,8 @@ class _InvoiceFormScreenState extends ConsumerState<InvoiceFormScreen> {
           lines: linesCompanions,
         );
       }
+
+      ref.invalidate(invoicesStreamProvider);
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

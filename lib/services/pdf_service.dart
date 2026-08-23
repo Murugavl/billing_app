@@ -1,6 +1,7 @@
-// PDF Generation Service for Invoices and Estimates
+// PDF Generation Service for Invoices and Estimates — Noto Sans Unicode & Proportional Logo Box
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
@@ -11,12 +12,38 @@ import '../utils/date_formatter.dart';
 import '../utils/number_to_words.dart';
 
 class PdfService {
+  /// Loads Noto Sans TTF font supporting Unicode U+20B9 (₹ Rupee symbol)
+  static Future<pw.Font> _loadFont(String assetPath, {required bool isBold}) async {
+    try {
+      final byteData = await rootBundle.load(assetPath);
+      return pw.Font.ttf(byteData);
+    } catch (_) {
+      try {
+        final file = File(assetPath);
+        if (file.existsSync()) {
+          final bytes = file.readAsBytesSync();
+          return pw.Font.ttf(bytes.buffer.asByteData());
+        }
+      } catch (_) {}
+      return isBold ? pw.Font.helveticaBold() : pw.Font.helvetica();
+    }
+  }
+
   /// Generates a PDF byte array for a given DocumentWithLines and BusinessProfile
   static Future<Uint8List> generateDocumentPdf({
     required DocumentWithLines documentWithLines,
     required BusinessProfileData? profile,
   }) async {
-    final pdf = pw.Document();
+    final ttfRegular = await _loadFont('assets/fonts/NotoSans-Regular.ttf', isBold: false);
+    final ttfBold = await _loadFont('assets/fonts/NotoSans-Bold.ttf', isBold: true);
+
+    final pdf = pw.Document(
+      theme: pw.ThemeData.withFont(
+        base: ttfRegular,
+        bold: ttfBold,
+      ),
+    );
+
     final doc = documentWithLines.document;
     final lines = documentWithLines.lineItems;
     final isInvoice = doc.type == 'invoice';
@@ -54,12 +81,17 @@ class PdfService {
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [
               if (logoImage != null) ...[
-                pw.Container(
-                  width: 60,
-                  height: 60,
-                  child: pw.Image(logoImage),
+                pw.ConstrainedBox(
+                  constraints: const pw.BoxConstraints(
+                    maxHeight: 65,
+                    maxWidth: 140,
+                  ),
+                  child: pw.Image(
+                    logoImage,
+                    fit: pw.BoxFit.contain,
+                  ),
                 ),
-                pw.SizedBox(width: 12),
+                pw.SizedBox(width: 14),
               ],
               pw.Expanded(
                 child: pw.Column(
@@ -176,9 +208,9 @@ class PdfService {
                   _tableCell('Item & Description', isHeader: true, textColor: tableHeaderTextColor),
                   _tableCell('HSN/SAC', isHeader: true, textColor: tableHeaderTextColor),
                   _tableCell('Qty', isHeader: true, textColor: tableHeaderTextColor, align: pw.Alignment.centerRight),
-                  _tableCell('Price (Rs.)', isHeader: true, textColor: tableHeaderTextColor, align: pw.Alignment.centerRight),
-                  _tableCell('Disc (Rs.)', isHeader: true, textColor: tableHeaderTextColor, align: pw.Alignment.centerRight),
-                  _tableCell('Amount (Rs.)', isHeader: true, textColor: tableHeaderTextColor, align: pw.Alignment.centerRight),
+                  _tableCell('Price (₹)', isHeader: true, textColor: tableHeaderTextColor, align: pw.Alignment.centerRight),
+                  _tableCell('Disc (₹)', isHeader: true, textColor: tableHeaderTextColor, align: pw.Alignment.centerRight),
+                  _tableCell('Amount (₹)', isHeader: true, textColor: tableHeaderTextColor, align: pw.Alignment.centerRight),
                 ],
               ),
               // Items Rows
@@ -192,9 +224,9 @@ class PdfService {
                     _tableCell(lines[i].itemName),
                     _tableCell(lines[i].hsnSacCode ?? '-'),
                     _tableCell('${lines[i].quantity} ${lines[i].unit}', align: pw.Alignment.centerRight),
-                    _tableCell(CurrencyFormatter.format(lines[i].pricePerUnit).replaceAll('₹', ''), align: pw.Alignment.centerRight),
-                    _tableCell(lines[i].discountAmount > 0 ? CurrencyFormatter.format(lines[i].discountAmount).replaceAll('₹', '') : '-', align: pw.Alignment.centerRight),
-                    _tableCell(CurrencyFormatter.format(lines[i].lineTotal).replaceAll('₹', ''), align: pw.Alignment.centerRight, isBold: true),
+                    _tableCell(CurrencyFormatter.format(lines[i].pricePerUnit), align: pw.Alignment.centerRight),
+                    _tableCell(lines[i].discountAmount > 0 ? CurrencyFormatter.format(lines[i].discountAmount) : '-', align: pw.Alignment.centerRight),
+                    _tableCell(CurrencyFormatter.format(lines[i].lineTotal), align: pw.Alignment.centerRight, isBold: true),
                   ],
                 ),
             ],
@@ -317,10 +349,15 @@ class PdfService {
                 crossAxisAlignment: pw.CrossAxisAlignment.center,
                 children: [
                   if (signatureImage != null) ...[
-                    pw.Container(
-                      width: 90,
-                      height: 40,
-                      child: pw.Image(signatureImage),
+                    pw.ConstrainedBox(
+                      constraints: const pw.BoxConstraints(
+                        maxHeight: 40,
+                        maxWidth: 100,
+                      ),
+                      child: pw.Image(
+                        signatureImage,
+                        fit: pw.BoxFit.contain,
+                      ),
                     ),
                     pw.SizedBox(height: 4),
                   ] else ...[

@@ -1,4 +1,5 @@
 // PDF Service Unit Test
+import 'dart:io';
 import 'package:billwise/db/app_database.dart';
 import 'package:billwise/services/pdf_service.dart';
 import 'package:drift/drift.dart' show Value;
@@ -80,7 +81,7 @@ void main() {
       expect(pdfBytes.length, greaterThan(1000));
     });
 
-    test('generates non-empty Uint8List byte array for estimate PDF', () async {
+    test('generates estimate PDF with uploaded logo and ₹3,540.00 currency values', () async {
       final custId = await db.customersDao.insertCustomer(
         const CustomersCompanion(
           name: Value('Metro Water Board'),
@@ -95,25 +96,21 @@ void main() {
           customerId: Value(custId),
           customerName: const Value('Metro Water Board'),
           date: Value(DateTime.now()),
-          subtotal: const Value(19200.0),
+          subtotal: const Value(3540.0),
           totalDiscount: const Value(0.0),
-          totalTax: const Value(0.0),
-          grandTotal: const Value(19200.0),
-          amountInWords: const Value('Nineteen Thousand Two Hundred Rupees Only'),
+          totalTax: const Value(540.0),
+          grandTotal: const Value(3540.0),
+          amountInWords: const Value('Three Thousand Five Hundred Forty Rupees Only'),
           status: const Value('sent'),
         ),
         lines: [
           const DocumentLineItemsCompanion(
-            itemName: Value('Manual 40 NB TMS'),
+            itemName: Value('Water Filter Cartridge'),
             quantity: Value(1.0),
-            pricePerUnit: Value(15000.0),
-            lineTotal: Value(15000.0),
-          ),
-          const DocumentLineItemsCompanion(
-            itemName: Value('Flow Meter'),
-            quantity: Value(1.0),
-            pricePerUnit: Value(4200.0),
-            lineTotal: Value(4200.0),
+            pricePerUnit: Value(3000.0),
+            taxableAmount: Value(3000.0),
+            taxAmount: Value(540.0),
+            lineTotal: Value(3540.0),
           ),
         ],
       );
@@ -121,9 +118,20 @@ void main() {
       final docWithLines = await db.documentsDao.getDocumentWithLines(docId);
       expect(docWithLines, isNotNull);
 
+      final logoFile = File('assets/images/app_logo.png');
+
+      final profile = BusinessProfileData(
+        id: 1,
+        businessName: 'Ponsri Enterprises',
+        addressLine: 'Chennai, TN',
+        logoPath: logoFile.existsSync() ? logoFile.path : null,
+        phone: '9876543210',
+        updatedAt: DateTime.now(),
+      );
+
       final pdfBytes = await PdfService.generateDocumentPdf(
         documentWithLines: docWithLines!,
-        profile: null,
+        profile: profile,
       );
 
       expect(pdfBytes, isNotNull);

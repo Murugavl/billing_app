@@ -23,13 +23,9 @@ class CurrencyFormatter {
     return _inrFormatter.format(amount);
   }
 
-  /// Formats [amount] for PDF rendering using `Rs. ` (compatible with standard PDF fonts).
+  /// Formats [amount] for PDF rendering using ₹ (Indian Rupee).
   static String formatPdf(double amount) {
-    return NumberFormat.currency(
-      locale: 'en_IN',
-      symbol: 'Rs. ',
-      decimalDigits: 2,
-    ).format(amount);
+    return _inrFormatter.format(amount);
   }
 
   /// Formats [amount] compactly. Example: `1234567` → `₹12.35L`

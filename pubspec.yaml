@@ -1,0 +1,63 @@
+name: billwise
+description: "Offline-first billing and invoicing app for small businesses — Billwise."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Database — drift (schema migrations, type-safe queries)
+  drift: ^2.18.0
+  drift_flutter: ^0.2.1
+  sqlite3_flutter_libs: ^0.5.24
+
+  # State management — Riverpod
+  flutter_riverpod: ^3.3.1
+  riverpod_annotation: ^4.0.2
+
+  # Navigation
+  go_router: ^17.5.0
+
+  # PDF generation & printing
+  pdf: ^3.11.1
+  printing: ^5.13.1
+
+  # File system
+  path_provider: ^2.1.3
+  path: ^1.9.0
+
+  # Sharing
+  share_plus: ^13.3.0
+
+  # Internationalisation (currency + date formatting — default INR)
+  intl: ^0.20.3
+
+  # Image picking (for business logo, product images)
+  image_picker: ^1.1.2
+
+  # Google Fonts (Inter for professional typography)
+  google_fonts: ^8.2.1
+  shared_preferences: ^2.2.3
+
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  # Code generation for drift + riverpod
+  build_runner: ^2.4.11
+  drift_dev: ^2.18.0
+  riverpod_generator: ^4.0.3
+  riverpod_lint: ^3.1.3
+
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/

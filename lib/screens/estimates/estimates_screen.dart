@@ -314,11 +314,14 @@ class _EstimatesScreenState extends ConsumerState<EstimatesScreen> {
                         ),
                         title: Row(
                           children: [
-                            Text(
-                              doc.documentNumber,
-                              style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 15),
+                            Expanded(
+                              child: Text(
+                                doc.documentNumber,
+                                style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 15),
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
-                            const Spacer(),
+                            const SizedBox(width: 8),
                             Text(
                               CurrencyFormatter.format(doc.grandTotal),
                               style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 15),

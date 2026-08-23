@@ -43,21 +43,29 @@ class SectionCard extends StatelessWidget {
                 Icon(icon, size: 18, color: cs.primary),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: Text(
-                    title,
-                    style: GoogleFonts.inter(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      color: cs.primary,
-                      letterSpacing: 0.3,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      title,
+                      style: GoogleFonts.inter(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: cs.primary,
+                        letterSpacing: 0.3,
+                      ),
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 if (trailing != null) ...[
                   const SizedBox(width: 8),
-                  trailing!,
+                  Flexible(
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerRight,
+                      child: trailing!,
+                    ),
+                  ),
                 ],
               ],
             ),

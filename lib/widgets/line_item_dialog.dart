@@ -196,13 +196,25 @@ class _LineItemDialogState extends ConsumerState<LineItemDialog> {
               if (_showCatalogPicker) ...[
                 // Catalog picker mode
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Select from Catalog', style: theme.textTheme.titleSmall),
-                    TextButton.icon(
-                      onPressed: () => setState(() => _showCatalogPicker = false),
-                      icon: const Icon(Icons.edit_note_rounded, size: 18),
-                      label: const Text('Custom / Manual Entry'),
+                    Expanded(
+                      child: Text(
+                        'Select from Catalog',
+                        style: theme.textTheme.titleSmall,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Flexible(
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: Alignment.centerRight,
+                        child: TextButton.icon(
+                          onPressed: () => setState(() => _showCatalogPicker = false),
+                          icon: const Icon(Icons.edit_note_rounded, size: 18),
+                          label: const Text('Custom / Manual Entry'),
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -253,13 +265,25 @@ class _LineItemDialogState extends ConsumerState<LineItemDialog> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('Item Details', style: theme.textTheme.titleSmall),
-                              TextButton.icon(
-                                onPressed: () => setState(() => _showCatalogPicker = true),
-                                icon: const Icon(Icons.search_rounded, size: 16),
-                                label: const Text('Pick from Catalog'),
+                              Expanded(
+                                child: Text(
+                                  'Item Details',
+                                  style: theme.textTheme.titleSmall,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Flexible(
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  alignment: Alignment.centerRight,
+                                  child: TextButton.icon(
+                                    onPressed: () => setState(() => _showCatalogPicker = true),
+                                    icon: const Icon(Icons.search_rounded, size: 16),
+                                    label: const Text('Pick from Catalog'),
+                                  ),
+                                ),
                               ),
                             ],
                           ),

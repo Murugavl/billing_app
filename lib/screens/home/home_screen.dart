@@ -377,12 +377,16 @@ class _SalesVsPurchasesCard extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: 4),
-                      Text(
-                        CurrencyFormatter.format(stats.totalSales),
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.green,
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          CurrencyFormatter.format(stats.totalSales),
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green,
+                          ),
                         ),
                       ),
                     ],
@@ -403,12 +407,16 @@ class _SalesVsPurchasesCard extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 4),
-                        Text(
-                          CurrencyFormatter.format(stats.totalPurchases),
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.red,
+                        FittedBox(
+                          fit: BoxFit.scaleDown,
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            CurrencyFormatter.format(stats.totalPurchases),
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red,
+                            ),
                           ),
                         ),
                       ],
@@ -449,13 +457,16 @@ class _SalesVsPurchasesCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  'Net Margin (Sales − Purchases):',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
+                const Expanded(
+                  child: Text(
+                    'Net Margin (Sales − Purchases):',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
                   ),
                 ),
+                const SizedBox(width: 8),
                 Text(
                   CurrencyFormatter.format(stats.netMargin),
                   style: TextStyle(

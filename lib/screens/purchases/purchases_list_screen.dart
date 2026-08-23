@@ -264,80 +264,102 @@ class _PurchaseBillCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         side: BorderSide(color: Colors.grey.shade200),
       ),
-      child: ListTile(
+      child: InkWell(
         onTap: onTap,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        title: Row(
-          children: [
-            Expanded(
-              child: Text(
-                supplierName,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15,
-                ),
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: statusColor.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(6),
-              ),
-              child: Text(
-                statusText,
-                style: TextStyle(
-                  color: statusColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 11,
-                ),
-              ),
-            ),
-          ],
-        ),
-        subtitle: Padding(
-          padding: const EdgeInsets.only(top: 6),
-          child: Row(
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Bill #${bill.billNumber}',
-                style: const TextStyle(
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.textDarkSecondary,
-                  fontSize: 13,
-                ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Text(
+                      supplierName,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: statusColor.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Text(
+                      statusText,
+                      style: TextStyle(
+                        color: statusColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 11,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              const Text(' • '),
-              Text(
-                DateFormatter.display(bill.date),
-                style: const TextStyle(fontSize: 12, color: Colors.grey),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Text(
+                          'Bill #${bill.billNumber}',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.textDarkSecondary,
+                            fontSize: 13,
+                          ),
+                        ),
+                        const Text(' • '),
+                        Flexible(
+                          child: Text(
+                            DateFormatter.display(bill.date),
+                            style: const TextStyle(fontSize: 12, color: Colors.grey),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        CurrencyFormatter.format(bill.grandTotal),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          color: AppColors.textDarkPrimary,
+                        ),
+                      ),
+                      if (bill.balanceDue > 0) ...[
+                        const SizedBox(height: 3),
+                        Text(
+                          'Due: ${CurrencyFormatter.format(bill.balanceDue)}',
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Colors.red,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ],
               ),
             ],
           ),
-        ),
-        trailing: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Text(
-              CurrencyFormatter.format(bill.grandTotal),
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 15,
-                color: AppColors.textDarkPrimary,
-              ),
-            ),
-            if (bill.balanceDue > 0)
-              Text(
-                'Due: ${CurrencyFormatter.format(bill.balanceDue)}',
-                style: const TextStyle(
-                  fontSize: 11,
-                  color: Colors.red,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-          ],
         ),
       ),
     );

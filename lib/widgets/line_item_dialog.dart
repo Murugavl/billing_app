@@ -80,12 +80,20 @@ class _LineItemDialogState extends ConsumerState<LineItemDialog> {
   late final TextEditingController _discountController;
   late final TextEditingController _taxController;
 
+  late final TextEditingController _catalogSearchController;
+  String _catalogQuery = '';
+
   bool _isPercentDiscount = true;
   bool _showCatalogPicker = false;
 
   @override
   void initState() {
     super.initState();
+    _catalogSearchController = TextEditingController();
+    _catalogSearchController.addListener(() {
+      setState(() => _catalogQuery = _catalogSearchController.text.trim().toLowerCase());
+    });
+
     final init = widget.initialLine;
     _selectedItemId = init?.itemId;
     _nameController = TextEditingController(text: init?.itemName ?? '');
@@ -119,6 +127,7 @@ class _LineItemDialogState extends ConsumerState<LineItemDialog> {
 
   @override
   void dispose() {
+    _catalogSearchController.dispose();
     _nameController.dispose();
     _hsnController.dispose();
     _qtyController.dispose();
@@ -165,7 +174,7 @@ class _LineItemDialogState extends ConsumerState<LineItemDialog> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
-    final itemsList = ref.watch(filteredItemsProvider);
+    final asyncItems = ref.watch(itemsStreamProvider);
 
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -220,8 +229,27 @@ class _LineItemDialogState extends ConsumerState<LineItemDialog> {
                 ),
                 const SizedBox(height: 8),
                 Expanded(
-                  child: itemsList.isEmpty
-                      ? Center(
+                  child: asyncItems.when(
+                    loading: () => const Center(child: CircularProgressIndicator()),
+                    error: (err, _) => Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.error_outline_rounded, size: 36, color: Colors.red),
+                          const SizedBox(height: 8),
+                          Text('Error loading catalog: $err'),
+                          const SizedBox(height: 12),
+                          ElevatedButton(
+                            onPressed: () => setState(() => _showCatalogPicker = false),
+                            child: const Text('Enter Manually'),
+                          ),
+                        ],
+                      ),
+                    ),
+                    data: (allItems) {
+                      debugPrint('[LineItemDialog] Catalog item count from DB: ${allItems.length}');
+                      if (allItems.isEmpty) {
+                        return Center(
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -235,25 +263,81 @@ class _LineItemDialogState extends ConsumerState<LineItemDialog> {
                               ),
                             ],
                           ),
-                        )
-                      : ListView.separated(
-                          itemCount: itemsList.length,
-                          separatorBuilder: (_, __) => const Divider(height: 1),
-                          itemBuilder: (ctx, idx) {
-                            final item = itemsList[idx];
-                            return ListTile(
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-                              title: Text(item.name, style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
-                              subtitle: Text(
-                                '${CurrencyFormatter.format(item.defaultPrice)} / ${item.defaultUnit}'
-                                '${item.hsnSacCode != null ? " • HSN: ${item.hsnSacCode}" : ""}',
-                                style: theme.textTheme.bodySmall,
+                        );
+                      }
+
+                      final filtered = allItems.where((item) {
+                        if (_catalogQuery.isEmpty) return true;
+                        final nameMatch = item.name.toLowerCase().contains(_catalogQuery);
+                        final hsnMatch = item.hsnSacCode?.toLowerCase().contains(_catalogQuery) ?? false;
+                        final unitMatch = item.defaultUnit.toLowerCase().contains(_catalogQuery);
+                        return nameMatch || hsnMatch || unitMatch;
+                      }).toList();
+
+                      return Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 8),
+                            child: TextField(
+                              controller: _catalogSearchController,
+                              decoration: InputDecoration(
+                                hintText: 'Search catalog items...',
+                                prefixIcon: const Icon(Icons.search_rounded, size: 18),
+                                suffixIcon: _catalogQuery.isNotEmpty
+                                    ? IconButton(
+                                        icon: const Icon(Icons.clear_rounded, size: 18),
+                                        onPressed: () => _catalogSearchController.clear(),
+                                      )
+                                    : null,
+                                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                isDense: true,
                               ),
-                              trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 14),
-                              onTap: () => _populateFromCatalog(item),
-                            );
-                          },
-                        ),
+                            ),
+                          ),
+                          Expanded(
+                            child: filtered.isEmpty
+                                ? Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(16),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const Text(
+                                            'No matching items found',
+                                            style: TextStyle(color: Colors.grey),
+                                          ),
+                                          const SizedBox(height: 8),
+                                          TextButton(
+                                            onPressed: () => _catalogSearchController.clear(),
+                                            child: const Text('Clear search'),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                : ListView.separated(
+                                    itemCount: filtered.length,
+                                    separatorBuilder: (_, __) => const Divider(height: 1),
+                                    itemBuilder: (ctx, idx) {
+                                      final item = filtered[idx];
+                                      return ListTile(
+                                        contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+                                        title: Text(item.name, style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
+                                        subtitle: Text(
+                                          '${CurrencyFormatter.format(item.defaultPrice)} / ${item.defaultUnit}'
+                                          '${item.hsnSacCode != null ? " • HSN: ${item.hsnSacCode}" : ""}',
+                                          style: theme.textTheme.bodySmall,
+                                        ),
+                                        trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 14),
+                                        onTap: () => _populateFromCatalog(item),
+                                      );
+                                    },
+                                  ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
                 ),
               ] else ...[
                 // Edit / Form Mode

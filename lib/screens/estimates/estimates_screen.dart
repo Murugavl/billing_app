@@ -163,6 +163,11 @@ class _EstimatesScreenState extends ConsumerState<EstimatesScreen> {
       return doc.status.toUpperCase() == _selectedStatusFilter;
     }).toList();
 
+    final totalEstimatesSum = displayList.fold<double>(
+      0.0,
+      (sum, doc) => sum + doc.grandTotal,
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Estimates / Quotations'),
@@ -215,6 +220,32 @@ class _EstimatesScreenState extends ConsumerState<EstimatesScreen> {
                   ),
                 );
               }).toList(),
+            ),
+          ),
+
+          // ── Total Summary KPI ──────────────────────────────────────────
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            color: AppColors.amberDark.withValues(alpha: 0.08),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '${displayList.length} Estimates Found',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textDarkSecondary,
+                  ),
+                ),
+                Text(
+                  'Total: ${CurrencyFormatter.format(totalEstimatesSum)}',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.amberDark,
+                    fontSize: 15,
+                  ),
+                ),
+              ],
             ),
           ),
 

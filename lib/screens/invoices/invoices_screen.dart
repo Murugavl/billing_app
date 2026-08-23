@@ -109,6 +109,11 @@ class _InvoicesScreenState extends ConsumerState<InvoicesScreen> {
       return doc.status.toUpperCase() == _selectedStatusFilter;
     }).toList();
 
+    final totalInvoicesSum = displayList.fold<double>(
+      0.0,
+      (sum, doc) => sum + doc.grandTotal,
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Invoices'),
@@ -161,6 +166,32 @@ class _InvoicesScreenState extends ConsumerState<InvoicesScreen> {
                   ),
                 );
               }).toList(),
+            ),
+          ),
+
+          // ── Total Summary KPI ──────────────────────────────────────────
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            color: AppColors.primaryBlue.withValues(alpha: 0.05),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '${displayList.length} Invoices Found',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textDarkSecondary,
+                  ),
+                ),
+                Text(
+                  'Total: ${CurrencyFormatter.format(totalInvoicesSum)}',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.primaryBlue,
+                    fontSize: 15,
+                  ),
+                ),
+              ],
             ),
           ),
 

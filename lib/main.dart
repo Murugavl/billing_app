@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'app.dart';
+import 'services/background_backup_scheduler.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Catch Flutter framework errors gracefully
@@ -19,10 +20,11 @@ void main() {
     return true;
   };
 
+  await BackgroundBackupScheduler.initialize();
+
   runApp(
     const ProviderScope(
       child: BillingApp(),
     ),
   );
 }
-

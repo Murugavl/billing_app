@@ -77,6 +77,18 @@ class MoreScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 20),
 
+          // ── Data & Backup section ─────────────────────────────────────────
+          _SectionHeader('DATA & CLOUD BACKUP'),
+          const SizedBox(height: 8),
+          _MenuTile(
+            icon: Icons.cloud_done_rounded,
+            label: 'Google Drive Backup',
+            subtitle: 'Encrypted automatic cloud backup & restore',
+            iconColor: Colors.teal,
+            onTap: () => context.push('/settings/drive-backup'),
+          ),
+          const SizedBox(height: 20),
+
           // ── Business section ───────────────────────────────────────────────
           _SectionHeader('BUSINESS'),
           const SizedBox(height: 8),

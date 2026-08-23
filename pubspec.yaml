@@ -43,6 +43,18 @@ dependencies:
   google_fonts: ^8.2.1
   shared_preferences: ^2.2.3
 
+  # Google Sign-In & Google Drive API (appDataFolder scope)
+  google_sign_in: ^6.2.1
+  googleapis: ^13.2.0
+  extension_google_sign_in_as_googleapis_auth: ^2.0.12
+
+  # Client-side AES-256 encryption & PBKDF2 key derivation
+  encrypt: ^5.0.3
+  crypto: ^3.0.3
+
+  # Background task scheduler
+  workmanager: ^0.9.0
+
   cupertino_icons: ^1.0.8
 
 dev_dependencies:

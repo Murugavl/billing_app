@@ -17,6 +17,7 @@ import '../../screens/purchases/purchase_bill_detail_screen.dart';
 import '../../screens/suppliers/suppliers_list_screen.dart';
 import '../../screens/more/more_screen.dart';
 import '../../screens/settings/settings_screen.dart';
+import '../../screens/settings/drive_backup_settings_screen.dart';
 
 import '../../screens/customers/customers_list_screen.dart';
 import '../../screens/items/items_list_screen.dart';
@@ -39,6 +40,7 @@ abstract final class AppRoutes {
   static const suppliers = '/suppliers';
   static const more = '/more';
   static const settings = '/settings';
+  static const driveBackup = '/settings/drive-backup';
   static const customers = '/customers';
   static const items = '/items';
 }
@@ -68,6 +70,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.settings,
         name: 'settings',
         builder: (context, state) => const SettingsScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.driveBackup,
+        name: 'driveBackup',
+        builder: (context, state) => const DriveBackupSettingsScreen(),
       ),
 
       // ── New Invoice ────────────────────────────────────────────────────────

@@ -99,11 +99,11 @@ class _LineItemDialogState extends ConsumerState<LineItemDialog> {
     _nameController = TextEditingController(text: init?.itemName ?? '');
     _hsnController = TextEditingController(text: init?.hsnSacCode ?? '');
     _qtyController = TextEditingController(
-      text: init != null ? init.quantity.toString() : '1',
+      text: init != null ? init.quantity.toString() : '',
     );
     _unitController = TextEditingController(text: init?.unit ?? 'Pcs');
     _priceController = TextEditingController(
-      text: init != null ? init.pricePerUnit.toStringAsFixed(2) : '0.00',
+      text: init != null ? init.pricePerUnit.toStringAsFixed(2) : '',
     );
 
     _isPercentDiscount = init?.isPercentDiscount ?? true;
@@ -112,11 +112,11 @@ class _LineItemDialogState extends ConsumerState<LineItemDialog> {
           ? (_isPercentDiscount
               ? init.discountPercent.toString()
               : init.discountAmount.toStringAsFixed(2))
-          : '0',
+          : '',
     );
 
     _taxController = TextEditingController(
-      text: init != null ? init.taxPercent.toString() : '0',
+      text: init != null ? init.taxPercent.toString() : '',
     );
 
     // If adding fresh, default to showing catalog picker first
@@ -410,10 +410,13 @@ class _LineItemDialogState extends ConsumerState<LineItemDialog> {
                                   label: 'Quantity',
                                   controller: _qtyController,
                                   isRequired: true,
+                                  hint: '1',
                                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
                                   onChanged: (_) => setState(() {}),
                                   validator: (v) {
-                                    final val = double.tryParse(v ?? '');
+                                    final str = (v ?? '').trim();
+                                    if (str.isEmpty) return null;
+                                    final val = double.tryParse(str);
                                     if (val == null || val <= 0) return 'Must be > 0';
                                     return null;
                                   },
@@ -425,10 +428,13 @@ class _LineItemDialogState extends ConsumerState<LineItemDialog> {
                                   label: 'Price per Unit (₹)',
                                   controller: _priceController,
                                   isRequired: true,
+                                  hint: '0.00',
                                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
                                   onChanged: (_) => setState(() {}),
                                   validator: (v) {
-                                    final val = double.tryParse(v ?? '');
+                                    final str = (v ?? '').trim();
+                                    if (str.isEmpty) return null;
+                                    final val = double.tryParse(str);
                                     if (val == null || val < 0) return 'Invalid price';
                                     return null;
                                   },
@@ -445,6 +451,7 @@ class _LineItemDialogState extends ConsumerState<LineItemDialog> {
                                 child: AppTextField(
                                   label: 'Discount (${_isPercentDiscount ? "%" : "₹"})',
                                   controller: _discountController,
+                                  hint: '0',
                                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
                                   onChanged: (_) => setState(() {}),
                                 ),
@@ -461,7 +468,7 @@ class _LineItemDialogState extends ConsumerState<LineItemDialog> {
                                   onSelectionChanged: (val) {
                                     setState(() {
                                       _isPercentDiscount = val.first;
-                                      _discountController.text = '0';
+                                      _discountController.text = '';
                                     });
                                   },
                                 ),
@@ -474,7 +481,7 @@ class _LineItemDialogState extends ConsumerState<LineItemDialog> {
                           AppTextField(
                             label: 'Tax % (GST)',
                             controller: _taxController,
-                            hint: '0, 5, 12, 18, 28',
+                            hint: '0',
                             keyboardType: const TextInputType.numberWithOptions(decimal: true),
                             onChanged: (_) => setState(() {}),
                           ),

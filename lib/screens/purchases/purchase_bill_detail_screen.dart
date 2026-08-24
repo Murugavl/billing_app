@@ -54,6 +54,7 @@ class PurchaseBillDetailScreen extends ConsumerWidget {
                   AppTextField(
                     label: 'Payment Amount (₹) *',
                     controller: amountCtrl,
+                    hint: '0.00',
                     keyboardType:
                         const TextInputType.numberWithOptions(decimal: true),
                   ),

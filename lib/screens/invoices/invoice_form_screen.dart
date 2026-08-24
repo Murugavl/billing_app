@@ -69,7 +69,9 @@ class _InvoiceFormScreenState extends ConsumerState<InvoiceFormScreen> {
       _date = doc.date;
       _placeOfSupplyController = TextEditingController(text: doc.placeOfSupply ?? 'Tamil Nadu');
       _amountReceivedController = TextEditingController(
-        text: doc.amountReceived != null ? doc.amountReceived!.toStringAsFixed(2) : '0.00',
+        text: (doc.amountReceived != null && doc.amountReceived! > 0)
+            ? doc.amountReceived!.toStringAsFixed(2)
+            : '',
       );
       _notesController = TextEditingController(text: doc.notes ?? '');
 
@@ -97,7 +99,7 @@ class _InvoiceFormScreenState extends ConsumerState<InvoiceFormScreen> {
       _documentNumber = await docsDao.nextDocumentNumber('invoice');
       _date = DateTime.now();
       _placeOfSupplyController = TextEditingController(text: 'Tamil Nadu');
-      _amountReceivedController = TextEditingController(text: '0.00');
+      _amountReceivedController = TextEditingController(text: '');
       _notesController = TextEditingController();
     }
 
@@ -743,6 +745,7 @@ class _InvoiceFormScreenState extends ConsumerState<InvoiceFormScreen> {
                         child: AppTextField(
                           label: 'Amount Received (₹)',
                           controller: _amountReceivedController,
+                          hint: '0.00',
                           keyboardType: const TextInputType.numberWithOptions(decimal: true),
                           inputFormatters: [
                             FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),

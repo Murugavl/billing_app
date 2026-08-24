@@ -12,6 +12,7 @@ import '../../services/database_provider.dart';
 import '../../utils/currency_formatter.dart';
 import '../../utils/date_formatter.dart';
 import '../pdf/pdf_preview_screen.dart';
+import '../../widgets/app_text_field.dart';
 import 'invoice_form_screen.dart';
 
 class InvoiceDetailScreen extends ConsumerWidget {
@@ -72,16 +73,15 @@ class InvoiceDetailScreen extends ConsumerWidget {
                     ),
                   ),
                   const SizedBox(height: 14),
-                  TextField(
+                  AppTextField(
+                    label: 'Amount Received (₹)',
                     controller: amountController,
+                    hint: '0.00',
                     keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    prefix: const Icon(Icons.currency_rupee_rounded),
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
                     ],
-                    decoration: const InputDecoration(
-                      labelText: 'Amount Received (₹)',
-                      prefixIcon: Icon(Icons.currency_rupee_rounded),
-                    ),
                   ),
                   const SizedBox(height: 12),
                   InkWell(

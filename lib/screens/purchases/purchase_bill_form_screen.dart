@@ -32,7 +32,7 @@ class _PurchaseBillFormScreenState
   Supplier? _selectedSupplier;
   final _billNumberController = TextEditingController();
   final _notesController = TextEditingController();
-  final _initialPaidController = TextEditingController(text: '0');
+  final _initialPaidController = TextEditingController(text: '');
   DateTime _selectedDate = DateTime.now();
 
   List<_TempLineItem> _lineItems = [];
@@ -67,12 +67,12 @@ class _PurchaseBillFormScreenState
     final nameCtrl = TextEditingController(text: existing?.name ?? '');
     final hsnCtrl = TextEditingController(text: existing?.hsnSacCode ?? '');
     final qtyCtrl =
-        TextEditingController(text: existing?.quantity.toString() ?? '1');
+        TextEditingController(text: existing != null ? existing.quantity.toString() : '');
     final unitCtrl = TextEditingController(text: existing?.unit ?? 'Pcs');
     final priceCtrl = TextEditingController(
-        text: existing?.pricePerUnit.toString() ?? '0.00');
+        text: existing != null ? existing.pricePerUnit.toStringAsFixed(2) : '');
     final taxRateCtrl =
-        TextEditingController(text: existing?.taxRate.toString() ?? '18.0');
+        TextEditingController(text: existing != null ? existing.taxRate.toString() : '');
     Item? selectedItemMaster = existing?.itemMaster;
 
     showDialog(
@@ -145,6 +145,7 @@ class _PurchaseBillFormScreenState
                         child: AppTextField(
                           label: 'Qty *',
                           controller: qtyCtrl,
+                          hint: '1',
                           keyboardType: const TextInputType.numberWithOptions(
                               decimal: true),
                         ),
@@ -154,6 +155,7 @@ class _PurchaseBillFormScreenState
                         child: AppTextField(
                           label: 'Purchase Price/Unit (₹) *',
                           controller: priceCtrl,
+                          hint: '0.00',
                           keyboardType: const TextInputType.numberWithOptions(
                               decimal: true),
                         ),
@@ -164,6 +166,7 @@ class _PurchaseBillFormScreenState
                   AppTextField(
                     label: 'GST Tax Rate (%)',
                     controller: taxRateCtrl,
+                    hint: '18.0',
                     keyboardType:
                         const TextInputType.numberWithOptions(decimal: true),
                   ),
@@ -511,6 +514,7 @@ class _PurchaseBillFormScreenState
                   AppTextField(
                     label: 'Initial Amount Paid (₹)',
                     controller: _initialPaidController,
+                    hint: '0.00',
                     keyboardType: const TextInputType.numberWithOptions(
                         decimal: true),
                     onChanged: (_) => setState(() {}),

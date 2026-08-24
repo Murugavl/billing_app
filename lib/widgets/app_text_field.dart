@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class AppTextField extends StatelessWidget {
+class AppTextField extends StatefulWidget {
   const AppTextField({
     super.key,
     required this.label,
@@ -23,6 +23,9 @@ class AppTextField extends StatelessWidget {
     this.enabled = true,
     this.onChanged,
     this.autofocus = false,
+    this.focusNode,
+    this.selectAllOnFocus,
+    this.onTap,
   });
 
   final String label;
@@ -42,6 +45,70 @@ class AppTextField extends StatelessWidget {
   final bool enabled;
   final void Function(String)? onChanged;
   final bool autofocus;
+  final FocusNode? focusNode;
+  final bool? selectAllOnFocus;
+  final VoidCallback? onTap;
+
+  @override
+  State<AppTextField> createState() => _AppTextFieldState();
+}
+
+class _AppTextFieldState extends State<AppTextField> {
+  FocusNode? _internalFocusNode;
+
+  FocusNode get _effectiveFocusNode => widget.focusNode ?? (_internalFocusNode ??= FocusNode());
+
+  bool get _shouldSelectAllOnFocus {
+    if (widget.selectAllOnFocus != null) return widget.selectAllOnFocus!;
+    final kt = widget.keyboardType;
+    if (kt == TextInputType.number ||
+        kt == const TextInputType.numberWithOptions() ||
+        kt == const TextInputType.numberWithOptions(decimal: true) ||
+        kt == const TextInputType.numberWithOptions(signed: true, decimal: true) ||
+        (kt != null && (kt.toString().contains('number')))) {
+      return true;
+    }
+    return false;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _effectiveFocusNode.addListener(_handleFocusChange);
+  }
+
+  @override
+  void didUpdateWidget(AppTextField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.focusNode != oldWidget.focusNode) {
+      (oldWidget.focusNode ?? _internalFocusNode)?.removeListener(_handleFocusChange);
+      _effectiveFocusNode.addListener(_handleFocusChange);
+    }
+  }
+
+  @override
+  void dispose() {
+    _effectiveFocusNode.removeListener(_handleFocusChange);
+    _internalFocusNode?.dispose();
+    super.dispose();
+  }
+
+  void _handleFocusChange() {
+    if (_effectiveFocusNode.hasFocus && _shouldSelectAllOnFocus) {
+      _selectAll();
+    }
+  }
+
+  void _selectAll() {
+    Future.microtask(() {
+      if (mounted && _effectiveFocusNode.hasFocus && widget.controller.text.isNotEmpty) {
+        widget.controller.selection = TextSelection(
+          baseOffset: 0,
+          extentOffset: widget.controller.text.length,
+        );
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,14 +122,14 @@ class AppTextField extends StatelessWidget {
         Row(
           children: [
             Text(
-              label,
+              widget.label,
               style: GoogleFonts.inter(
                 fontSize: 13,
                 fontWeight: FontWeight.w500,
                 color: cs.onSurface.withAlpha(200),
               ),
             ),
-            if (isRequired) ...[
+            if (widget.isRequired) ...[
               const SizedBox(width: 3),
               Text(
                 '*',
@@ -77,17 +144,24 @@ class AppTextField extends StatelessWidget {
         ),
         const SizedBox(height: 6),
         TextFormField(
-          controller: controller,
-          validator: validator,
-          keyboardType: keyboardType,
-          textCapitalization: textCapitalization,
-          textInputAction: textInputAction,
-          maxLines: maxLines,
-          minLines: minLines,
-          inputFormatters: inputFormatters,
-          enabled: enabled,
-          autofocus: autofocus,
-          onChanged: onChanged,
+          controller: widget.controller,
+          focusNode: _effectiveFocusNode,
+          validator: widget.validator,
+          keyboardType: widget.keyboardType,
+          textCapitalization: widget.textCapitalization,
+          textInputAction: widget.textInputAction,
+          maxLines: widget.maxLines,
+          minLines: widget.minLines,
+          inputFormatters: widget.inputFormatters,
+          enabled: widget.enabled,
+          autofocus: widget.autofocus,
+          onChanged: widget.onChanged,
+          onTap: () {
+            widget.onTap?.call();
+            if (_shouldSelectAllOnFocus) {
+              _selectAll();
+            }
+          },
           style: GoogleFonts.inter(
             fontSize: 14,
             fontWeight: FontWeight.w400,
@@ -95,11 +169,11 @@ class AppTextField extends StatelessWidget {
             height: 1.3,
           ),
           decoration: InputDecoration(
-            hintText: hint,
-            helperText: helperText,
+            hintText: widget.hint,
+            helperText: widget.helperText,
             helperMaxLines: 2,
-            suffixIcon: suffix,
-            prefixIcon: prefix,
+            suffixIcon: widget.suffix,
+            prefixIcon: widget.prefix,
             contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
           ),
         ),

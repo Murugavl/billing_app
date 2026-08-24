@@ -60,7 +60,7 @@ class PurchaseBillDetailScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: 12),
                   DropdownButtonFormField<String>(
-                    value: selectedMethod,
+                    initialValue: selectedMethod,
                     decoration: const InputDecoration(
                       labelText: 'Payment Method',
                       border: OutlineInputBorder(),

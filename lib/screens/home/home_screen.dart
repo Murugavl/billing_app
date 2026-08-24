@@ -357,7 +357,7 @@ class _SalesVsPurchasesCard extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
-                    color: isProfit ? Colors.green.withOpacity(0.12) : Colors.red.withOpacity(0.12),
+                    color: isProfit ? Colors.green.withAlpha(30) : Colors.red.withAlpha(30),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(

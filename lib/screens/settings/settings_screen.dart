@@ -1,4 +1,4 @@
-// Settings Screen — Business Profile editor & Data Safety / Backup & Cloud Sync settings
+// Settings Screen — Business Profile editor & Data Safety / Local Backup settings
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -19,7 +19,6 @@ class SettingsScreen extends ConsumerStatefulWidget {
 
 class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   DateTime? _lastBackupDate;
-  bool _cloudSyncEnabled = false;
 
   @override
   void initState() {
@@ -207,32 +206,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     ),
                   ],
                 ),
-              ),
-            ),
-
-            const SizedBox(height: 16),
-
-            // ── Scaffolded Cloud Sync Toggle ─────────────────────────────────
-            Card(
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(14),
-                side: BorderSide(color: cs.outline.withAlpha(60)),
-              ),
-              child: SwitchListTile(
-                value: _cloudSyncEnabled,
-                onChanged: (val) {
-                  setState(() => _cloudSyncEnabled = val);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(val ? 'Cloud sync enabled (runs in background when connected)' : 'Cloud sync disabled (app operates 100% offline)'),
-                      behavior: SnackBarBehavior.floating,
-                    ),
-                  );
-                },
-                secondary: const Icon(Icons.cloud_sync_rounded, color: AppColors.primaryBlue),
-                title: Text('Cloud Sync & Multi-Device', style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 14)),
-                subtitle: const Text('Scaffolded sync backend (Firebase/Supabase). App functions 100% offline when disabled.'),
               ),
             ),
 

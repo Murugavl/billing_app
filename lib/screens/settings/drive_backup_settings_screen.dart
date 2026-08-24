@@ -1,3 +1,4 @@
+// ignore_for_file: deprecated_member_use
 // Google Drive Backup Settings Screen — Manage AES-256 Encrypted Backups
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

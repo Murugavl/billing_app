@@ -2,7 +2,6 @@
 import 'package:billwise/db/app_database.dart';
 import 'package:billwise/db/daos/customers_dao.dart';
 import 'package:billwise/db/daos/documents_dao.dart';
-import 'package:billwise/providers/dashboard_provider.dart';
 import 'package:billwise/providers/reports_provider.dart';
 import 'package:billwise/services/database_provider.dart';
 import 'package:drift/drift.dart' show Value;

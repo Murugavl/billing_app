@@ -38,7 +38,7 @@ An offline-first, professional billing and invoicing Flutter application designe
    - Search across Customers, Invoices, and Estimates by name, phone, or document number.
 9. **Data Safety, Local Backup & Restore**:
    - One-click JSON database export and atomic import restoration (preserves all customers, items, invoices, estimates, and payment history).
-   - Auto-backup date tracking and scaffolded Cloud Sync toggle.
+   - Auto-backup date tracking and encrypted Google Drive cloud backup.
 
 ---
 

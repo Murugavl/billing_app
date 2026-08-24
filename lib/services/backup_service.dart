@@ -130,6 +130,7 @@ class BackupService {
     final file = File('${tempDir.path}/$filename');
     await file.writeAsString(jsonStr);
 
+    // ignore: deprecated_member_use
     await Share.shareXFiles(
       [XFile(file.path)],
       subject: 'Billwise Data Backup ($filename)',

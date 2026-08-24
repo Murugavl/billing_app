@@ -52,6 +52,7 @@ class _PdfPreviewScreenState extends ConsumerState<PdfPreviewScreen> {
     await file.writeAsBytes(pdfBytes);
 
     if (mounted) {
+      // ignore: deprecated_member_use
       await Share.shareXFiles(
         [XFile(file.path)],
         subject: '${_docWithLines!.document.documentNumber} from Billwise',

@@ -35,7 +35,7 @@ class _PurchaseBillFormScreenState
   final _initialPaidController = TextEditingController(text: '');
   DateTime _selectedDate = DateTime.now();
 
-  List<_TempLineItem> _lineItems = [];
+  final List<_TempLineItem> _lineItems = [];
   bool _isSaving = false;
 
   @override
@@ -89,7 +89,7 @@ class _PurchaseBillFormScreenState
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   DropdownButtonFormField<Item>(
-                    value: selectedItemMaster,
+                    initialValue: selectedItemMaster,
                     decoration: const InputDecoration(
                       labelText: 'Select from Product Catalog (Optional)',
                       border: OutlineInputBorder(),
@@ -326,7 +326,7 @@ class _PurchaseBillFormScreenState
                     children: [
                       Expanded(
                         child: DropdownButtonFormField<Supplier>(
-                          value: _selectedSupplier,
+                          initialValue: _selectedSupplier,
                           decoration: const InputDecoration(
                             labelText: 'Select Supplier *',
                             border: OutlineInputBorder(),

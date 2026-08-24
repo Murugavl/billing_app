@@ -24,7 +24,7 @@ void callbackDispatcher() {
         return Future.value(true);
       } catch (e) {
         if (kDebugMode) {
-          print('Background backup execution failed: $e');
+          debugPrint('Background backup execution failed: $e');
         }
         return Future.value(false);
       }
@@ -40,7 +40,7 @@ class BackgroundBackupScheduler {
         callbackDispatcher,
       );
     } catch (e) {
-      if (kDebugMode) print('WorkManager init error: $e');
+      if (kDebugMode) debugPrint('WorkManager init error: $e');
     }
   }
 

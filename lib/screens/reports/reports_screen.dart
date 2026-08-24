@@ -105,13 +105,22 @@ class ReportsScreen extends ConsumerWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            children: [
-                              const Icon(Icons.bar_chart_rounded, color: AppColors.primaryBlue),
-                              const SizedBox(width: 8),
-                              Text('Sales Summary', style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 16)),
-                            ],
+                          Expanded(
+                            child: Row(
+                              children: [
+                                const Icon(Icons.bar_chart_rounded, color: AppColors.primaryBlue),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    'Sales Summary',
+                                    style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 16),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
+                          const SizedBox(width: 8),
                           ElevatedButton.icon(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.primaryBlue,
@@ -132,15 +141,21 @@ class ReportsScreen extends ConsumerWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Total Sales Revenue', style: theme.textTheme.bodySmall),
-                              Text(
-                                CurrencyFormatter.format(sales.totalSales),
-                                style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.primaryBlue),
-                              ),
-                            ],
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Total Sales Revenue', style: theme.textTheme.bodySmall),
+                                FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    CurrencyFormatter.format(sales.totalSales),
+                                    style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.primaryBlue),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
@@ -183,13 +198,22 @@ class ReportsScreen extends ConsumerWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            children: [
-                              const Icon(Icons.shopping_bag_outlined, color: Colors.purple),
-                              const SizedBox(width: 8),
-                              Text('Purchase Summary', style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 16)),
-                            ],
+                          Expanded(
+                            child: Row(
+                              children: [
+                                const Icon(Icons.shopping_bag_outlined, color: Colors.purple),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    'Purchase Summary',
+                                    style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 16),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
+                          const SizedBox(width: 8),
                           ElevatedButton.icon(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.purple,
@@ -210,15 +234,21 @@ class ReportsScreen extends ConsumerWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Total Purchase Outlay', style: theme.textTheme.bodySmall),
-                              Text(
-                                CurrencyFormatter.format(purchase.totalPurchases),
-                                style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.purple),
-                              ),
-                            ],
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Total Purchase Outlay', style: theme.textTheme.bodySmall),
+                                FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    CurrencyFormatter.format(purchase.totalPurchases),
+                                    style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.purple),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
@@ -246,7 +276,13 @@ class ReportsScreen extends ConsumerWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Outstanding Payments Report', style: theme.textTheme.titleMedium),
+                Expanded(
+                  child: Text(
+                    'Outstanding Payments Report',
+                    style: theme.textTheme.titleMedium,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
                 outstandingAsync.when(
                   data: (list) => list.isEmpty
                       ? const SizedBox.shrink()
@@ -299,7 +335,14 @@ class ReportsScreen extends ConsumerWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Total Outstanding Across ${report.length} Customers:', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: cs.onErrorContainer)),
+                          Expanded(
+                            child: Text(
+                              'Total Outstanding Across ${report.length} Customers:',
+                              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: cs.onErrorContainer),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
                           Text(CurrencyFormatter.format(totalDueSum), style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: cs.onErrorContainer)),
                         ],
                       ),

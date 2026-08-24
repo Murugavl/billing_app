@@ -199,12 +199,12 @@ class _GlobalSearchScreenState extends ConsumerState<GlobalSearchScreen> {
                                   },
                                   title: Row(
                                     children: [
-                                      Text(doc.documentNumber, style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
-                                      const Spacer(),
+                                      Expanded(child: Text(doc.documentNumber, style: GoogleFonts.inter(fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis)),
+                                      const SizedBox(width: 8),
                                       Text(CurrencyFormatter.format(doc.grandTotal), style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
                                     ],
                                   ),
-                                  subtitle: Text('${doc.customerName} • ${DateFormatter.display(doc.date)}'),
+                                  subtitle: Text('${doc.customerName} • ${DateFormatter.display(doc.date)}', maxLines: 1, overflow: TextOverflow.ellipsis),
                                 );
                               },
                             ),
@@ -239,12 +239,12 @@ class _GlobalSearchScreenState extends ConsumerState<GlobalSearchScreen> {
                                   },
                                   title: Row(
                                     children: [
-                                      Text(doc.documentNumber, style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
-                                      const Spacer(),
+                                      Expanded(child: Text(doc.documentNumber, style: GoogleFonts.inter(fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis)),
+                                      const SizedBox(width: 8),
                                       Text(CurrencyFormatter.format(doc.grandTotal), style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
                                     ],
                                   ),
-                                  subtitle: Text('${doc.customerName} • ${DateFormatter.display(doc.date)}'),
+                                  subtitle: Text('${doc.customerName} • ${DateFormatter.display(doc.date)}', maxLines: 1, overflow: TextOverflow.ellipsis),
                                 );
                               },
                             ),

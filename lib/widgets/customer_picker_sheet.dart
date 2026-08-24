@@ -57,9 +57,15 @@ class _CustomerPickerSheetState extends ConsumerState<CustomerPickerSheet> {
           const SizedBox(height: 12),
 
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Select Customer', style: theme.textTheme.titleLarge),
+              Expanded(
+                child: Text(
+                  'Select Customer',
+                  style: theme.textTheme.titleLarge,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const SizedBox(width: 8),
               OutlinedButton.icon(
                 onPressed: () async {
                   await Navigator.of(context).push(
@@ -137,11 +143,18 @@ class _CustomerPickerSheetState extends ConsumerState<CustomerPickerSheet> {
                             style: GoogleFonts.inter(fontWeight: FontWeight.bold, color: cs.primary),
                           ),
                         ),
-                        title: Text(c.name, style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
+                        title: Text(
+                          c.name,
+                          style: GoogleFonts.inter(fontWeight: FontWeight.w600),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                         subtitle: Text(
                           'Phone: ${c.phone ?? "N/A"}'
                           '${c.gstNumber != null ? " • GST: ${c.gstNumber}" : ""}',
                           style: theme.textTheme.bodySmall,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                         trailing: const Icon(Icons.chevron_right_rounded),
                         onTap: () => Navigator.of(context).pop(c),

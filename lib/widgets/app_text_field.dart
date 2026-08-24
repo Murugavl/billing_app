@@ -121,12 +121,15 @@ class _AppTextFieldState extends State<AppTextField> {
         // Label row
         Row(
           children: [
-            Text(
-              widget.label,
-              style: GoogleFonts.inter(
-                fontSize: 13,
-                fontWeight: FontWeight.w500,
-                color: cs.onSurface.withAlpha(200),
+            Flexible(
+              child: Text(
+                widget.label,
+                style: GoogleFonts.inter(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                  color: cs.onSurface.withAlpha(200),
+                ),
+                overflow: TextOverflow.ellipsis,
               ),
             ),
             if (widget.isRequired) ...[

@@ -541,11 +541,16 @@ class _EstimateFormScreenState extends ConsumerState<EstimateFormScreen> {
                           children: [
                             const Icon(Icons.person_search_rounded, color: AppColors.amberDark),
                             const SizedBox(width: 8),
-                            Text(
-                              'Tap to select customer for estimate',
-                              style: GoogleFonts.inter(
-                                color: AppColors.amberDark,
-                                fontWeight: FontWeight.w600,
+                            Flexible(
+                              child: Text(
+                                'Tap to select customer for estimate',
+                                textAlign: TextAlign.center,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.inter(
+                                  color: AppColors.amberDark,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
                           ],
@@ -559,12 +564,24 @@ class _EstimateFormScreenState extends ConsumerState<EstimateFormScreen> {
                         Text(
                           _selectedCustomer!.name,
                           style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.bold),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
                         const SizedBox(height: 4),
                         if (_selectedCustomer!.phone != null)
-                          Text('Phone: ${_selectedCustomer!.phone}', style: theme.textTheme.bodyMedium),
+                          Text(
+                            'Phone: ${_selectedCustomer!.phone}',
+                            style: theme.textTheme.bodyMedium,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         if (_selectedCustomer!.address != null)
-                          Text('Address: ${_selectedCustomer!.address}', style: theme.textTheme.bodyMedium),
+                          Text(
+                            'Address: ${_selectedCustomer!.address}',
+                            style: theme.textTheme.bodyMedium,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         if (_selectedCustomer!.gstNumber != null) ...[
                           const SizedBox(height: 4),
                           Container(
@@ -620,14 +637,20 @@ class _EstimateFormScreenState extends ConsumerState<EstimateFormScreen> {
                               ),
                               const SizedBox(height: 4),
                               Row(
-                                children: [
-                                  const Icon(Icons.calendar_today_rounded, size: 16, color: AppColors.amberDark),
-                                  const SizedBox(width: 6),
-                                  Text(
-                                    DateFormatter.display(_date),
-                                    style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 13),
-                                  ),
-                                ],
+                                  children: [
+                                    const Icon(Icons.calendar_today_rounded, size: 16, color: AppColors.amberDark),
+                                    const SizedBox(width: 6),
+                                    Flexible(
+                                      child: FittedBox(
+                                        fit: BoxFit.scaleDown,
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          DateFormatter.display(_date),
+                                          style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 13),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                               ),
                             ],
                           ),
@@ -886,7 +909,10 @@ class _EstimateFormScreenState extends ConsumerState<EstimateFormScreen> {
                                 child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                               )
                             : const Icon(Icons.send_rounded, size: 18),
-                        label: Text(_isEditing ? 'Update Estimate' : 'Save & Send'),
+                        label: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(_isEditing ? 'Update Estimate' : 'Save & Send'),
+                        ),
                       ),
                     ),
                   ),
@@ -923,20 +949,30 @@ class _SummaryRow extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            label,
-            style: GoogleFonts.inter(
-              fontSize: fontSize,
-              fontWeight: isBold ? FontWeight.bold : FontWeight.w500,
-              color: color,
+          Expanded(
+            child: Text(
+              label,
+              style: GoogleFonts.inter(
+                fontSize: fontSize,
+                fontWeight: isBold ? FontWeight.bold : FontWeight.w500,
+                color: color,
+              ),
+              overflow: TextOverflow.ellipsis,
             ),
           ),
-          Text(
-            value,
-            style: GoogleFonts.inter(
-              fontSize: fontSize,
-              fontWeight: isBold ? FontWeight.bold : FontWeight.w600,
-              color: color,
+          const SizedBox(width: 8),
+          Flexible(
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerRight,
+              child: Text(
+                value,
+                style: GoogleFonts.inter(
+                  fontSize: fontSize,
+                  fontWeight: isBold ? FontWeight.bold : FontWeight.w600,
+                  color: color,
+                ),
+              ),
             ),
           ),
         ],
@@ -962,12 +998,14 @@ class _BankDetailRow extends StatelessWidget {
             child: Text(
               '$label:',
               style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w500, color: cs.onSurface.withAlpha(140)),
+              overflow: TextOverflow.ellipsis,
             ),
           ),
           Expanded(
             child: Text(
               value,
               style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: cs.onSurface),
+              overflow: TextOverflow.ellipsis,
             ),
           ),
         ],

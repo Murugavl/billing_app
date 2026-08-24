@@ -205,11 +205,14 @@ class HomeScreen extends ConsumerWidget {
                         ),
                         title: Row(
                           children: [
-                            Text(
-                              doc.documentNumber,
-                              style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 14),
+                            Expanded(
+                              child: Text(
+                                doc.documentNumber,
+                                style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 14),
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
-                            const Spacer(),
+                            const SizedBox(width: 8),
                             Text(
                               CurrencyFormatter.format(doc.grandTotal),
                               style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 14),
@@ -218,8 +221,14 @@ class HomeScreen extends ConsumerWidget {
                         ),
                         subtitle: Row(
                           children: [
-                            Text(doc.customerName, style: theme.textTheme.bodySmall),
-                            const Spacer(),
+                            Expanded(
+                              child: Text(
+                                doc.customerName,
+                                style: theme.textTheme.bodySmall,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
                             _StatusBadge(status: doc.status),
                           ],
                         ),
@@ -467,12 +476,18 @@ class _SalesVsPurchasesCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 8),
-                Text(
-                  CurrencyFormatter.format(stats.netMargin),
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                    color: isProfit ? Colors.green.shade800 : Colors.red.shade800,
+                Flexible(
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      CurrencyFormatter.format(stats.netMargin),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: isProfit ? Colors.green.shade800 : Colors.red.shade800,
+                      ),
+                    ),
                   ),
                 ),
               ],

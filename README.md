@@ -104,3 +104,13 @@ flutter build appbundle --release
 # or
 flutter build apk --release
 ```
+
+---
+
+## 📐 Layout Guidelines & Text Overflow Rules
+
+To ensure visual consistency and prevent UI overflow errors on compact mobile screens (such as 360dp width viewports):
+
+1. **Flex Child Protection**: Any `Text` widget placed inside a `Row`, `Flex`, `ListTile`, or horizontal card header **MUST** be wrapped in an `Expanded` or `Flexible` widget.
+2. **Explicit Overflow Handling**: Specify `overflow: TextOverflow.ellipsis` and an explicit `maxLines` count (e.g. `maxLines: 1` or `maxLines: 2`) for dynamic text fields such as customer names, business names, addresses, item titles, or button labels.
+3. **Numeric & Currency Displays**: Currency totals or statutory figures inside tight horizontal spaces should use `FittedBox(fit: BoxFit.scaleDown)` or `Flexible` with ellipsis to scale down gracefully on narrow displays without breaking out of container boundaries.

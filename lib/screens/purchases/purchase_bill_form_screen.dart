@@ -334,7 +334,10 @@ class _PurchaseBillFormScreenState
                           items: suppliersList.map((s) {
                             return DropdownMenuItem(
                               value: s,
-                              child: Text('${s.name} (${s.phone})'),
+                              child: Text(
+                                '${s.name} (${s.phone})',
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             );
                           }).toList(),
                           onChanged: (supplier) =>
@@ -531,18 +534,25 @@ class _PurchaseBillFormScreenState
                           fontSize: 15,
                         ),
                       ),
-                      Text(
-                        CurrencyFormatter.format(
-                          (_grandTotal -
-                                  (double.tryParse(
-                                          _initialPaidController.text) ??
-                                      0.0))
-                              .clamp(0.0, double.infinity),
-                        ),
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red,
-                          fontSize: 16,
+                      const SizedBox(width: 8),
+                      Flexible(
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            CurrencyFormatter.format(
+                              (_grandTotal -
+                                      (double.tryParse(
+                                              _initialPaidController.text) ??
+                                          0.0))
+                                  .clamp(0.0, double.infinity),
+                            ),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red,
+                              fontSize: 16,
+                            ),
+                          ),
                         ),
                       ),
                     ],

@@ -372,24 +372,35 @@ class _InvoiceFormScreenState extends ConsumerState<InvoiceFormScreen> {
                               Text(
                                 profile?.businessName ?? 'Ponsri Enterprises',
                                 style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 16),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
                               if (profile?.gstNumber != null)
-                                Text('GSTIN: ${profile!.gstNumber}', style: theme.textTheme.bodySmall),
+                                Text(
+                                  'GSTIN: ${profile!.gstNumber}',
+                                  style: theme.textTheme.bodySmall,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                             ],
                           ),
                         ),
+                        const SizedBox(width: 8),
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                           decoration: BoxDecoration(
                             color: cs.primaryContainer,
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          child: Text(
-                            _documentNumber,
-                            style: GoogleFonts.inter(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                              color: cs.primary,
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              _documentNumber,
+                              style: GoogleFonts.inter(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                                color: cs.primary,
+                              ),
                             ),
                           ),
                         ),
@@ -433,11 +444,16 @@ class _InvoiceFormScreenState extends ConsumerState<InvoiceFormScreen> {
                           children: [
                             Icon(Icons.person_search_rounded, color: cs.primary),
                             const SizedBox(width: 8),
-                            Text(
-                              'Tap to select or quick-add customer',
-                              style: GoogleFonts.inter(
-                                color: cs.primary,
-                                fontWeight: FontWeight.w600,
+                            Flexible(
+                              child: Text(
+                                'Tap to select or quick-add customer',
+                                textAlign: TextAlign.center,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.inter(
+                                  color: cs.primary,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
                           ],
@@ -451,12 +467,24 @@ class _InvoiceFormScreenState extends ConsumerState<InvoiceFormScreen> {
                         Text(
                           _selectedCustomer!.name,
                           style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.bold),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
                         const SizedBox(height: 4),
                         if (_selectedCustomer!.phone != null)
-                          Text('Phone: ${_selectedCustomer!.phone}', style: theme.textTheme.bodyMedium),
+                          Text(
+                            'Phone: ${_selectedCustomer!.phone}',
+                            style: theme.textTheme.bodyMedium,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         if (_selectedCustomer!.address != null)
-                          Text('Address: ${_selectedCustomer!.address}', style: theme.textTheme.bodyMedium),
+                          Text(
+                            'Address: ${_selectedCustomer!.address}',
+                            style: theme.textTheme.bodyMedium,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         if (_selectedCustomer!.gstNumber != null) ...[
                           const SizedBox(height: 4),
                           Container(
@@ -468,6 +496,8 @@ class _InvoiceFormScreenState extends ConsumerState<InvoiceFormScreen> {
                             child: Text(
                               'GSTIN: ${_selectedCustomer!.gstNumber}',
                               style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: cs.primary),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                         ],
@@ -515,9 +545,15 @@ class _InvoiceFormScreenState extends ConsumerState<InvoiceFormScreen> {
                                 children: [
                                   Icon(Icons.calendar_today_rounded, size: 16, color: cs.primary),
                                   const SizedBox(width: 6),
-                                  Text(
-                                    DateFormatter.display(_date),
-                                    style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 13),
+                                  Flexible(
+                                    child: FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        DateFormatter.display(_date),
+                                        style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 13),
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -570,9 +606,15 @@ class _InvoiceFormScreenState extends ConsumerState<InvoiceFormScreen> {
                               'No line items added yet',
                               style: GoogleFonts.inter(fontWeight: FontWeight.w600, color: cs.primary),
                             ),
-                            Text(
-                              'Tap to select items from catalog or add custom entries',
-                              style: theme.textTheme.bodySmall,
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 16),
+                              child: Text(
+                                'Tap to select items from catalog or add custom entries',
+                                style: theme.textTheme.bodySmall,
+                                textAlign: TextAlign.center,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
                           ],
                         ),
@@ -595,9 +637,13 @@ class _InvoiceFormScreenState extends ConsumerState<InvoiceFormScreen> {
                                 children: [
                                   Row(
                                     children: [
-                                      Text(
-                                        line.itemName,
-                                        style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 14),
+                                      Expanded(
+                                        child: Text(
+                                          line.itemName,
+                                          style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 14),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                       ),
                                       if (line.hsnSacCode != null) ...[
                                         const SizedBox(width: 6),
@@ -812,7 +858,10 @@ class _InvoiceFormScreenState extends ConsumerState<InvoiceFormScreen> {
                       height: 50,
                       child: OutlinedButton(
                         onPressed: _isSaving ? null : () => _saveInvoice('draft'),
-                        child: const Text('Save as Draft'),
+                        child: const FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text('Save as Draft'),
+                        ),
                       ),
                     ),
                   ),
@@ -829,7 +878,10 @@ class _InvoiceFormScreenState extends ConsumerState<InvoiceFormScreen> {
                                 child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                               )
                             : const Icon(Icons.send_rounded, size: 18),
-                        label: Text(_isEditing ? 'Update & Send' : 'Save & Send'),
+                        label: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(_isEditing ? 'Update & Send' : 'Save & Send'),
+                        ),
                       ),
                     ),
                   ),
@@ -866,20 +918,30 @@ class _SummaryRow extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            label,
-            style: GoogleFonts.inter(
-              fontSize: fontSize,
-              fontWeight: isBold ? FontWeight.bold : FontWeight.w500,
-              color: color,
+          Expanded(
+            child: Text(
+              label,
+              style: GoogleFonts.inter(
+                fontSize: fontSize,
+                fontWeight: isBold ? FontWeight.bold : FontWeight.w500,
+                color: color,
+              ),
+              overflow: TextOverflow.ellipsis,
             ),
           ),
-          Text(
-            value,
-            style: GoogleFonts.inter(
-              fontSize: fontSize,
-              fontWeight: isBold ? FontWeight.bold : FontWeight.w600,
-              color: color,
+          const SizedBox(width: 8),
+          Flexible(
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerRight,
+              child: Text(
+                value,
+                style: GoogleFonts.inter(
+                  fontSize: fontSize,
+                  fontWeight: isBold ? FontWeight.bold : FontWeight.w600,
+                  color: color,
+                ),
+              ),
             ),
           ),
         ],

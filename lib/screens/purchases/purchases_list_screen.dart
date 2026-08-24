@@ -9,6 +9,7 @@ import '../../providers/purchases_provider.dart';
 import '../../providers/suppliers_provider.dart';
 import '../../utils/currency_formatter.dart';
 import '../../utils/date_formatter.dart';
+import '../../widgets/app_filter_chip.dart';
 
 class PurchasesListScreen extends ConsumerWidget {
   const PurchasesListScreen({super.key});
@@ -208,23 +209,10 @@ class _FilterChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FilterChip(
-      label: Text(label),
-      selected: isSelected,
-      onSelected: (_) => onSelected(),
-      selectedColor: AppColors.primaryBlue,
-      labelStyle: TextStyle(
-        color: isSelected ? Colors.white : AppColors.textDarkPrimary,
-        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-        fontSize: 13,
-      ),
-      showCheckmark: false,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-        side: BorderSide(
-          color: isSelected ? AppColors.primaryBlue : Colors.grey.shade300,
-        ),
-      ),
+    return AppFilterChip(
+      label: label,
+      isSelected: isSelected,
+      onSelected: onSelected,
     );
   }
 }

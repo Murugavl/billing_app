@@ -340,14 +340,22 @@ abstract final class AppTheme {
 
   static ChipThemeData _chipTheme(ColorScheme cs) => ChipThemeData(
         backgroundColor: cs.surfaceContainerHighest,
-        selectedColor: cs.primaryContainer,
+        selectedColor: AppColors.primaryBlue,
+        disabledColor: cs.onSurface.withAlpha(50),
         labelStyle: GoogleFonts.inter(
           fontSize: 12,
           fontWeight: FontWeight.w500,
+          color: cs.onSurface,
+        ),
+        secondaryLabelStyle: GoogleFonts.inter(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+          color: Colors.white,
         ),
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
+          side: BorderSide(color: cs.outlineVariant),
         ),
       );
 

@@ -8,6 +8,7 @@ import '../../providers/reports_provider.dart';
 import '../../services/csv_service.dart';
 import '../../utils/currency_formatter.dart';
 import '../../utils/date_formatter.dart';
+import '../../widgets/app_filter_chip.dart';
 
 class ReportsScreen extends ConsumerWidget {
   const ReportsScreen({super.key});
@@ -467,10 +468,10 @@ class _FilterChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChoiceChip(
-      label: Text(label, style: const TextStyle(fontSize: 12)),
-      selected: isSelected,
-      onSelected: (_) => onSelected(),
+    return AppFilterChip(
+      label: label,
+      isSelected: isSelected,
+      onSelected: onSelected,
     );
   }
 }

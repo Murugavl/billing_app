@@ -10,6 +10,7 @@ import '../../providers/estimates_provider.dart';
 import '../../services/database_provider.dart';
 import '../../utils/currency_formatter.dart';
 import '../../utils/date_formatter.dart';
+import '../../widgets/app_filter_chip.dart';
 import '../invoices/invoice_form_screen.dart';
 import 'estimate_form_screen.dart';
 import '../pdf/pdf_preview_screen.dart';
@@ -210,13 +211,11 @@ class _EstimatesScreenState extends ConsumerState<EstimatesScreen> {
                 final label = st.replaceAll('_', ' ');
                 return Padding(
                   padding: const EdgeInsets.only(right: 6),
-                  child: ChoiceChip(
-                    label: Text(label, style: const TextStyle(fontSize: 12)),
-                    selected: isSelected,
-                    onSelected: (selected) {
-                      if (selected) {
-                        setState(() => _selectedStatusFilter = st);
-                      }
+                  child: AppFilterChip(
+                    label: label,
+                    isSelected: isSelected,
+                    onSelected: () {
+                      setState(() => _selectedStatusFilter = st);
                     },
                   ),
                 );

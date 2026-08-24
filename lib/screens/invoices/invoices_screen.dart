@@ -9,6 +9,7 @@ import '../../providers/invoices_provider.dart';
 import '../../services/database_provider.dart';
 import '../../utils/currency_formatter.dart';
 import '../../utils/date_formatter.dart';
+import '../../widgets/app_filter_chip.dart';
 import 'invoice_form_screen.dart';
 import 'invoice_detail_screen.dart';
 import '../pdf/pdf_preview_screen.dart';
@@ -155,13 +156,11 @@ class _InvoicesScreenState extends ConsumerState<InvoicesScreen> {
                 final label = st.replaceAll('_', ' ');
                 return Padding(
                   padding: const EdgeInsets.only(right: 6),
-                  child: ChoiceChip(
-                    label: Text(label, style: const TextStyle(fontSize: 12)),
-                    selected: isSelected,
-                    onSelected: (selected) {
-                      if (selected) {
-                        setState(() => _selectedStatusFilter = st);
-                      }
+                  child: AppFilterChip(
+                    label: label,
+                    isSelected: isSelected,
+                    onSelected: () {
+                      setState(() => _selectedStatusFilter = st);
                     },
                   ),
                 );

@@ -129,7 +129,6 @@ class _EstimatesScreenState extends ConsumerState<EstimatesScreen> {
 
     // Update estimate status to accepted
     await docsDao.updateStatus(doc.id, 'accepted');
-    ref.invalidate(estimatesStreamProvider);
 
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(

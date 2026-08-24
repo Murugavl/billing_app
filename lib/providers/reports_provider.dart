@@ -128,128 +128,132 @@ final activeDateRangeProvider = Provider<DateRange>((ref) {
 });
 
 /// Sales Report Provider
-final salesReportProvider = FutureProvider<SalesReportData>((ref) async {
+final salesReportProvider = StreamProvider<SalesReportData>((ref) {
   final docsDao = ref.watch(documentsDaoProvider);
   final range = ref.watch(activeDateRangeProvider);
 
-  final invoices = await docsDao.getDocumentsByType('invoice');
-  final filtered = invoices.where((doc) {
-    return doc.date.isAfter(range.start.subtract(const Duration(seconds: 1))) &&
-        doc.date.isBefore(range.end.add(const Duration(seconds: 1)));
-  }).toList();
+  return docsDao.watchDocumentsByType('invoice').map((invoices) {
+    final filtered = invoices.where((doc) {
+      return doc.date.isAfter(range.start.subtract(const Duration(seconds: 1))) &&
+          doc.date.isBefore(range.end.add(const Duration(seconds: 1)));
+    }).toList();
 
-  double totalSales = 0.0;
-  for (final doc in filtered) {
-    totalSales += doc.grandTotal;
-  }
+    double totalSales = 0.0;
+    for (final doc in filtered) {
+      totalSales += doc.grandTotal;
+    }
 
-  final count = filtered.length;
-  final avg = count > 0 ? totalSales / count : 0.0;
+    final count = filtered.length;
+    final avg = count > 0 ? totalSales / count : 0.0;
 
-  return SalesReportData(
-    totalSales: double.parse(totalSales.toStringAsFixed(2)),
-    invoiceCount: count,
-    averageInvoiceValue: double.parse(avg.toStringAsFixed(2)),
-    invoices: filtered,
-  );
+    return SalesReportData(
+      totalSales: double.parse(totalSales.toStringAsFixed(2)),
+      invoiceCount: count,
+      averageInvoiceValue: double.parse(avg.toStringAsFixed(2)),
+      invoices: filtered,
+    );
+  });
 });
 
 /// Purchase Report Provider
-final purchaseReportProvider = FutureProvider<PurchaseReportData>((ref) async {
+final purchaseReportProvider = StreamProvider<PurchaseReportData>((ref) {
   final purchasesDao = ref.watch(purchaseBillsDaoProvider);
   final range = ref.watch(activeDateRangeProvider);
 
-  final bills = await purchasesDao.getAllPurchaseBills();
-  final filtered = bills.where((b) {
-    return b.date.isAfter(range.start.subtract(const Duration(seconds: 1))) &&
-        b.date.isBefore(range.end.add(const Duration(seconds: 1)));
-  }).toList();
+  return purchasesDao.watchAllPurchaseBills().map((bills) {
+    final filtered = bills.where((b) {
+      return b.date.isAfter(range.start.subtract(const Duration(seconds: 1))) &&
+          b.date.isBefore(range.end.add(const Duration(seconds: 1)));
+    }).toList();
 
-  double totalPurchases = 0.0;
-  for (final bill in filtered) {
-    totalPurchases += bill.grandTotal;
-  }
+    double totalPurchases = 0.0;
+    for (final bill in filtered) {
+      totalPurchases += bill.grandTotal;
+    }
 
-  final count = filtered.length;
-  final avg = count > 0 ? totalPurchases / count : 0.0;
+    final count = filtered.length;
+    final avg = count > 0 ? totalPurchases / count : 0.0;
 
-  return PurchaseReportData(
-    totalPurchases: double.parse(totalPurchases.toStringAsFixed(2)),
-    billCount: count,
-    averageBillValue: double.parse(avg.toStringAsFixed(2)),
-    bills: filtered,
-  );
+    return PurchaseReportData(
+      totalPurchases: double.parse(totalPurchases.toStringAsFixed(2)),
+      billCount: count,
+      averageBillValue: double.parse(avg.toStringAsFixed(2)),
+      bills: filtered,
+    );
+  });
 });
 
 /// Top Customers by Revenue Provider
-final topCustomersProvider = FutureProvider<List<CustomerRevenue>>((ref) async {
+final topCustomersProvider = StreamProvider<List<CustomerRevenue>>((ref) {
   final docsDao = ref.watch(documentsDaoProvider);
-  final invoices = await docsDao.getDocumentsByType('invoice');
 
-  final Map<int, CustomerRevenue> map = {};
-  for (final doc in invoices) {
-    if (doc.customerId == null) continue;
-    final id = doc.customerId!;
-    final existing = map[id];
+  return docsDao.watchDocumentsByType('invoice').map((invoices) {
+    final Map<int, CustomerRevenue> map = {};
+    for (final doc in invoices) {
+      if (doc.customerId == null) continue;
+      final id = doc.customerId!;
+      final existing = map[id];
 
-    if (existing == null) {
-      map[id] = CustomerRevenue(
-        customerId: id,
-        customerName: doc.customerName,
-        customerPhone: doc.customerPhone,
-        totalRevenue: doc.grandTotal,
-        invoiceCount: 1,
-      );
-    } else {
-      map[id] = CustomerRevenue(
-        customerId: id,
-        customerName: doc.customerName,
-        customerPhone: doc.customerPhone,
-        totalRevenue: double.parse((existing.totalRevenue + doc.grandTotal).toStringAsFixed(2)),
-        invoiceCount: existing.invoiceCount + 1,
-      );
+      if (existing == null) {
+        map[id] = CustomerRevenue(
+          customerId: id,
+          customerName: doc.customerName,
+          customerPhone: doc.customerPhone,
+          totalRevenue: doc.grandTotal,
+          invoiceCount: 1,
+        );
+      } else {
+        map[id] = CustomerRevenue(
+          customerId: id,
+          customerName: doc.customerName,
+          customerPhone: doc.customerPhone,
+          totalRevenue: double.parse((existing.totalRevenue + doc.grandTotal).toStringAsFixed(2)),
+          invoiceCount: existing.invoiceCount + 1,
+        );
+      }
     }
-  }
 
-  final list = map.values.toList();
-  list.sort((a, b) => b.totalRevenue.compareTo(a.totalRevenue));
-  return list;
+    final list = map.values.toList();
+    list.sort((a, b) => b.totalRevenue.compareTo(a.totalRevenue));
+    return list;
+  });
 });
 
 /// Outstanding Payments Report Provider (sorted highest balance due first)
-final outstandingReportProvider = FutureProvider<List<OutstandingCustomerReport>>((ref) async {
+final outstandingReportProvider = StreamProvider<List<OutstandingCustomerReport>>((ref) {
   final docsDao = ref.watch(documentsDaoProvider);
-  final invoices = await docsDao.getDocumentsByType('invoice');
 
-  final Map<int, OutstandingCustomerReport> map = {};
-  for (final doc in invoices) {
-    if (doc.status == 'paid' || doc.customerId == null) continue;
-    final due = doc.balanceDue ?? 0.0;
-    if (due <= 0) continue;
+  return docsDao.watchDocumentsByType('invoice').map((invoices) {
+    final Map<int, OutstandingCustomerReport> map = {};
+    for (final doc in invoices) {
+      if (doc.status == 'paid' || doc.customerId == null) continue;
+      final due = doc.balanceDue ?? 0.0;
+      if (due <= 0) continue;
 
-    final id = doc.customerId!;
-    final existing = map[id];
+      final id = doc.customerId!;
+      final existing = map[id];
 
-    if (existing == null) {
-      map[id] = OutstandingCustomerReport(
-        customerId: id,
-        customerName: doc.customerName,
-        customerPhone: doc.customerPhone,
-        totalOutstanding: due,
-        unpaidInvoicesCount: 1,
-      );
-    } else {
-      map[id] = OutstandingCustomerReport(
-        customerId: id,
-        customerName: doc.customerName,
-        customerPhone: doc.customerPhone,
-        totalOutstanding: double.parse((existing.totalOutstanding + due).toStringAsFixed(2)),
-        unpaidInvoicesCount: existing.unpaidInvoicesCount + 1,
-      );
+      if (existing == null) {
+        map[id] = OutstandingCustomerReport(
+          customerId: id,
+          customerName: doc.customerName,
+          customerPhone: doc.customerPhone,
+          totalOutstanding: due,
+          unpaidInvoicesCount: 1,
+        );
+      } else {
+        map[id] = OutstandingCustomerReport(
+          customerId: id,
+          customerName: doc.customerName,
+          customerPhone: doc.customerPhone,
+          totalOutstanding: double.parse((existing.totalOutstanding + due).toStringAsFixed(2)),
+          unpaidInvoicesCount: existing.unpaidInvoicesCount + 1,
+        );
+      }
     }
-  }
 
-  final list = map.values.toList();
-  list.sort((a, b) => b.totalOutstanding.compareTo(a.totalOutstanding));
-  return list;
+    final list = map.values.toList();
+    list.sort((a, b) => b.totalOutstanding.compareTo(a.totalOutstanding));
+    return list;
+  });
 });

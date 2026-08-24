@@ -274,9 +274,6 @@ class _InvoiceFormScreenState extends ConsumerState<InvoiceFormScreen> {
           lines: linesCompanions,
         );
       }
-
-      ref.invalidate(invoicesStreamProvider);
-
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

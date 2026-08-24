@@ -53,11 +53,26 @@ class PurchaseBillsDao extends DatabaseAccessor<AppDatabase>
     return PurchaseBillWithLines(bill: bill, lineItems: lines);
   }
 
+  Stream<PurchaseBillWithLines?> watchPurchaseBillWithLines(int id) {
+    final billStream = (select(purchaseBills)..where((t) => t.id.equals(id))).watchSingleOrNull();
+    return billStream.asyncMap((bill) async {
+      if (bill == null) return null;
+      final lines = await (select(purchaseLineItems)..where((t) => t.purchaseBillId.equals(id))).get();
+      return PurchaseBillWithLines(bill: bill, lineItems: lines);
+    });
+  }
+
   Future<List<PurchasePayment>> getPaymentsForBill(int billId) =>
       (select(purchasePayments)
             ..where((t) => t.purchaseBillId.equals(billId))
             ..orderBy([(t) => OrderingTerm.desc(t.date)]))
           .get();
+
+  Stream<List<PurchasePayment>> watchPaymentsForBill(int billId) =>
+      (select(purchasePayments)
+            ..where((t) => t.purchaseBillId.equals(billId))
+            ..orderBy([(t) => OrderingTerm.desc(t.date)]))
+          .watch();
 
   // Delete safety checks
   Future<int> getPurchaseCountForSupplier(int supplierId) async {

@@ -42,6 +42,11 @@ class DocumentsDao extends DatabaseAccessor<AppDatabase>
             ..orderBy([(t) => OrderingTerm.desc(t.createdAt)]))
           .get();
 
+  Stream<List<Document>> watchAllDocuments() =>
+      (select(documents)
+            ..orderBy([(t) => OrderingTerm.desc(t.createdAt)]))
+          .watch();
+
   Future<List<Document>> getDocumentsByType(String type) =>
       (select(documents)
             ..where((t) => t.type.equals(type))

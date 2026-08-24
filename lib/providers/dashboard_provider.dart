@@ -42,75 +42,76 @@ final dashboardStatsProvider = StreamProvider<DashboardStats>((ref) {
   final docsStream = db.select(db.documents).watch();
   final billsStream = db.select(db.purchaseBills).watch();
 
-  return docsStream.asyncMap((documents) async {
-    final purchaseBills = await db.select(db.purchaseBills).get();
-    final now = DateTime.now();
+  return docsStream.asyncExpand((documents) {
+    return billsStream.map((purchaseBills) {
+      final now = DateTime.now();
 
-    DateTime start = DateTime(2000);
-    DateTime end = DateTime(2100);
+      DateTime start = DateTime(2000);
+      DateTime end = DateTime(2100);
 
-    switch (range) {
-      case DashboardDateRange.today:
-        start = DateTime(now.year, now.month, now.day);
-        end = DateTime(now.year, now.month, now.day, 23, 59, 59);
-        break;
-      case DashboardDateRange.thisWeek:
-        final monday = now.subtract(Duration(days: now.weekday - 1));
-        start = DateTime(monday.year, monday.month, monday.day);
-        end = DateTime(now.year, now.month, now.day, 23, 59, 59);
-        break;
-      case DashboardDateRange.thisMonth:
-        start = DateTime(now.year, now.month, 1);
-        end = DateTime(now.year, now.month + 1, 0, 23, 59, 59);
-        break;
-      case DashboardDateRange.thisYear:
-        start = DateTime(now.year, 1, 1);
-        end = DateTime(now.year, 12, 31, 23, 59, 59);
-        break;
-      case DashboardDateRange.all:
-        start = DateTime(2000);
-        end = DateTime(2100);
-        break;
-    }
+      switch (range) {
+        case DashboardDateRange.today:
+          start = DateTime(now.year, now.month, now.day);
+          end = DateTime(now.year, now.month, now.day, 23, 59, 59);
+          break;
+        case DashboardDateRange.thisWeek:
+          final monday = now.subtract(Duration(days: now.weekday - 1));
+          start = DateTime(monday.year, monday.month, monday.day);
+          end = DateTime(now.year, now.month, now.day, 23, 59, 59);
+          break;
+        case DashboardDateRange.thisMonth:
+          start = DateTime(now.year, now.month, 1);
+          end = DateTime(now.year, now.month + 1, 0, 23, 59, 59);
+          break;
+        case DashboardDateRange.thisYear:
+          start = DateTime(now.year, 1, 1);
+          end = DateTime(now.year, 12, 31, 23, 59, 59);
+          break;
+        case DashboardDateRange.all:
+          start = DateTime(2000);
+          end = DateTime(2100);
+          break;
+      }
 
-    double outstanding = 0.0;
-    double salesSum = 0.0;
-    int draftEstimates = 0;
+      double outstanding = 0.0;
+      double salesSum = 0.0;
+      int draftEstimates = 0;
 
-    for (final doc in documents) {
-      if (doc.type == 'invoice') {
-        if (doc.status != 'paid') {
-          outstanding += doc.balanceDue ?? 0.0;
-        }
-        if (doc.date.isAfter(start.subtract(const Duration(seconds: 1))) &&
-            doc.date.isBefore(end.add(const Duration(seconds: 1))) &&
-            doc.status != 'cancelled') {
-          salesSum += doc.grandTotal;
-        }
-      } else if (doc.type == 'estimate') {
-        if (doc.status == 'draft') {
-          draftEstimates++;
+      for (final doc in documents) {
+        if (doc.type == 'invoice') {
+          if (doc.status != 'paid') {
+            outstanding += doc.balanceDue ?? 0.0;
+          }
+          if (doc.date.isAfter(start.subtract(const Duration(seconds: 1))) &&
+              doc.date.isBefore(end.add(const Duration(seconds: 1))) &&
+              doc.status != 'cancelled') {
+            salesSum += doc.grandTotal;
+          }
+        } else if (doc.type == 'estimate') {
+          if (doc.status == 'draft') {
+            draftEstimates++;
+          }
         }
       }
-    }
 
-    double purchasesSum = 0.0;
-    for (final bill in purchaseBills) {
-      if (bill.date.isAfter(start.subtract(const Duration(seconds: 1))) &&
-          bill.date.isBefore(end.add(const Duration(seconds: 1)))) {
-        purchasesSum += bill.grandTotal;
+      double purchasesSum = 0.0;
+      for (final bill in purchaseBills) {
+        if (bill.date.isAfter(start.subtract(const Duration(seconds: 1))) &&
+            bill.date.isBefore(end.add(const Duration(seconds: 1)))) {
+          purchasesSum += bill.grandTotal;
+        }
       }
-    }
 
-    final margin = salesSum - purchasesSum;
+      final margin = salesSum - purchasesSum;
 
-    return DashboardStats(
-      totalOutstanding: double.parse(outstanding.toStringAsFixed(2)),
-      totalSales: double.parse(salesSum.toStringAsFixed(2)),
-      totalPurchases: double.parse(purchasesSum.toStringAsFixed(2)),
-      netMargin: double.parse(margin.toStringAsFixed(2)),
-      draftEstimatesCount: draftEstimates,
-      dateRange: range,
-    );
+      return DashboardStats(
+        totalOutstanding: double.parse(outstanding.toStringAsFixed(2)),
+        totalSales: double.parse(salesSum.toStringAsFixed(2)),
+        totalPurchases: double.parse(purchasesSum.toStringAsFixed(2)),
+        netMargin: double.parse(margin.toStringAsFixed(2)),
+        draftEstimatesCount: draftEstimates,
+        dateRange: range,
+      );
+    });
   });
 });

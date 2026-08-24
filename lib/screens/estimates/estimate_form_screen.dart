@@ -335,9 +335,6 @@ class _EstimateFormScreenState extends ConsumerState<EstimateFormScreen> {
           lines: linesCompanions,
         );
       }
-
-      ref.invalidate(estimatesStreamProvider);
-
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

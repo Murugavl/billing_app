@@ -76,12 +76,12 @@ final filteredPurchaseBillsProvider = Provider<List<PurchaseBill>>((ref) {
 
 /// Single purchase bill with line items provider
 final purchaseBillDetailProvider =
-    FutureProvider.family<PurchaseBillWithLines?, int>((ref, billId) async {
-  return ref.watch(purchaseBillsDaoProvider).getPurchaseBillWithLines(billId);
+    StreamProvider.family<PurchaseBillWithLines?, int>((ref, billId) {
+  return ref.watch(purchaseBillsDaoProvider).watchPurchaseBillWithLines(billId);
 });
 
 /// Payments history provider for a purchase bill
 final purchaseBillPaymentsProvider =
-    FutureProvider.family<List<PurchasePayment>, int>((ref, billId) async {
-  return ref.watch(purchaseBillsDaoProvider).getPaymentsForBill(billId);
+    StreamProvider.family<List<PurchasePayment>, int>((ref, billId) {
+  return ref.watch(purchaseBillsDaoProvider).watchPaymentsForBill(billId);
 });

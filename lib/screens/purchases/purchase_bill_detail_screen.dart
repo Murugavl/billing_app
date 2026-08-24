@@ -103,10 +103,6 @@ class PurchaseBillDetailScreen extends ConsumerWidget {
                             : notesCtrl.text.trim(),
                       );
 
-                  ref.invalidate(purchaseBillDetailProvider(bill.id));
-                  ref.invalidate(purchaseBillPaymentsProvider(bill.id));
-                  ref.invalidate(purchaseBillsStreamProvider);
-
                   if (context.mounted) {
                     Navigator.pop(ctx);
                     ScaffoldMessenger.of(context).showSnackBar(

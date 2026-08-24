@@ -2,6 +2,7 @@
 import 'dart:async';
 import 'dart:typed_data';
 import 'package:extension_google_sign_in_as_googleapis_auth/extension_google_sign_in_as_googleapis_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -48,8 +49,18 @@ class DriveService {
         }
       }
       return user;
+    } on PlatformException catch (e) {
+      final detailStr = e.toString();
+      if (detailStr.contains('10') || detailStr.contains('sign_in_failed')) {
+        throw Exception(
+          'Google Sign-In configuration error (10: DEVELOPER_ERROR). '
+          'Please ensure the SHA-1 fingerprint and package name (com.ponsri.billwise) '
+          'are registered in Google Cloud / Firebase Console.',
+        );
+      }
+      throw Exception('Google Sign-In failed: ${e.message ?? e.code}');
     } catch (e) {
-      rethrow;
+      throw Exception('Google Sign-In failed: $e');
     }
   }
 

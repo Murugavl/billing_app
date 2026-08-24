@@ -50,13 +50,15 @@ class DriveBackupSettingsScreen extends ConsumerWidget {
               final success =
                   await ref.read(driveBackupProvider.notifier).performRestore();
               if (context.mounted) {
+                final statusMsg = ref.read(driveBackupProvider).statusMessage;
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
                       success
                           ? 'Database restored successfully!'
-                          : 'Restore failed. Check internet connection.',
+                          : (statusMsg ?? 'Restore failed.'),
                     ),
+                    backgroundColor: success ? Colors.green : Colors.red,
                   ),
                 );
               }
@@ -313,13 +315,32 @@ class DriveBackupSettingsScreen extends ConsumerWidget {
 
             if (state.statusMessage != null) ...[
               const SizedBox(height: 16),
-              Text(
-                state.statusMessage!,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: cs.primary,
-                  fontWeight: FontWeight.w500,
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: state.statusMessage!.toLowerCase().contains('failed') ||
+                          state.statusMessage!.toLowerCase().contains('error')
+                      ? Colors.red.withValues(alpha: 0.1)
+                      : cs.primaryContainer.withValues(alpha: 0.3),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: state.statusMessage!.toLowerCase().contains('failed') ||
+                            state.statusMessage!.toLowerCase().contains('error')
+                        ? Colors.red.withValues(alpha: 0.3)
+                        : cs.primary.withValues(alpha: 0.2),
+                  ),
+                ),
+                child: Text(
+                  state.statusMessage!,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: state.statusMessage!.toLowerCase().contains('failed') ||
+                            state.statusMessage!.toLowerCase().contains('error')
+                        ? Colors.red.shade800
+                        : cs.primary,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ],

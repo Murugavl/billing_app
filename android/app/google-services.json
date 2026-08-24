@@ -1,0 +1,44 @@
+{
+  "project_info": {
+    "project_number": "959779438700",
+    "project_id": "billwise-app",
+    "storage_bucket": "billwise-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:959779438700:android:c35f7911ab083038",
+        "android_client_info": {
+          "package_name": "com.ponsri.billwise"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "959779438700-billwiseappclient.apps.googleusercontent.com",
+          "client_type": 1,
+          "certificate_hash": "fb41bf382b78bf5fbf7c66792bc343bf941b3038"
+        },
+        {
+          "client_id": "959779438700-billwiseappclientrelease.apps.googleusercontent.com",
+          "client_type": 1,
+          "certificate_hash": "803fc611bf118a0300c3b6504b15204644ff19ca"
+        },
+        {
+          "client_id": "959779438700-billwiseappwebclient.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBillwiseAppGoogleServicesKey2026"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

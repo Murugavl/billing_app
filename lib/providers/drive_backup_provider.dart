@@ -158,7 +158,15 @@ class DriveBackupNotifier extends Notifier<DriveBackupState> {
   }
 
   Future<bool> performRestore([String? fileId]) async {
-    if (state.user == null) return false;
+    if (state.user == null) {
+      await signIn();
+      if (state.user == null) {
+        if (state.statusMessage == null || !state.statusMessage!.contains('failed')) {
+          state = state.copyWith(statusMessage: 'Please sign in with Google before restoring');
+        }
+        return false;
+      }
+    }
 
     String? targetFileId = fileId;
     if (targetFileId == null) {

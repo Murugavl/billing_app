@@ -23,3 +23,15 @@
 
 # Path Provider Keep Rules
 -keep class io.flutter.plugins.pathprovider.** { *; }
+
+# Google Sign-In & Google APIs Keep Rules
+-keep class com.google.android.gms.auth.api.signin.** { *; }
+-keep class com.google.android.gms.common.** { *; }
+-dontwarn com.google.android.gms.**
+
+# WorkManager Keep Rules
+-keep class androidx.work.** { *; }
+
+# Google Play Core Dontwarn Rules
+-dontwarn com.google.android.play.core.**
+

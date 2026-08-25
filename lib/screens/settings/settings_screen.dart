@@ -79,7 +79,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               controller: controller,
               maxLines: 6,
               decoration: const InputDecoration(
-                hintText: 'Paste {"app": "ponsri_billing"...} JSON here',
+                hintText: 'Paste {"app": "rasidhu"...} JSON here',
                 border: OutlineInputBorder(),
               ),
             ),

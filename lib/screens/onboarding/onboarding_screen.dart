@@ -59,7 +59,7 @@ class OnboardingScreen extends ConsumerWidget {
                         ),
                         const SizedBox(height: 14),
                         Text(
-                          'Welcome to\nPonsri Billing',
+                          'Welcome to\nRasidhu Invoicing',
                           style: GoogleFonts.inter(
                             fontSize: 26,
                             fontWeight: FontWeight.w700,

@@ -473,7 +473,7 @@ class _EstimateFormScreenState extends ConsumerState<EstimateFormScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                profile?.businessName ?? 'Ponsri Enterprises',
+                                profile?.businessName ?? 'My Business',
                                 style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 16),
                               ),
                               if (profile?.gstNumber != null)

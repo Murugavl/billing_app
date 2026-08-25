@@ -98,7 +98,7 @@ class PdfService {
                   crossAxisAlignment: pw.CrossAxisAlignment.start,
                   children: [
                     pw.Text(
-                      profile?.businessName ?? 'Ponsri Enterprises',
+                      profile?.businessName ?? 'My Business',
                       style: pw.TextStyle(
                         fontSize: 18,
                         fontWeight: pw.FontWeight.bold,

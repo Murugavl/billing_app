@@ -46,7 +46,7 @@ class BackupService {
     }
 
     final backupData = {
-      'app': 'ponsri_billing',
+      'app': 'rasidhu',
       'version': 1,
       'exportedAt': DateTime.now().toIso8601String(),
       'businessProfile': profile == null ? null : {
@@ -124,7 +124,7 @@ class BackupService {
   static Future<void> exportAndShareBackup(AppDatabase db) async {
     final jsonStr = await generateBackupJson(db);
     final dateSuffix = DateTime.now().toIso8601String().replaceAll(':', '-').split('.').first;
-    final filename = 'ponsri_billing_backup_$dateSuffix.json';
+    final filename = 'rasidhu_backup_$dateSuffix.json';
 
     final tempDir = await getTemporaryDirectory();
     final file = File('${tempDir.path}/$filename');
@@ -142,7 +142,7 @@ class BackupService {
   /// Restores entire database state from a backup JSON string
   static Future<bool> restoreFromBackupJson(AppDatabase db, String jsonStr) async {
     final Map<String, dynamic> data = jsonDecode(jsonStr);
-    if (data['app'] != 'ponsri_billing') {
+    if (data['app'] != 'rasidhu' && data['app'] != 'Rasidhu' && data['app'] != 'ponsri_billing') {
       throw FormatException('Invalid backup payload file');
     }
 

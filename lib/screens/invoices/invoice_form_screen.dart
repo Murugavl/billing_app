@@ -366,7 +366,7 @@ class _InvoiceFormScreenState extends ConsumerState<InvoiceFormScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                profile?.businessName ?? 'Ponsri Enterprises',
+                                profile?.businessName ?? 'My Business',
                                 style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 16),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,

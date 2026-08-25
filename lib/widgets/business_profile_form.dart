@@ -188,7 +188,7 @@ class _BusinessProfileFormState extends State<BusinessProfileForm> {
           AppTextField(
             label: 'Business Name',
             controller: _businessName,
-            hint: 'e.g. Ponsri Enterprises',
+            hint: 'e.g. Acme Traders',
             isRequired: true,
             textCapitalization: TextCapitalization.words,
             validator: (v) => Validators.required(v, label: 'Business name'),

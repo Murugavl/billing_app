@@ -7,7 +7,7 @@ abstract final class EnvConfig {
 
   static const String defaultBusinessName = String.fromEnvironment(
     'DEFAULT_BUSINESS_NAME',
-    defaultValue: 'Ponsri Enterprises',
+    defaultValue: '',
   );
 
   static const String defaultPhone = String.fromEnvironment(
@@ -17,7 +17,7 @@ abstract final class EnvConfig {
 
   static const String defaultEmail = String.fromEnvironment(
     'DEFAULT_EMAIL',
-    defaultValue: 'ponsrienterprises@gmail.com',
+    defaultValue: '',
   );
 
   static const String defaultState = String.fromEnvironment(

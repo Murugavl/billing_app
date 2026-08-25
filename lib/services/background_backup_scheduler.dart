@@ -7,7 +7,7 @@ import '../db/app_database.dart';
 import 'backup_repository.dart';
 import 'drive_service.dart';
 
-const String driveBackupTaskName = 'billwise_google_drive_backup_task';
+const String driveBackupTaskName = 'rasidhu_google_drive_backup_task';
 
 @pragma('vm:entry-point')
 void callbackDispatcher() {

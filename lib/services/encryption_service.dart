@@ -5,7 +5,7 @@ import 'package:crypto/crypto.dart';
 import 'package:encrypt/encrypt.dart';
 
 class EncryptionService {
-  static const String _salt = 'BillwiseEncryptedDriveBackupSalt2026_v1';
+  static const String _salt = 'RasidhuEncryptedDriveBackupSalt2026_v1';
 
   /// Derives a 256-bit (32 bytes) AES Key from Google User ID and app salt using SHA-256.
   static Key _deriveKey(String googleUserId) {

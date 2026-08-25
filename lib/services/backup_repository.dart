@@ -28,7 +28,7 @@ class BackupRepository {
 
     final Map<String, dynamic> exportMap = {
       'schemaVersion': 3,
-      'app': 'Billwise',
+      'app': 'Rasidhu',
       'exportedAt': DateTime.now().toIso8601String(),
       'businessProfile': profile == null
           ? null
@@ -185,8 +185,8 @@ class BackupRepository {
   Future<void> restoreDatabaseFromJson(String jsonString) async {
     final Map<String, dynamic> data = jsonDecode(jsonString);
 
-    if (data['app'] != 'Billwise') {
-      throw Exception('Invalid backup file — missing Billwise signature.');
+    if (data['app'] != 'Rasidhu') {
+      throw Exception('Invalid backup file — missing Rasidhu signature.');
     }
 
     await db.transaction(() async {

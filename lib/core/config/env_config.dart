@@ -2,7 +2,7 @@
 abstract final class EnvConfig {
   static const String appName = String.fromEnvironment(
     'APP_NAME',
-    defaultValue: 'Billwise',
+    defaultValue: 'Rasidhu',
   );
 
   static const String defaultBusinessName = String.fromEnvironment(
@@ -27,6 +27,6 @@ abstract final class EnvConfig {
 
   static const String dbSecretSalt = String.fromEnvironment(
     'DB_SECRET_SALT',
-    defaultValue: 'BillwiseSecretKey2026',
+    defaultValue: 'RasidhuSecretKey2026',
   );
 }

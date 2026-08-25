@@ -8,6 +8,9 @@
 *.log
 *.pyc
 *.swp
+*.json
+!*.example
+!pubspec.lock
 .DS_Store
 .atom/
 .build/

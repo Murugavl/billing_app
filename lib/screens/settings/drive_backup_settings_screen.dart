@@ -113,7 +113,7 @@ class DriveBackupSettingsScreen extends ConsumerWidget {
                         ),
                         SizedBox(height: 2),
                         Text(
-                          'Backups are stored in Drive appDataFolder (private to you). Nobody else, including Google or Billwise, can read your business data.',
+                          'Backups are stored in Drive appDataFolder (private to you). Nobody else, including Google or Rasidhu, can read your business data.',
                           style: TextStyle(fontSize: 11, color: Colors.black87),
                         ),
                       ],

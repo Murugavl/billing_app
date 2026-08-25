@@ -89,7 +89,7 @@ class AppDatabase extends _$AppDatabase {
 /// Opens an on-disk [QueryExecutor] using the app documents directory.
 QueryExecutor _openConnection() {
   return driftDatabase(
-    name: 'billwise_db',
+    name: 'rasidhu_db',
     native: DriftNativeOptions(
       databaseDirectory: getApplicationDocumentsDirectory,
     ),

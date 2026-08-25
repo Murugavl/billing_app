@@ -13,7 +13,7 @@ class BillingApp extends ConsumerWidget {
     final router = ref.watch(appRouterProvider);
 
     return MaterialApp.router(
-      title: 'Billwise',
+      title: 'Rasidhu',
       debugShowCheckedModeBanner: false,
 
       // Theme

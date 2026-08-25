@@ -133,7 +133,7 @@ class BackupService {
     // ignore: deprecated_member_use
     await Share.shareXFiles(
       [XFile(file.path)],
-      subject: 'Billwise Data Backup ($filename)',
+      subject: 'Rasidhu Data Backup ($filename)',
     );
 
     await recordBackupDone();

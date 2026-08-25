@@ -55,7 +55,7 @@ class _PdfPreviewScreenState extends ConsumerState<PdfPreviewScreen> {
       // ignore: deprecated_member_use
       await Share.shareXFiles(
         [XFile(file.path)],
-        subject: '${_docWithLines!.document.documentNumber} from Billwise',
+        subject: '${_docWithLines!.document.documentNumber} from Rasidhu',
         text: 'Please find attached ${_docWithLines!.document.type == "invoice" ? "Invoice" : "Estimate"} ${_docWithLines!.document.documentNumber}.',
       );
     }

@@ -91,7 +91,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                 ),
                 const SizedBox(height: 20),
                 const Text(
-                  'Billwise',
+                  'Rasidhu',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 26,

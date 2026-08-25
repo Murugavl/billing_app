@@ -107,7 +107,7 @@ class MoreScreen extends ConsumerWidget {
           _MenuTile(
             icon: Icons.info_outline_rounded,
             label: 'About',
-            subtitle: 'Billwise v1.0.0',
+            subtitle: 'Rasidhu v1.0.0',
             iconColor: cs.onSurface.withAlpha(120),
             onTap: () => _showAbout(context),
           ),
@@ -120,9 +120,9 @@ class MoreScreen extends ConsumerWidget {
   void _showAbout(BuildContext context) {
     showAboutDialog(
       context: context,
-      applicationName: 'Billwise',
+      applicationName: 'Rasidhu',
       applicationVersion: '1.0.0',
-      applicationLegalese: '© 2026 Billwise Invoicing',
+      applicationLegalese: '© 2026 Rasidhu Invoicing',
     );
   }
 }

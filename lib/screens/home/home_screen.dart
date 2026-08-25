@@ -28,9 +28,9 @@ class HomeScreen extends ConsumerWidget {
     final docsDao = ref.watch(documentsDaoProvider);
 
     final businessName = profileAsync.when(
-      data: (p) => p?.businessName ?? 'Billwise',
-      loading: () => 'Billwise',
-      error: (_, __) => 'Billwise',
+      data: (p) => p?.businessName ?? 'Rasidhu',
+      loading: () => 'Rasidhu',
+      error: (_, __) => 'Rasidhu',
     );
 
     return Scaffold(

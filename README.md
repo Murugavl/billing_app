@@ -1,6 +1,37 @@
-# Billwise — Offline-First Billing & Invoicing App
+# Rasidhu — Offline-First Billing & Invoicing App
 
-An offline-first, professional billing and invoicing Flutter application designed for small businesses, water treatment suppliers, and utility service providers (Billwise).
+An offline-first, professional billing and invoicing Flutter application designed for small businesses, water treatment suppliers, and utility service providers.
+
+---
+
+## 🔐 Developer Setup — Required Secret Files
+
+This project uses several secret files that are **NOT included in version control**. You must obtain or create each one before the project will build.
+
+### 1. `.env`
+Copy `.env.example` to `.env` and fill in your values:
+```bash
+cp .env.example .env
+```
+| Variable | Description |
+|---|---|
+| `APP_NAME` | Display name of the app (default: `Rasidhu`) |
+| `DB_SECRET_SALT` | Random secret string for database encryption |
+| `DEFAULT_BUSINESS_NAME` | Pre-filled business name in profile setup |
+
+### 2. `android/key.properties` (Release Signing)
+Copy `android/key.properties.example` to `android/key.properties` and fill in your keystore details:
+```bash
+cp android/key.properties.example android/key.properties
+```
+You also need the **keystore file** itself (`android/app/upload-keystore.jks`). This must be obtained from the project owner or generated fresh if starting from scratch.
+
+### 3. `android/app/google-services.json` (Firebase / Google Sign-In)
+Obtain this file from your **Firebase Console** → Project Settings → Android app (`com.ponsri.rasidhu`). Place it at `android/app/google-services.json`.
+
+A template showing the expected structure is at `android/app/google-services.json.example`.
+
+> ⚠️ **Git Security**: All three files above are listed in `.gitignore`. Running `git status` should never show them as untracked. If they appear, do NOT stage or commit them.
 
 ---
 
@@ -17,28 +48,27 @@ An offline-first, professional billing and invoicing Flutter application designe
    - Inline customer picker with instant `+ New Customer` quick-add.
    - Line items editor supporting catalog picking or custom entry.
    - **Discount Toggle**: Switch between Percentage (`%`) and Flat Amount (`₹`) discount calculation modes.
-   - Live auto-updating totals, "You Saved ₹X" savings callout, and **Indian Currency Number-to-Words** converter (e.g. `"Eight Thousand Rupees and Three Paise Only"`).
-   - Partial & full payment recording with auto-calculated Balance Due and dynamic status updates (`draft`, `sent`, `partially_paid`, `paid`, `overdue`).
+   - Live auto-updating totals, "You Saved ₹X" savings callout, and **Indian Currency Number-to-Words** converter.
+   - Partial & full payment recording with auto-calculated Balance Due and dynamic status updates.
 4. **Estimate & Quotation Flow**:
    - Sequential quotation auto-numbering (`EST-0001`).
-   - Quotation layout highlighting **Taxable Amount** column and Bank Details block for advance payments.
-   - **One-Click "Convert to Invoice"**: Automatically carries over customer details and all line items into a pre-filled new invoice form.
+   - **One-Click "Convert to Invoice"**: Automatically carries over customer details and all line items.
 5. **Pixel-Perfect PDF Generation, Printing & Sharing**:
-   - Configurable PDF templates matching sample invoice/estimate designs (logo, company header, colored table headers, totals, bank details, signature).
-   - **Native Sharing**: One-tap share via `share_plus` (`Share.shareXFiles`) to WhatsApp, Email, or Drive.
+   - Configurable PDF templates with logo, company header, colored table headers, totals, bank details, signature.
+   - **Native Sharing**: One-tap share via `share_plus` to WhatsApp, Email, or Drive.
    - **Local PDF Save & Native Printing**: Integrated with iOS/Android print frameworks.
 6. **Dashboard Analytics**:
    - Summary cards displaying **Total Outstanding Balance**, **This Month Sales**, and **Draft Estimates Count**.
    - Recent Documents activity list with tap navigation.
 7. **Reports & Accountant CSV Export**:
    - Date range filters (`Today`, `This Week`, `This Month`, `Custom Range`).
-   - Sales Summary report, Outstanding Payments report (sorted highest balance due first), and Top Customers report.
+   - Sales Summary, Outstanding Payments, and Top Customers reports.
    - One-tap **CSV Export** for accountant tax filing.
 8. **Global Search Engine**:
    - Search across Customers, Invoices, and Estimates by name, phone, or document number.
 9. **Data Safety, Local Backup & Restore**:
-   - One-click JSON database export and atomic import restoration (preserves all customers, items, invoices, estimates, and payment history).
-   - Auto-backup date tracking and encrypted Google Drive cloud backup.
+   - One-click JSON database export and atomic import restoration.
+   - Auto-backup date tracking and AES-256 encrypted Google Drive cloud backup.
 
 ---
 
@@ -57,32 +87,14 @@ An offline-first, professional billing and invoicing Flutter application designe
 
 If you modify or add database tables/columns in `lib/db/tables/` or DAOs in `lib/db/daos/`:
 
-1. **Update Table Definition**: Edit or add columns in `lib/db/tables/` (e.g. `documents_table.dart`, `customers_table.dart`).
-2. **Increment Schema Version**: In `lib/db/app_database.dart`, increment `schemaVersion`:
-   ```dart
-   @override
-   int get schemaVersion => 2; // increment version number
-   ```
+1. **Update Table Definition**: Edit or add columns in `lib/db/tables/`.
+2. **Increment Schema Version**: In `lib/db/app_database.dart`, increment `schemaVersion`.
 3. **Run Code Generation**:
-   Execute build runner to regenerate `.g.dart` files:
    ```bash
    dart run build_runner build --delete-conflicting-outputs
    ```
 4. **Add Schema Migration** (if required):
-   In `lib/db/app_database.dart`, update `migration` strategy inside `AppDatabase`:
-   ```dart
-   @override
-   MigrationStrategy get migration {
-     return MigrationStrategy(
-       onUpgrade: (m, from, to) async {
-         if (from < 2) {
-           // Add new columns or tables
-           // await m.addColumn(documents, documents.newColumn);
-         }
-       },
-     );
-   }
-   ```
+   In `lib/db/app_database.dart`, update `migration` strategy inside `AppDatabase`.
 
 ---
 
@@ -93,12 +105,7 @@ If you modify or add database tables/columns in `lib/db/tables/` or DAOs in `lib
 flutter analyze
 ```
 
-### 2. Run Full Unit Test Suite (33 Tests)
-```bash
-flutter test
-```
-
-### 3. Build Release Android App Bundle / APK
+### 2. Build Release Android App Bundle / APK
 ```bash
 flutter build appbundle --release
 # or
@@ -109,8 +116,6 @@ flutter build apk --release
 
 ## 📐 Layout Guidelines & Text Overflow Rules
 
-To ensure visual consistency and prevent UI overflow errors on compact mobile screens (such as 360dp width viewports):
-
 1. **Flex Child Protection**: Any `Text` widget placed inside a `Row`, `Flex`, `ListTile`, or horizontal card header **MUST** be wrapped in an `Expanded` or `Flexible` widget.
-2. **Explicit Overflow Handling**: Specify `overflow: TextOverflow.ellipsis` and an explicit `maxLines` count (e.g. `maxLines: 1` or `maxLines: 2`) for dynamic text fields such as customer names, business names, addresses, item titles, or button labels.
-3. **Numeric & Currency Displays**: Currency totals or statutory figures inside tight horizontal spaces should use `FittedBox(fit: BoxFit.scaleDown)` or `Flexible` with ellipsis to scale down gracefully on narrow displays without breaking out of container boundaries.
+2. **Explicit Overflow Handling**: Specify `overflow: TextOverflow.ellipsis` and an explicit `maxLines` count for dynamic text fields.
+3. **Numeric & Currency Displays**: Currency totals inside tight horizontal spaces should use `FittedBox(fit: BoxFit.scaleDown)` or `Flexible` with ellipsis.

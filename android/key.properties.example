@@ -1,6 +1,15 @@
-# Android Release Signing Configuration Example
-# Copy this file to key.properties and replace values with your actual keystore credentials.
-storePassword=YOUR_STORE_PASSWORD
-keyPassword=YOUR_KEY_PASSWORD
-keyAlias=upload
+# Android Release Signing Configuration
+# Copy this file to android/key.properties and fill in your actual values.
+# NEVER commit key.properties to version control — it is listed in .gitignore.
+
+# The path to your release keystore JKS file, relative to android/app/
 storeFile=upload-keystore.jks
+
+# The password you set when creating the keystore
+storePassword=YOUR_KEYSTORE_PASSWORD
+
+# The alias you chose for the key inside the keystore
+keyAlias=upload
+
+# The password for the specific key (often the same as storePassword)
+keyPassword=YOUR_KEY_PASSWORD

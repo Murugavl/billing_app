@@ -19,7 +19,7 @@ class DriveBackupMetadata {
 }
 
 class DriveService {
-  static const String backupFileName = 'billwise_backup.enc';
+  static const String backupFileName = 'rasidhu_backup.enc';
   static const String appDataFolderScope = 'https://www.googleapis.com/auth/drive.appdata';
 
   static final GoogleSignIn _googleSignIn = GoogleSignIn(
@@ -53,7 +53,7 @@ class DriveService {
       if (detailStr.contains('10') || detailStr.contains('sign_in_failed')) {
         throw Exception(
           'Google Sign-In configuration error (10: DEVELOPER_ERROR). '
-          'Please ensure the SHA-1 fingerprint and package name (com.ponsri.billwise) '
+          'Please ensure the SHA-1 fingerprint and package name (com.ponsri.rasidhu) '
           'are registered in Google Cloud / Firebase Console.',
         );
       }
@@ -135,7 +135,7 @@ class DriveService {
       final driveFile = drive.File()
         ..name = backupFileName
         ..parents = ['appDataFolder']
-        ..description = 'Billwise Encrypted Database Backup';
+        ..description = 'Rasidhu Encrypted Database Backup';
 
       final createdFile = await driveApi.files.create(
         driveFile,

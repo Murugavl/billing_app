@@ -39,6 +39,7 @@ class _InvoiceFormScreenState extends ConsumerState<InvoiceFormScreen> {
   late final TextEditingController _placeOfSupplyController;
   late final TextEditingController _amountReceivedController;
   late final TextEditingController _notesController;
+  bool _includeBankDetails = true;
 
   final List<LineItemData> _lines = [];
   bool _isLoading = true;
@@ -55,6 +56,7 @@ class _InvoiceFormScreenState extends ConsumerState<InvoiceFormScreen> {
   Future<void> _initData() async {
     final docsDao = ref.read(documentsDaoProvider);
     final custDao = ref.read(customersDaoProvider);
+    final profile = await ref.read(businessProfileDaoProvider).getProfile();
 
     if (widget.documentWithLines != null) {
       final doc = widget.documentWithLines!.document;
@@ -66,6 +68,7 @@ class _InvoiceFormScreenState extends ConsumerState<InvoiceFormScreen> {
         _documentNumber = doc.documentNumber;
       }
       _date = doc.date;
+      _includeBankDetails = doc.includeBankDetails;
       _placeOfSupplyController = TextEditingController(text: doc.placeOfSupply ?? 'Tamil Nadu');
       _amountReceivedController = TextEditingController(
         text: (doc.amountReceived != null && doc.amountReceived! > 0)
@@ -82,6 +85,7 @@ class _InvoiceFormScreenState extends ConsumerState<InvoiceFormScreen> {
         _lines.add(
           LineItemData(
             itemId: item.itemId,
+            itemType: item.itemType,
             itemName: item.itemName,
             hsnSacCode: item.hsnSacCode,
             quantity: item.quantity,
@@ -97,6 +101,7 @@ class _InvoiceFormScreenState extends ConsumerState<InvoiceFormScreen> {
     } else {
       _documentNumber = await docsDao.nextDocumentNumber('invoice');
       _date = DateTime.now();
+      _includeBankDetails = profile?.defaultIncludeBankDetailsInvoice ?? true;
       _placeOfSupplyController = TextEditingController(text: 'Tamil Nadu');
       _amountReceivedController = TextEditingController(text: '');
       _notesController = TextEditingController();
@@ -221,6 +226,10 @@ class _InvoiceFormScreenState extends ConsumerState<InvoiceFormScreen> {
     try {
       final docsDao = ref.read(documentsDaoProvider);
 
+      if (!_isEditing) {
+        _documentNumber = await docsDao.consumeNextDocumentNumber('invoice', date: _date);
+      }
+
       final docCompanion = DocumentsCompanion(
         id: _isEditing ? Value(widget.documentWithLines!.document.id) : const Value.absent(),
         documentNumber: Value(_documentNumber),
@@ -241,6 +250,7 @@ class _InvoiceFormScreenState extends ConsumerState<InvoiceFormScreen> {
         amountInWords: Value(_amountInWords),
         status: Value(status),
         notes: Value(_notesController.text.trim().isEmpty ? null : _notesController.text.trim()),
+        includeBankDetails: Value(_includeBankDetails),
         createdAt: _isEditing ? Value(widget.documentWithLines!.document.createdAt) : Value(DateTime.now()),
         updatedAt: Value(DateTime.now()),
       );
@@ -248,6 +258,7 @@ class _InvoiceFormScreenState extends ConsumerState<InvoiceFormScreen> {
       final linesCompanions = _lines.map((l) {
         return DocumentLineItemsCompanion(
           itemId: Value(l.itemId),
+          itemType: Value(l.itemType),
           itemName: Value(l.itemName),
           hsnSacCode: Value(l.hsnSacCode),
           quantity: Value(l.quantity),
@@ -649,8 +660,11 @@ class _InvoiceFormScreenState extends ConsumerState<InvoiceFormScreen> {
                                   ),
                                   const SizedBox(height: 2),
                                   Text(
-                                    '${line.quantity} ${line.unit} × ${CurrencyFormatter.format(line.pricePerUnit)}'
-                                    '${line.calculatedDiscountAmount > 0 ? " • Disc: -${CurrencyFormatter.format(line.calculatedDiscountAmount)}" : ""}',
+                                    line.itemType == 'service'
+                                        ? 'Amount: ${CurrencyFormatter.format(line.pricePerUnit)}'
+                                          '${line.calculatedDiscountAmount > 0 ? " • Disc: -${CurrencyFormatter.format(line.calculatedDiscountAmount)}" : ""}'
+                                        : '${line.quantity} ${line.unit} × ${CurrencyFormatter.format(line.pricePerUnit)}'
+                                          '${line.calculatedDiscountAmount > 0 ? " • Disc: -${CurrencyFormatter.format(line.calculatedDiscountAmount)}" : ""}',
                                     style: theme.textTheme.bodySmall,
                                   ),
                                 ],
@@ -836,12 +850,30 @@ class _InvoiceFormScreenState extends ConsumerState<InvoiceFormScreen> {
 
               const SizedBox(height: 16),
 
-              // ── Notes ─────────────────────────────────────────────────────
-              AppTextField(
-                label: 'Notes / Terms & Conditions',
-                controller: _notesController,
-                hint: 'e.g. Payment due within 15 days.',
-                maxLines: 2,
+              // ── Notes & PDF Options ───────────────────────────────────────
+              SectionCard(
+                title: 'PDF OPTIONS & NOTES',
+                icon: Icons.settings_applications_rounded,
+                children: [
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: const Text('Include Bank Details on PDF',
+                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                    subtitle: const Text(
+                      'Controls whether your Business Profile bank account details block is shown on this document\'s generated PDF.',
+                      style: TextStyle(fontSize: 11),
+                    ),
+                    value: _includeBankDetails,
+                    onChanged: (val) => setState(() => _includeBankDetails = val),
+                  ),
+                  const FieldGap(),
+                  AppTextField(
+                    label: 'Notes / Terms & Conditions',
+                    controller: _notesController,
+                    hint: 'e.g. Payment due within 15 days.',
+                    maxLines: 2,
+                  ),
+                ],
               ),
 
               const SizedBox(height: 32),

@@ -51,6 +51,10 @@ class Documents extends Table {
 
   TextColumn get notes => text().nullable()();
 
+  /// Whether to render Business Profile bank details on PDF for this document.
+  BoolColumn get includeBankDetails =>
+      boolean().withDefault(const Constant(true))();
+
   DateTimeColumn get createdAt =>
       dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get updatedAt =>

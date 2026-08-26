@@ -10,6 +10,10 @@ class DocumentLineItems extends Table {
   /// FK → items.id — nullable when the line is an ad-hoc / custom entry.
   IntColumn get itemId => integer().nullable()();
 
+  /// Item type: 'product' or 'service'
+  TextColumn get itemType =>
+      text().withLength(max: 20).withDefault(const Constant('product'))();
+
   TextColumn get itemName => text()();
   TextColumn get hsnSacCode => text().nullable()();
   RealColumn get quantity =>

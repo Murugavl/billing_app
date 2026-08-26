@@ -102,6 +102,8 @@ class _EstimatesScreenState extends ConsumerState<EstimatesScreen> {
     final docWithLines = await docsDao.getDocumentWithLines(doc.id);
     if (docWithLines == null || !context.mounted) return;
 
+    final profile = await ref.read(businessProfileDaoProvider).getProfile();
+
     // Create draft Invoice Document
     final draftDoc = Document(
       id: 0,
@@ -123,6 +125,7 @@ class _EstimatesScreenState extends ConsumerState<EstimatesScreen> {
       amountInWords: doc.amountInWords,
       status: 'draft',
       notes: doc.notes,
+      includeBankDetails: profile?.defaultIncludeBankDetailsInvoice ?? true,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
     );

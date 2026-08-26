@@ -38,6 +38,7 @@ class _EstimateFormScreenState extends ConsumerState<EstimateFormScreen> {
   late DateTime _date;
   late final TextEditingController _placeOfSupplyController;
   late final TextEditingController _notesController;
+  bool _includeBankDetails = true;
 
   final List<LineItemData> _lines = [];
   bool _isLoading = true;
@@ -54,6 +55,7 @@ class _EstimateFormScreenState extends ConsumerState<EstimateFormScreen> {
   Future<void> _initData() async {
     final docsDao = ref.read(documentsDaoProvider);
     final custDao = ref.read(customersDaoProvider);
+    final profile = await ref.read(businessProfileDaoProvider).getProfile();
 
     if (widget.documentWithLines != null) {
       final doc = widget.documentWithLines!.document;
@@ -61,6 +63,7 @@ class _EstimateFormScreenState extends ConsumerState<EstimateFormScreen> {
 
       _documentNumber = doc.documentNumber;
       _date = doc.date;
+      _includeBankDetails = doc.includeBankDetails;
       _placeOfSupplyController = TextEditingController(text: doc.placeOfSupply ?? 'Tamil Nadu');
       _notesController = TextEditingController(text: doc.notes ?? '');
 
@@ -72,6 +75,7 @@ class _EstimateFormScreenState extends ConsumerState<EstimateFormScreen> {
         _lines.add(
           LineItemData(
             itemId: item.itemId,
+            itemType: item.itemType,
             itemName: item.itemName,
             hsnSacCode: item.hsnSacCode,
             quantity: item.quantity,
@@ -87,6 +91,7 @@ class _EstimateFormScreenState extends ConsumerState<EstimateFormScreen> {
     } else {
       _documentNumber = await docsDao.nextDocumentNumber('estimate');
       _date = DateTime.now();
+      _includeBankDetails = profile?.defaultIncludeBankDetailsEstimate ?? true;
       _placeOfSupplyController = TextEditingController(text: 'Tamil Nadu');
       _notesController = TextEditingController();
     }
@@ -198,6 +203,7 @@ class _EstimateFormScreenState extends ConsumerState<EstimateFormScreen> {
         id: 0,
         documentId: 0,
         itemId: l.itemId,
+        itemType: l.itemType,
         itemName: l.itemName,
         hsnSacCode: l.hsnSacCode,
         quantity: l.quantity,
@@ -213,6 +219,7 @@ class _EstimateFormScreenState extends ConsumerState<EstimateFormScreen> {
       );
     }).toList();
 
+    final profile = await ref.read(businessProfileDaoProvider).getProfile();
     final draftDoc = Document(
       id: 0,
       documentNumber: nextInvNum, // auto-generated next INV-xxxx
@@ -233,6 +240,7 @@ class _EstimateFormScreenState extends ConsumerState<EstimateFormScreen> {
       amountInWords: _amountInWords,
       status: 'draft',
       notes: _notesController.text.trim(),
+      includeBankDetails: profile?.defaultIncludeBankDetailsInvoice ?? true,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
     );
@@ -284,6 +292,10 @@ class _EstimateFormScreenState extends ConsumerState<EstimateFormScreen> {
     try {
       final docsDao = ref.read(documentsDaoProvider);
 
+      if (!_isEditing) {
+        _documentNumber = await docsDao.consumeNextDocumentNumber('estimate', date: _date);
+      }
+
       final docCompanion = DocumentsCompanion(
         id: _isEditing ? Value(widget.documentWithLines!.document.id) : const Value.absent(),
         documentNumber: Value(_documentNumber),
@@ -302,6 +314,7 @@ class _EstimateFormScreenState extends ConsumerState<EstimateFormScreen> {
         amountInWords: Value(_amountInWords),
         status: Value(status),
         notes: Value(_notesController.text.trim().isEmpty ? null : _notesController.text.trim()),
+        includeBankDetails: Value(_includeBankDetails),
         createdAt: _isEditing ? Value(widget.documentWithLines!.document.createdAt) : Value(DateTime.now()),
         updatedAt: Value(DateTime.now()),
       );
@@ -309,6 +322,7 @@ class _EstimateFormScreenState extends ConsumerState<EstimateFormScreen> {
       final linesCompanions = _lines.map((l) {
         return DocumentLineItemsCompanion(
           itemId: Value(l.itemId),
+          itemType: Value(l.itemType),
           itemName: Value(l.itemName),
           hsnSacCode: Value(l.hsnSacCode),
           quantity: Value(l.quantity),
@@ -734,7 +748,9 @@ class _EstimateFormScreenState extends ConsumerState<EstimateFormScreen> {
                                   ),
                                   const SizedBox(height: 2),
                                   Text(
-                                    '${line.quantity} ${line.unit} × ${CurrencyFormatter.format(line.pricePerUnit)}',
+                                    line.itemType == 'service'
+                                        ? 'Amount: ${CurrencyFormatter.format(line.pricePerUnit)}'
+                                        : '${line.quantity} ${line.unit} × ${CurrencyFormatter.format(line.pricePerUnit)}',
                                     style: theme.textTheme.bodySmall,
                                   ),
                                   Text(
@@ -866,12 +882,30 @@ class _EstimateFormScreenState extends ConsumerState<EstimateFormScreen> {
 
               const SizedBox(height: 16),
 
-              // ── Notes ─────────────────────────────────────────────────────
-              AppTextField(
-                label: 'Notes / Validity Terms',
-                controller: _notesController,
-                hint: 'e.g. Estimate valid for 30 days. Advance payment required.',
-                maxLines: 2,
+              // ── Notes & PDF Options ───────────────────────────────────────
+              SectionCard(
+                title: 'PDF OPTIONS & NOTES',
+                icon: Icons.settings_applications_rounded,
+                children: [
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: const Text('Include Bank Details on PDF',
+                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                    subtitle: const Text(
+                      'Controls whether your Business Profile bank account details block is shown on this estimate\'s generated PDF.',
+                      style: TextStyle(fontSize: 11),
+                    ),
+                    value: _includeBankDetails,
+                    onChanged: (val) => setState(() => _includeBankDetails = val),
+                  ),
+                  const FieldGap(),
+                  AppTextField(
+                    label: 'Notes / Validity Terms',
+                    controller: _notesController,
+                    hint: 'e.g. Estimate valid for 30 days. Advance payment required.',
+                    maxLines: 2,
+                  ),
+                ],
               ),
 
               const SizedBox(height: 32),

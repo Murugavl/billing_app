@@ -377,7 +377,9 @@ class InvoiceDetailScreen extends ConsumerWidget {
                                   style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 14),
                                 ),
                                 Text(
-                                  '${item.quantity} ${item.unit} × ${CurrencyFormatter.format(item.pricePerUnit)}',
+                                  item.itemType == 'service'
+                                      ? 'Amount: ${CurrencyFormatter.format(item.pricePerUnit)}'
+                                      : '${item.quantity} ${item.unit} × ${CurrencyFormatter.format(item.pricePerUnit)}',
                                   style: theme.textTheme.bodySmall,
                                 ),
                               ],

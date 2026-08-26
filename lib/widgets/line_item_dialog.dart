@@ -10,6 +10,7 @@ import 'app_text_field.dart';
 
 class LineItemData {
   int? itemId;
+  String itemType; // 'product' or 'service'
   String itemName;
   String? hsnSacCode;
   double quantity;
@@ -22,6 +23,7 @@ class LineItemData {
 
   LineItemData({
     this.itemId,
+    this.itemType = 'product',
     required this.itemName,
     this.hsnSacCode,
     this.quantity = 1.0,
@@ -72,6 +74,7 @@ class _LineItemDialogState extends ConsumerState<LineItemDialog> {
   final _formKey = GlobalKey<FormState>();
 
   int? _selectedItemId;
+  String _itemType = 'product';
   late final TextEditingController _nameController;
   late final TextEditingController _hsnController;
   late final TextEditingController _qtyController;
@@ -96,12 +99,13 @@ class _LineItemDialogState extends ConsumerState<LineItemDialog> {
 
     final init = widget.initialLine;
     _selectedItemId = init?.itemId;
+    _itemType = init?.itemType ?? 'product';
     _nameController = TextEditingController(text: init?.itemName ?? '');
     _hsnController = TextEditingController(text: init?.hsnSacCode ?? '');
     _qtyController = TextEditingController(
       text: init != null ? init.quantity.toString() : '',
     );
-    _unitController = TextEditingController(text: init?.unit ?? 'Pcs');
+    _unitController = TextEditingController(text: init?.unit ?? (_itemType == 'service' ? 'Service' : 'Pcs'));
     _priceController = TextEditingController(
       text: init != null ? init.pricePerUnit.toStringAsFixed(2) : '',
     );
@@ -141,6 +145,7 @@ class _LineItemDialogState extends ConsumerState<LineItemDialog> {
   void _populateFromCatalog(Item item) {
     setState(() {
       _selectedItemId = item.id;
+      _itemType = 'product';
       _nameController.text = item.name;
       _hsnController.text = item.hsnSacCode ?? '';
       _unitController.text = item.defaultUnit;
@@ -151,17 +156,19 @@ class _LineItemDialogState extends ConsumerState<LineItemDialog> {
   }
 
   LineItemData _buildLineData() {
-    final qty = double.tryParse(_qtyController.text.trim()) ?? 1.0;
+    final isService = _itemType == 'service';
+    final qty = isService ? 1.0 : (double.tryParse(_qtyController.text.trim()) ?? 1.0);
     final price = double.tryParse(_priceController.text.trim()) ?? 0.0;
     final discVal = double.tryParse(_discountController.text.trim()) ?? 0.0;
     final tax = double.tryParse(_taxController.text.trim()) ?? 0.0;
 
     return LineItemData(
       itemId: _selectedItemId,
+      itemType: _itemType,
       itemName: _nameController.text.trim(),
       hsnSacCode: _hsnController.text.trim().isEmpty ? null : _hsnController.text.trim(),
       quantity: qty,
-      unit: _unitController.text.trim().isEmpty ? 'Pcs' : _unitController.text.trim(),
+      unit: isService ? 'Service' : (_unitController.text.trim().isEmpty ? 'Pcs' : _unitController.text.trim()),
       pricePerUnit: price,
       isPercentDiscount: _isPercentDiscount,
       discountPercent: _isPercentDiscount ? discVal : 0.0,
@@ -371,77 +378,143 @@ class _LineItemDialogState extends ConsumerState<LineItemDialog> {
                               ),
                             ],
                           ),
+                          // ── Item Type Toggle (Product / Service) ─────────────
+                          Row(
+                            children: [
+                              Text(
+                                'Item Type:',
+                                style: theme.textTheme.titleSmall,
+                              ),
+                              const SizedBox(width: 12),
+                              SegmentedButton<String>(
+                                segments: const [
+                                  ButtonSegment(
+                                    value: 'product',
+                                    label: Text('Product'),
+                                    icon: Icon(Icons.inventory_2_outlined, size: 16),
+                                  ),
+                                  ButtonSegment(
+                                    value: 'service',
+                                    label: Text('Service'),
+                                    icon: Icon(Icons.build_outlined, size: 16),
+                                  ),
+                                ],
+                                selected: {_itemType},
+                                onSelectionChanged: (val) {
+                                  setState(() {
+                                    _itemType = val.first;
+                                    if (_itemType == 'service') {
+                                      _unitController.text = 'Service';
+                                      _qtyController.text = '1';
+                                    } else if (_unitController.text == 'Service') {
+                                      _unitController.text = 'Pcs';
+                                    }
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                          const FieldGap(),
                           AppTextField(
-                            label: 'Item / Service Name',
+                            label: _itemType == 'service' ? 'Description' : 'Item / Service Name',
                             controller: _nameController,
                             isRequired: true,
-                            hint: 'e.g. Aqua Queen',
-                            validator: (v) => v == null || v.trim().isEmpty ? 'Item name required' : null,
+                            hint: _itemType == 'service' ? 'e.g. Service charges' : 'e.g. Aqua Queen',
+                            validator: (v) => v == null || v.trim().isEmpty
+                                ? (_itemType == 'service' ? 'Description required' : 'Item name required')
+                                : null,
                           ),
                           const FieldGap(),
-                          Row(
-                            children: [
-                              Expanded(
-                                flex: 2,
-                                child: AppTextField(
-                                  label: 'HSN / SAC Code',
-                                  controller: _hsnController,
-                                  hint: '84818090',
-                                  keyboardType: TextInputType.number,
+                          if (_itemType == 'service') ...[
+                            AppTextField(
+                              label: 'HSN / SAC Code',
+                              controller: _hsnController,
+                              hint: '998313',
+                              keyboardType: TextInputType.number,
+                            ),
+                          ] else ...[
+                            Row(
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: AppTextField(
+                                    label: 'HSN / SAC Code',
+                                    controller: _hsnController,
+                                    hint: '84818090',
+                                    keyboardType: TextInputType.number,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                flex: 1,
-                                child: AppTextField(
-                                  label: 'Unit',
-                                  controller: _unitController,
-                                  isRequired: true,
-                                  hint: 'Pcs',
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  flex: 1,
+                                  child: AppTextField(
+                                    label: 'Unit',
+                                    controller: _unitController,
+                                    isRequired: true,
+                                    hint: 'Pcs',
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
+                              ],
+                            ),
+                          ],
                           const FieldGap(),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: AppTextField(
-                                  label: 'Quantity',
-                                  controller: _qtyController,
-                                  isRequired: true,
-                                  hint: '1',
-                                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                                  onChanged: (_) => setState(() {}),
-                                  validator: (v) {
-                                    final str = (v ?? '').trim();
-                                    if (str.isEmpty) return null;
-                                    final val = double.tryParse(str);
-                                    if (val == null || val <= 0) return 'Must be > 0';
-                                    return null;
-                                  },
+                          if (_itemType == 'service') ...[
+                            AppTextField(
+                              label: 'Amount (₹)',
+                              controller: _priceController,
+                              isRequired: true,
+                              hint: '0.00',
+                              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                              onChanged: (_) => setState(() {}),
+                              validator: (v) {
+                                final str = (v ?? '').trim();
+                                if (str.isEmpty) return 'Amount required';
+                                final val = double.tryParse(str);
+                                if (val == null || val < 0) return 'Invalid amount';
+                                return null;
+                              },
+                            ),
+                          ] else ...[
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: AppTextField(
+                                    label: 'Quantity',
+                                    controller: _qtyController,
+                                    isRequired: true,
+                                    hint: '1',
+                                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                    onChanged: (_) => setState(() {}),
+                                    validator: (v) {
+                                      final str = (v ?? '').trim();
+                                      if (str.isEmpty) return null;
+                                      final val = double.tryParse(str);
+                                      if (val == null || val <= 0) return 'Must be > 0';
+                                      return null;
+                                    },
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: AppTextField(
-                                  label: 'Price per Unit (₹)',
-                                  controller: _priceController,
-                                  isRequired: true,
-                                  hint: '0.00',
-                                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                                  onChanged: (_) => setState(() {}),
-                                  validator: (v) {
-                                    final str = (v ?? '').trim();
-                                    if (str.isEmpty) return null;
-                                    final val = double.tryParse(str);
-                                    if (val == null || val < 0) return 'Invalid price';
-                                    return null;
-                                  },
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: AppTextField(
+                                    label: 'Price per Unit (₹)',
+                                    controller: _priceController,
+                                    isRequired: true,
+                                    hint: '0.00',
+                                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                    onChanged: (_) => setState(() {}),
+                                    validator: (v) {
+                                      final str = (v ?? '').trim();
+                                      if (str.isEmpty) return null;
+                                      final val = double.tryParse(str);
+                                      if (val == null || val < 0) return 'Invalid price';
+                                      return null;
+                                    },
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
+                              ],
+                            ),
+                          ],
                           const FieldGap(),
 
                           // ── Discount Toggle (% vs ₹) ──────────────────────
@@ -500,7 +573,9 @@ class _LineItemDialogState extends ConsumerState<LineItemDialog> {
                               child: Column(
                                 children: [
                                   _CalcRow(
-                                    label: 'Subtotal (${data.quantity} × ${CurrencyFormatter.format(data.pricePerUnit)})',
+                                    label: data.itemType == 'service'
+                                        ? 'Subtotal (${CurrencyFormatter.format(data.pricePerUnit)})'
+                                        : 'Subtotal (${data.quantity} × ${CurrencyFormatter.format(data.pricePerUnit)})',
                                     value: CurrencyFormatter.format(data.subtotal),
                                   ),
                                   if (data.calculatedDiscountAmount > 0)

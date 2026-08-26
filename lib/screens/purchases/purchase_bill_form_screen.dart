@@ -41,8 +41,16 @@ class _PurchaseBillFormScreenState
   @override
   void initState() {
     super.initState();
-    _billNumberController.text =
-        'PUR-${DateFormat('yyyyMMdd-HHmm').format(DateTime.now())}';
+    _initBillNumber();
+  }
+
+  Future<void> _initBillNumber() async {
+    final num = await ref.read(purchaseBillsDaoProvider).nextPurchaseBillNumber();
+    if (mounted) {
+      setState(() {
+        _billNumberController.text = num;
+      });
+    }
   }
 
   @override
@@ -240,6 +248,17 @@ class _PurchaseBillFormScreenState
     setState(() => _isSaving = true);
 
     try {
+      final dao = ref.read(purchaseBillsDaoProvider);
+      final generatedNext = await dao.nextPurchaseBillNumber(date: _selectedDate);
+      final currentNum = _billNumberController.text.trim();
+      
+      final String finalBillNumber;
+      if (currentNum.isEmpty || currentNum == generatedNext) {
+        finalBillNumber = await dao.consumeNextPurchaseBillNumber(date: _selectedDate);
+      } else {
+        finalBillNumber = currentNum;
+      }
+
       final initialPaid = double.tryParse(_initialPaidController.text) ?? 0.0;
       final balance = (_grandTotal - initialPaid).clamp(0.0, double.infinity);
       String status = 'unpaid';
@@ -250,7 +269,7 @@ class _PurchaseBillFormScreenState
       }
 
       final billCompanion = PurchaseBillsCompanion.insert(
-        billNumber: _billNumberController.text.trim(),
+        billNumber: finalBillNumber,
         supplierId: _selectedSupplier!.id,
         date: _selectedDate,
         subtotal: _subtotal,

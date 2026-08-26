@@ -53,6 +53,20 @@ class PdfService {
     final headerBgColor = isInvoice ? PdfColor.fromHex('#1E3A5F') : PdfColor.fromHex('#B7791F');
     final tableHeaderTextColor = PdfColors.white;
 
+    // GSTIN / PAN line formatting for business header
+    final gstVal = profile?.gstNumber?.trim();
+    final panVal = profile?.panNumber?.trim();
+    final hasGst = gstVal != null && gstVal.isNotEmpty;
+    final hasPan = panVal != null && panVal.isNotEmpty;
+    String? gstPanText;
+    if (hasGst && hasPan) {
+      gstPanText = 'GSTIN: $gstVal   PAN: $panVal';
+    } else if (hasGst) {
+      gstPanText = 'GSTIN: $gstVal';
+    } else if (hasPan) {
+      gstPanText = 'PAN: $panVal';
+    }
+
     // Load logo image if present
     pw.MemoryImage? logoImage;
     if (profile?.logoPath != null && File(profile!.logoPath!).existsSync()) {
@@ -70,6 +84,10 @@ class PdfService {
         signatureImage = pw.MemoryImage(bytes);
       } catch (_) {}
     }
+
+    final addr = profile?.addressLine?.trim();
+    final ph = profile?.phone?.trim();
+    final em = profile?.email?.trim();
 
     pdf.addPage(
       pw.MultiPage(
@@ -98,21 +116,21 @@ class PdfService {
                   crossAxisAlignment: pw.CrossAxisAlignment.start,
                   children: [
                     pw.Text(
-                      profile?.businessName ?? 'My Business',
+                      (profile?.businessName ?? 'My Business').toUpperCase(),
                       style: pw.TextStyle(
                         fontSize: 18,
                         fontWeight: pw.FontWeight.bold,
                         color: primaryColor,
                       ),
                     ),
-                    if (profile?.addressLine != null)
-                      pw.Text(profile!.addressLine!, style: const pw.TextStyle(fontSize: 9)),
-                    if (profile?.phone != null)
-                      pw.Text('Phone: ${profile!.phone!}', style: const pw.TextStyle(fontSize: 9)),
-                    if (profile?.email != null)
-                      pw.Text('Email: ${profile!.email!}', style: const pw.TextStyle(fontSize: 9)),
-                    if (profile?.gstNumber != null)
-                      pw.Text('GSTIN: ${profile!.gstNumber!}', style: pw.TextStyle(fontSize: 9, fontWeight: pw.FontWeight.bold)),
+                    if (addr != null && addr.isNotEmpty)
+                      pw.Text(addr, style: const pw.TextStyle(fontSize: 9)),
+                    if (ph != null && ph.isNotEmpty)
+                      pw.Text('Phone: $ph', style: const pw.TextStyle(fontSize: 9)),
+                    if (em != null && em.isNotEmpty)
+                      pw.Text('Email: $em', style: const pw.TextStyle(fontSize: 9)),
+                    if (gstPanText != null)
+                      pw.Text(gstPanText, style: pw.TextStyle(fontSize: 9, fontWeight: pw.FontWeight.bold)),
                   ],
                 ),
               ),
@@ -171,13 +189,13 @@ class PdfService {
                         style: pw.TextStyle(fontSize: 9, fontWeight: pw.FontWeight.bold, color: primaryColor),
                       ),
                       pw.SizedBox(height: 4),
-                      pw.Text(doc.customerName, style: pw.TextStyle(fontSize: 11, fontWeight: pw.FontWeight.bold)),
-                      if (doc.customerPhone != null)
-                        pw.Text('Phone: ${doc.customerPhone!}', style: const pw.TextStyle(fontSize: 9)),
-                      if (doc.customerAddress != null)
-                        pw.Text('Address: ${doc.customerAddress!}', style: const pw.TextStyle(fontSize: 9)),
-                      if (doc.customerGstNumber != null)
-                        pw.Text('GSTIN: ${doc.customerGstNumber!}', style: pw.TextStyle(fontSize: 9, fontWeight: pw.FontWeight.bold)),
+                      pw.Text(doc.customerName.toUpperCase(), style: pw.TextStyle(fontSize: 11, fontWeight: pw.FontWeight.bold)),
+                      if (doc.customerPhone != null && doc.customerPhone!.trim().isNotEmpty)
+                        pw.Text('Phone: ${doc.customerPhone!.trim()}', style: const pw.TextStyle(fontSize: 9)),
+                      if (doc.customerAddress != null && doc.customerAddress!.trim().isNotEmpty)
+                        pw.Text('Address: ${doc.customerAddress!.trim()}', style: const pw.TextStyle(fontSize: 9)),
+                      if (doc.customerGstNumber != null && doc.customerGstNumber!.trim().isNotEmpty)
+                        pw.Text('GSTIN: ${doc.customerGstNumber!.trim()}', style: pw.TextStyle(fontSize: 9, fontWeight: pw.FontWeight.bold)),
                     ],
                   ),
                 ),
@@ -223,7 +241,7 @@ class PdfService {
                     _tableCell('${i + 1}', align: pw.Alignment.center),
                     _tableCell(lines[i].itemName),
                     _tableCell(lines[i].hsnSacCode ?? '-'),
-                    _tableCell('${lines[i].quantity} ${lines[i].unit}', align: pw.Alignment.centerRight),
+                    _tableCell(lines[i].itemType == 'service' ? '-' : '${lines[i].quantity} ${lines[i].unit}', align: pw.Alignment.centerRight),
                     _tableCell(CurrencyFormatter.format(lines[i].pricePerUnit), align: pw.Alignment.centerRight),
                     _tableCell(lines[i].discountAmount > 0 ? CurrencyFormatter.format(lines[i].discountAmount) : '-', align: pw.Alignment.centerRight),
                     _tableCell(CurrencyFormatter.format(lines[i].lineTotal), align: pw.Alignment.centerRight, isBold: true),
@@ -266,7 +284,9 @@ class PdfService {
                         ],
                       ),
                     ),
-                    if (!isInvoice || (profile?.bankName != null)) ...[
+                    if (doc.includeBankDetails &&
+                        (profile?.bankName != null ||
+                            profile?.bankAccountNo != null)) ...[
                       pw.SizedBox(height: 8),
                       pw.Container(
                         padding: const pw.EdgeInsets.all(8),
@@ -369,7 +389,7 @@ class PdfService {
                       border: pw.Border(top: pw.BorderSide(color: PdfColors.grey400, width: 0.5)),
                     ),
                     child: pw.Text(
-                      'Authorized Signatory\n${profile?.businessName ?? ""}',
+                      'Authorized Signatory\n${(profile?.businessName ?? "").toUpperCase()}',
                       style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold),
                       textAlign: pw.TextAlign.center,
                     ),

@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:drift/drift.dart';
+import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,6 +29,7 @@ class BackupService {
             'id': line.id,
             'documentId': line.documentId,
             'itemId': line.itemId,
+            'itemType': line.itemType,
             'itemName': line.itemName,
             'hsnSacCode': line.hsnSacCode,
             'quantity': line.quantity,
@@ -49,72 +51,102 @@ class BackupService {
       'app': 'rasidhu',
       'version': 1,
       'exportedAt': DateTime.now().toIso8601String(),
-      'businessProfile': profile == null ? null : {
-        'id': profile.id,
-        'businessName': profile.businessName,
-        'addressLine': profile.addressLine,
-        'phone': profile.phone,
-        'email': profile.email,
-        'panNumber': profile.panNumber,
-        'gstNumber': profile.gstNumber,
-        'logoPath': profile.logoPath,
-        'signaturePath': profile.signaturePath,
-        'bankName': profile.bankName,
-        'bankAccountNo': profile.bankAccountNo,
-        'bankIfsc': profile.bankIfsc,
-        'bankBranchAddress': profile.bankBranchAddress,
-      },
-      'customers': customers.map((c) => {
-        'id': c.id,
-        'name': c.name,
-        'phone': c.phone,
-        'email': c.email,
-        'address': c.address,
-        'gstNumber': c.gstNumber,
-        'createdAt': c.createdAt.toIso8601String(),
-      }).toList(),
-      'items': items.map((i) => {
-        'id': i.id,
-        'name': i.name,
-        'hsnSacCode': i.hsnSacCode,
-        'defaultUnit': i.defaultUnit,
-        'defaultPrice': i.defaultPrice,
-        'defaultTaxPercent': i.defaultTaxPercent,
-        'createdAt': i.createdAt.toIso8601String(),
-      }).toList(),
-      'documents': docs.map((d) => {
-        'id': d.id,
-        'documentNumber': d.documentNumber,
-        'type': d.type,
-        'customerId': d.customerId,
-        'customerName': d.customerName,
-        'customerPhone': d.customerPhone,
-        'customerAddress': d.customerAddress,
-        'customerGstNumber': d.customerGstNumber,
-        'date': d.date.toIso8601String(),
-        'placeOfSupply': d.placeOfSupply,
-        'subtotal': d.subtotal,
-        'totalDiscount': d.totalDiscount,
-        'totalTax': d.totalTax,
-        'grandTotal': d.grandTotal,
-        'amountReceived': d.amountReceived,
-        'balanceDue': d.balanceDue,
-        'amountInWords': d.amountInWords,
-        'status': d.status,
-        'notes': d.notes,
-        'createdAt': d.createdAt.toIso8601String(),
-        'updatedAt': d.updatedAt.toIso8601String(),
-      }).toList(),
+      'businessProfile': profile == null
+          ? null
+          : {
+              'id': profile.id,
+              'businessName': profile.businessName,
+              'addressLine': profile.addressLine,
+              'phone': profile.phone,
+              'email': profile.email,
+              'panNumber': profile.panNumber,
+              'gstNumber': profile.gstNumber,
+              'logoPath': profile.logoPath,
+              'signaturePath': profile.signaturePath,
+              'bankName': profile.bankName,
+              'bankAccountNo': profile.bankAccountNo,
+              'bankIfsc': profile.bankIfsc,
+              'bankBranchAddress': profile.bankBranchAddress,
+              'invoiceNumberPrefix': profile.invoiceNumberPrefix,
+              'invoiceNumberFormat': profile.invoiceNumberFormat,
+              'invoiceNumberPadding': profile.invoiceNumberPadding,
+              'invoiceNumberSeparator': profile.invoiceNumberSeparator,
+              'invoiceNextSequence': profile.invoiceNextSequence,
+              'estimateNumberPrefix': profile.estimateNumberPrefix,
+              'estimateNumberFormat': profile.estimateNumberFormat,
+              'estimateNumberPadding': profile.estimateNumberPadding,
+              'estimateNumberSeparator': profile.estimateNumberSeparator,
+              'estimateNextSequence': profile.estimateNextSequence,
+              'purchaseNumberPrefix': profile.purchaseNumberPrefix,
+              'purchaseNumberFormat': profile.purchaseNumberFormat,
+              'purchaseNumberPadding': profile.purchaseNumberPadding,
+              'purchaseNumberSeparator': profile.purchaseNumberSeparator,
+              'purchaseNextSequence': profile.purchaseNextSequence,
+              'defaultIncludeBankDetailsInvoice':
+                  profile.defaultIncludeBankDetailsInvoice,
+              'defaultIncludeBankDetailsEstimate':
+                  profile.defaultIncludeBankDetailsEstimate,
+            },
+      'customers': customers
+          .map((c) => {
+                'id': c.id,
+                'name': c.name,
+                'phone': c.phone,
+                'email': c.email,
+                'address': c.address,
+                'gstNumber': c.gstNumber,
+                'createdAt': c.createdAt.toIso8601String(),
+              })
+          .toList(),
+      'items': items
+          .map((i) => {
+                'id': i.id,
+                'name': i.name,
+                'hsnSacCode': i.hsnSacCode,
+                'defaultUnit': i.defaultUnit,
+                'defaultPrice': i.defaultPrice,
+                'defaultTaxPercent': i.defaultTaxPercent,
+                'createdAt': i.createdAt.toIso8601String(),
+              })
+          .toList(),
+      'documents': docs
+          .map((d) => {
+                'id': d.id,
+                'documentNumber': d.documentNumber,
+                'type': d.type,
+                'customerId': d.customerId,
+                'customerName': d.customerName,
+                'customerPhone': d.customerPhone,
+                'customerAddress': d.customerAddress,
+                'customerGstNumber': d.customerGstNumber,
+                'date': d.date.toIso8601String(),
+                'placeOfSupply': d.placeOfSupply,
+                'subtotal': d.subtotal,
+                'totalDiscount': d.totalDiscount,
+                'totalTax': d.totalTax,
+                'grandTotal': d.grandTotal,
+                'amountReceived': d.amountReceived,
+                'balanceDue': d.balanceDue,
+                'amountInWords': d.amountInWords,
+                'status': d.status,
+                'notes': d.notes,
+                'includeBankDetails': d.includeBankDetails,
+                'createdAt': d.createdAt.toIso8601String(),
+                'updatedAt': d.updatedAt.toIso8601String(),
+              })
+          .toList(),
       'lineItems': lineItemsList,
-      'payments': payments.map((p) => {
-        'id': p.id,
-        'documentId': p.documentId,
-        'amount': p.amount,
-        'date': p.date.toIso8601String(),
-        'method': p.method,
-        'notes': p.notes,
-        'createdAt': p.createdAt.toIso8601String(),
-      }).toList(),
+      'payments': payments
+          .map((p) => {
+                'id': p.id,
+                'documentId': p.documentId,
+                'amount': p.amount,
+                'date': p.date.toIso8601String(),
+                'method': p.method,
+                'notes': p.notes,
+                'createdAt': p.createdAt.toIso8601String(),
+              })
+          .toList(),
     };
 
     return jsonEncode(backupData);
@@ -123,14 +155,13 @@ class BackupService {
   /// Exports backup JSON to file and invokes share_plus
   static Future<void> exportAndShareBackup(AppDatabase db) async {
     final jsonStr = await generateBackupJson(db);
-    final dateSuffix = DateTime.now().toIso8601String().replaceAll(':', '-').split('.').first;
-    final filename = 'rasidhu_backup_$dateSuffix.json';
+    final filename =
+        'rasidhu_backup_${DateFormat('yyyyMMdd_HHmm').format(DateTime.now())}.json';
 
     final tempDir = await getTemporaryDirectory();
     final file = File('${tempDir.path}/$filename');
     await file.writeAsString(jsonStr);
 
-    // ignore: deprecated_member_use
     await Share.shareXFiles(
       [XFile(file.path)],
       subject: 'Rasidhu Data Backup ($filename)',
@@ -140,10 +171,13 @@ class BackupService {
   }
 
   /// Restores entire database state from a backup JSON string
-  static Future<bool> restoreFromBackupJson(AppDatabase db, String jsonStr) async {
+  static Future<bool> restoreFromBackupJson(
+      AppDatabase db, String jsonStr) async {
     final Map<String, dynamic> data = jsonDecode(jsonStr);
-    if (data['app'] != 'rasidhu' && data['app'] != 'Rasidhu' && data['app'] != 'ponsri_billing') {
-      throw FormatException('Invalid backup payload file');
+    if (data['app'] != 'rasidhu' &&
+        data['app'] != 'Rasidhu' &&
+        data['app'] != 'ponsri_billing') {
+      throw const FormatException('Invalid backup payload file');
     }
 
     return db.transaction(() async {
@@ -159,123 +193,155 @@ class BackupService {
       final prof = data['businessProfile'];
       if (prof != null) {
         await db.into(db.businessProfile).insert(
-          BusinessProfileCompanion.insert(
-            businessName: prof['businessName'],
-            addressLine: Value(prof['addressLine']),
-            phone: Value(prof['phone']),
-            email: Value(prof['email']),
-            panNumber: Value(prof['panNumber']),
-            gstNumber: Value(prof['gstNumber']),
-            logoPath: Value(prof['logoPath']),
-            signaturePath: Value(prof['signaturePath']),
-            bankName: Value(prof['bankName']),
-            bankAccountNo: Value(prof['bankAccountNo']),
-            bankIfsc: Value(prof['bankIfsc']),
-            bankBranchAddress: Value(prof['bankBranchAddress']),
-          ),
-        );
+              BusinessProfileCompanion.insert(
+                businessName: prof['businessName'],
+                addressLine: Value(prof['addressLine']),
+                phone: Value(prof['phone']),
+                email: Value(prof['email']),
+                panNumber: Value(prof['panNumber']),
+                gstNumber: Value(prof['gstNumber']),
+                logoPath: Value(prof['logoPath']),
+                signaturePath: Value(prof['signaturePath']),
+                bankName: Value(prof['bankName']),
+                bankAccountNo: Value(prof['bankAccountNo']),
+                bankIfsc: Value(prof['bankIfsc']),
+                bankBranchAddress: Value(prof['bankBranchAddress']),
+                invoiceNumberPrefix:
+                    Value(prof['invoiceNumberPrefix'] ?? 'INV'),
+                invoiceNumberFormat:
+                    Value(prof['invoiceNumberFormat'] ?? '{PREFIX}-{SEQ}'),
+                invoiceNumberPadding: Value(prof['invoiceNumberPadding'] ?? 4),
+                invoiceNumberSeparator:
+                    Value(prof['invoiceNumberSeparator'] ?? '-'),
+                invoiceNextSequence: Value(prof['invoiceNextSequence'] ?? 1),
+                estimateNumberPrefix:
+                    Value(prof['estimateNumberPrefix'] ?? 'EST'),
+                estimateNumberFormat:
+                    Value(prof['estimateNumberFormat'] ?? '{PREFIX}-{SEQ}'),
+                estimateNumberPadding:
+                    Value(prof['estimateNumberPadding'] ?? 4),
+                estimateNumberSeparator:
+                    Value(prof['estimateNumberSeparator'] ?? '-'),
+                estimateNextSequence: Value(prof['estimateNextSequence'] ?? 1),
+                purchaseNumberPrefix:
+                    Value(prof['purchaseNumberPrefix'] ?? 'PUR'),
+                purchaseNumberFormat:
+                    Value(prof['purchaseNumberFormat'] ?? '{PREFIX}-{SEQ}'),
+                purchaseNumberPadding:
+                    Value(prof['purchaseNumberPadding'] ?? 4),
+                purchaseNumberSeparator:
+                    Value(prof['purchaseNumberSeparator'] ?? '-'),
+                purchaseNextSequence: Value(prof['purchaseNextSequence'] ?? 1),
+                defaultIncludeBankDetailsInvoice: Value(
+                    prof['defaultIncludeBankDetailsInvoice'] ?? true),
+                defaultIncludeBankDetailsEstimate: Value(
+                    prof['defaultIncludeBankDetailsEstimate'] ?? true),
+              ),
+            );
       }
 
       // 3. Restore Customers
       final List customers = data['customers'] ?? [];
       for (final c in customers) {
         await db.into(db.customers).insert(
-          CustomersCompanion(
-            id: Value(c['id']),
-            name: Value(c['name']),
-            phone: Value(c['phone']),
-            email: Value(c['email']),
-            address: Value(c['address']),
-            gstNumber: Value(c['gstNumber']),
-            createdAt: Value(DateTime.parse(c['createdAt'])),
-          ),
-        );
+              CustomersCompanion(
+                id: Value(c['id']),
+                name: Value(c['name']),
+                phone: Value(c['phone']),
+                email: Value(c['email']),
+                address: Value(c['address']),
+                gstNumber: Value(c['gstNumber']),
+                createdAt: Value(DateTime.parse(c['createdAt'])),
+              ),
+            );
       }
 
       // 4. Restore Items
       final List items = data['items'] ?? [];
       for (final i in items) {
         await db.into(db.items).insert(
-          ItemsCompanion(
-            id: Value(i['id']),
-            name: Value(i['name']),
-            hsnSacCode: Value(i['hsnSacCode']),
-            defaultUnit: Value(i['defaultUnit']),
-            defaultPrice: Value(i['defaultPrice']),
-            defaultTaxPercent: Value(i['defaultTaxPercent']),
-            createdAt: Value(DateTime.parse(i['createdAt'])),
-          ),
-        );
+              ItemsCompanion(
+                id: Value(i['id']),
+                name: Value(i['name']),
+                hsnSacCode: Value(i['hsnSacCode']),
+                defaultUnit: Value(i['defaultUnit']),
+                defaultPrice: Value(i['defaultPrice']),
+                defaultTaxPercent: Value(i['defaultTaxPercent']),
+                createdAt: Value(DateTime.parse(i['createdAt'])),
+              ),
+            );
       }
 
       // 5. Restore Documents
       final List docs = data['documents'] ?? [];
       for (final d in docs) {
         await db.into(db.documents).insert(
-          DocumentsCompanion(
-            id: Value(d['id']),
-            documentNumber: Value(d['documentNumber']),
-            type: Value(d['type']),
-            customerId: Value(d['customerId']),
-            customerName: Value(d['customerName']),
-            customerPhone: Value(d['customerPhone']),
-            customerAddress: Value(d['customerAddress']),
-            customerGstNumber: Value(d['customerGstNumber']),
-            date: Value(DateTime.parse(d['date'])),
-            placeOfSupply: Value(d['placeOfSupply']),
-            subtotal: Value(d['subtotal']),
-            totalDiscount: Value(d['totalDiscount']),
-            totalTax: Value(d['totalTax']),
-            grandTotal: Value(d['grandTotal']),
-            amountReceived: Value(d['amountReceived']),
-            balanceDue: Value(d['balanceDue']),
-            amountInWords: Value(d['amountInWords']),
-            status: Value(d['status']),
-            notes: Value(d['notes']),
-            createdAt: Value(DateTime.parse(d['createdAt'])),
-            updatedAt: Value(DateTime.parse(d['updatedAt'])),
-          ),
-        );
+              DocumentsCompanion(
+                id: Value(d['id']),
+                documentNumber: Value(d['documentNumber']),
+                type: Value(d['type']),
+                customerId: Value(d['customerId']),
+                customerName: Value(d['customerName']),
+                customerPhone: Value(d['customerPhone']),
+                customerAddress: Value(d['customerAddress']),
+                customerGstNumber: Value(d['customerGstNumber']),
+                date: Value(DateTime.parse(d['date'])),
+                placeOfSupply: Value(d['placeOfSupply']),
+                subtotal: Value(d['subtotal']),
+                totalDiscount: Value(d['totalDiscount']),
+                totalTax: Value(d['totalTax']),
+                grandTotal: Value(d['grandTotal']),
+                amountReceived: Value(d['amountReceived']),
+                balanceDue: Value(d['balanceDue']),
+                amountInWords: Value(d['amountInWords']),
+                status: Value(d['status']),
+                notes: Value(d['notes']),
+                includeBankDetails: Value(d['includeBankDetails'] ?? true),
+                createdAt: Value(DateTime.parse(d['createdAt'])),
+                updatedAt: Value(DateTime.parse(d['updatedAt'])),
+              ),
+            );
       }
 
       // 6. Restore Document Line Items
       final List lineItems = data['lineItems'] ?? [];
       for (final l in lineItems) {
         await db.into(db.documentLineItems).insert(
-          DocumentLineItemsCompanion(
-            id: Value(l['id']),
-            documentId: Value(l['documentId']),
-            itemId: Value(l['itemId']),
-            itemName: Value(l['itemName']),
-            hsnSacCode: Value(l['hsnSacCode']),
-            quantity: Value(l['quantity']),
-            unit: Value(l['unit']),
-            pricePerUnit: Value(l['pricePerUnit']),
-            discountPercent: Value(l['discountPercent']),
-            discountAmount: Value(l['discountAmount']),
-            taxableAmount: Value(l['taxableAmount']),
-            taxPercent: Value(l['taxPercent']),
-            taxAmount: Value(l['taxAmount']),
-            lineTotal: Value(l['lineTotal']),
-            sortOrder: Value(l['sortOrder']),
-          ),
-        );
+              DocumentLineItemsCompanion(
+                id: Value(l['id']),
+                documentId: Value(l['documentId']),
+                itemId: Value(l['itemId']),
+                itemType: Value(l['itemType'] ?? 'product'),
+                itemName: Value(l['itemName']),
+                hsnSacCode: Value(l['hsnSacCode']),
+                quantity: Value(l['quantity']),
+                unit: Value(l['unit']),
+                pricePerUnit: Value(l['pricePerUnit']),
+                discountPercent: Value(l['discountPercent']),
+                discountAmount: Value(l['discountAmount']),
+                taxableAmount: Value(l['taxableAmount']),
+                taxPercent: Value(l['taxPercent']),
+                taxAmount: Value(l['taxAmount']),
+                lineTotal: Value(l['lineTotal']),
+                sortOrder: Value(l['sortOrder']),
+              ),
+            );
       }
 
       // 7. Restore Payments
       final List payments = data['payments'] ?? [];
       for (final p in payments) {
         await db.into(db.payments).insert(
-          PaymentsCompanion(
-            id: Value(p['id']),
-            documentId: Value(p['documentId']),
-            amount: Value(p['amount']),
-            date: Value(DateTime.parse(p['date'])),
-            method: Value(p['method']),
-            notes: Value(p['notes']),
-            createdAt: Value(DateTime.parse(p['createdAt'])),
-          ),
-        );
+              PaymentsCompanion(
+                id: Value(p['id']),
+                documentId: Value(p['documentId']),
+                amount: Value(p['amount']),
+                date: Value(DateTime.parse(p['date'])),
+                method: Value(p['method']),
+                notes: Value(p['notes']),
+                createdAt: Value(DateTime.parse(p['createdAt'])),
+              ),
+            );
       }
 
       return true;

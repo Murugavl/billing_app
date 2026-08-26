@@ -5,6 +5,8 @@ import '../app_database.dart';
 import '../tables/documents_table.dart';
 import '../tables/document_line_items_table.dart';
 
+import '../../services/document_numbering_service.dart';
+
 part 'documents_dao.g.dart';
 
 /// A document together with its line items — used as a rich return type.
@@ -22,17 +24,112 @@ class DocumentsDao extends DatabaseAccessor<AppDatabase>
 
   // ── Sequence counter ─────────────────────────────────────────────────────────
 
-  /// Returns the next auto-increment document number for a given type.
-  /// Format: "INV-0001" or "EST-0001".
-  Future<String> nextDocumentNumber(String type) async {
-    final prefix = type == 'invoice' ? 'INV' : 'EST';
+  /// Returns the next document number for a given type according to BusinessProfile settings.
+  Future<String> nextDocumentNumber(String type, {DateTime? date}) async {
+    final profile = await db.businessProfileDao.getProfile();
     final count = await (selectOnly(documents)
           ..addColumns([documents.id.count()])
           ..where(documents.type.equals(type)))
         .map((r) => r.read(documents.id.count()))
         .getSingle();
-    final next = (count ?? 0) + 1;
-    return '$prefix-${next.toString().padLeft(4, '0')}';
+    final docCount = (count ?? 0) + 1;
+
+    if (type == 'invoice') {
+      final prefix = profile?.invoiceNumberPrefix ?? 'INV';
+      final format = profile?.invoiceNumberFormat ?? '{PREFIX}-{SEQ}';
+      final padding = profile?.invoiceNumberPadding ?? 4;
+      final separator = profile?.invoiceNumberSeparator ?? '-';
+      final seq = profile?.invoiceNextSequence ?? 1;
+      final nextSeq = seq > docCount ? seq : docCount;
+
+      return DocumentNumberingService.formatDocumentNumber(
+        template: format,
+        prefix: prefix,
+        sequence: nextSeq,
+        padding: padding,
+        separator: separator,
+        date: date,
+      );
+    } else {
+      final prefix = profile?.estimateNumberPrefix ?? 'EST';
+      final format = profile?.estimateNumberFormat ?? '{PREFIX}-{SEQ}';
+      final padding = profile?.estimateNumberPadding ?? 4;
+      final separator = profile?.estimateNumberSeparator ?? '-';
+      final seq = profile?.estimateNextSequence ?? 1;
+      final nextSeq = seq > docCount ? seq : docCount;
+
+      return DocumentNumberingService.formatDocumentNumber(
+        template: format,
+        prefix: prefix,
+        sequence: nextSeq,
+        padding: padding,
+        separator: separator,
+        date: date,
+      );
+    }
+  }
+
+  /// Consumes and returns the next document number, while incrementing the sequence counter in BusinessProfile.
+  Future<String> consumeNextDocumentNumber(String type, {DateTime? date}) async {
+    final profile = await db.businessProfileDao.getProfile();
+    final count = await (selectOnly(documents)
+          ..addColumns([documents.id.count()])
+          ..where(documents.type.equals(type)))
+        .map((r) => r.read(documents.id.count()))
+        .getSingle();
+    final docCount = (count ?? 0) + 1;
+
+    if (type == 'invoice') {
+      final prefix = profile?.invoiceNumberPrefix ?? 'INV';
+      final format = profile?.invoiceNumberFormat ?? '{PREFIX}-{SEQ}';
+      final padding = profile?.invoiceNumberPadding ?? 4;
+      final separator = profile?.invoiceNumberSeparator ?? '-';
+      final seq = profile?.invoiceNextSequence ?? 1;
+      final nextSeq = seq > docCount ? seq : docCount;
+
+      final docNum = DocumentNumberingService.formatDocumentNumber(
+        template: format,
+        prefix: prefix,
+        sequence: nextSeq,
+        padding: padding,
+        separator: separator,
+        date: date,
+      );
+
+      await db.businessProfileDao.upsertProfile(
+        BusinessProfileCompanion(
+          invoiceNextSequence: Value(nextSeq + 1),
+          updatedAt: Value(DateTime.now()),
+        ),
+      );
+
+      return docNum;
+    } else {
+      final prefix = profile?.estimateNumberPrefix ?? 'EST';
+      final format = profile?.estimateNumberFormat ?? '{PREFIX}-{SEQ}';
+      final padding = profile?.estimateNumberPadding ?? 4;
+      final separator = profile?.estimateNumberSeparator ?? '-';
+      final seq = profile?.estimateNextSequence ?? 1;
+      final nextSeq = seq > docCount ? seq : docCount;
+
+      final docNum = DocumentNumberingService.formatDocumentNumber(
+        template: format,
+        prefix: prefix,
+        sequence: nextSeq,
+        padding: padding,
+        separator: separator,
+        date: date,
+      );
+
+      await db.businessProfileDao.upsertProfile(
+        BusinessProfileCompanion(
+          estimateNextSequence: Value(nextSeq + 1),
+          updatedAt: Value(DateTime.now()),
+        ),
+      );
+
+      return docNum;
+    }
   }
 
   // ── Read — Documents ─────────────────────────────────────────────────────────

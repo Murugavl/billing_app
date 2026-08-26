@@ -59,7 +59,7 @@ class AppDatabase extends _$AppDatabase {
       : super(executor ?? _openConnection());
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 6;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -78,6 +78,48 @@ class AppDatabase extends _$AppDatabase {
             await m.createTable(purchaseBills);
             await m.createTable(purchaseLineItems);
             await m.createTable(purchasePayments);
+          }
+          if (from < 4) {
+            await m.addColumn(
+                businessProfile, businessProfile.invoiceNumberPrefix);
+            await m.addColumn(
+                businessProfile, businessProfile.invoiceNumberFormat);
+            await m.addColumn(
+                businessProfile, businessProfile.invoiceNumberPadding);
+            await m.addColumn(
+                businessProfile, businessProfile.invoiceNumberSeparator);
+            await m.addColumn(
+                businessProfile, businessProfile.invoiceNextSequence);
+            await m.addColumn(
+                businessProfile, businessProfile.estimateNumberPrefix);
+            await m.addColumn(
+                businessProfile, businessProfile.estimateNumberFormat);
+            await m.addColumn(
+                businessProfile, businessProfile.estimateNumberPadding);
+            await m.addColumn(
+                businessProfile, businessProfile.estimateNumberSeparator);
+            await m.addColumn(
+                businessProfile, businessProfile.estimateNextSequence);
+            await m.addColumn(
+                businessProfile, businessProfile.purchaseNumberPrefix);
+            await m.addColumn(
+                businessProfile, businessProfile.purchaseNumberFormat);
+            await m.addColumn(
+                businessProfile, businessProfile.purchaseNumberPadding);
+            await m.addColumn(
+                businessProfile, businessProfile.purchaseNumberSeparator);
+            await m.addColumn(
+                businessProfile, businessProfile.purchaseNextSequence);
+          }
+          if (from < 5) {
+            await m.addColumn(documents, documents.includeBankDetails);
+            await m.addColumn(businessProfile,
+                businessProfile.defaultIncludeBankDetailsInvoice);
+            await m.addColumn(businessProfile,
+                businessProfile.defaultIncludeBankDetailsEstimate);
+          }
+          if (from < 6) {
+            await m.addColumn(documentLineItems, documentLineItems.itemType);
           }
         },
         beforeOpen: (details) async {

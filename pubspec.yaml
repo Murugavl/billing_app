@@ -80,3 +80,8 @@ flutter:
   assets:
     - assets/images/
     - assets/fonts/
+  fonts:
+    - family: DancingScript
+      fonts:
+        - asset: assets/fonts/DancingScript.ttf
+

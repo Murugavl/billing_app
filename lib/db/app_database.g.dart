@@ -105,6 +105,148 @@ class $BusinessProfileTable extends BusinessProfile
   late final GeneratedColumn<String> bankBranchAddress =
       GeneratedColumn<String>('bank_branch_address', aliasedName, true,
           type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _invoiceNumberPrefixMeta =
+      const VerificationMeta('invoiceNumberPrefix');
+  @override
+  late final GeneratedColumn<String> invoiceNumberPrefix =
+      GeneratedColumn<String>('invoice_number_prefix', aliasedName, false,
+          type: DriftSqlType.string,
+          requiredDuringInsert: false,
+          defaultValue: const Constant('INV'));
+  static const VerificationMeta _invoiceNumberFormatMeta =
+      const VerificationMeta('invoiceNumberFormat');
+  @override
+  late final GeneratedColumn<String> invoiceNumberFormat =
+      GeneratedColumn<String>('invoice_number_format', aliasedName, false,
+          type: DriftSqlType.string,
+          requiredDuringInsert: false,
+          defaultValue: const Constant('{PREFIX}-{SEQ}'));
+  static const VerificationMeta _invoiceNumberPaddingMeta =
+      const VerificationMeta('invoiceNumberPadding');
+  @override
+  late final GeneratedColumn<int> invoiceNumberPadding = GeneratedColumn<int>(
+      'invoice_number_padding', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(4));
+  static const VerificationMeta _invoiceNumberSeparatorMeta =
+      const VerificationMeta('invoiceNumberSeparator');
+  @override
+  late final GeneratedColumn<String> invoiceNumberSeparator =
+      GeneratedColumn<String>('invoice_number_separator', aliasedName, false,
+          type: DriftSqlType.string,
+          requiredDuringInsert: false,
+          defaultValue: const Constant('-'));
+  static const VerificationMeta _invoiceNextSequenceMeta =
+      const VerificationMeta('invoiceNextSequence');
+  @override
+  late final GeneratedColumn<int> invoiceNextSequence = GeneratedColumn<int>(
+      'invoice_next_sequence', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(1));
+  static const VerificationMeta _estimateNumberPrefixMeta =
+      const VerificationMeta('estimateNumberPrefix');
+  @override
+  late final GeneratedColumn<String> estimateNumberPrefix =
+      GeneratedColumn<String>('estimate_number_prefix', aliasedName, false,
+          type: DriftSqlType.string,
+          requiredDuringInsert: false,
+          defaultValue: const Constant('EST'));
+  static const VerificationMeta _estimateNumberFormatMeta =
+      const VerificationMeta('estimateNumberFormat');
+  @override
+  late final GeneratedColumn<String> estimateNumberFormat =
+      GeneratedColumn<String>('estimate_number_format', aliasedName, false,
+          type: DriftSqlType.string,
+          requiredDuringInsert: false,
+          defaultValue: const Constant('{PREFIX}-{SEQ}'));
+  static const VerificationMeta _estimateNumberPaddingMeta =
+      const VerificationMeta('estimateNumberPadding');
+  @override
+  late final GeneratedColumn<int> estimateNumberPadding = GeneratedColumn<int>(
+      'estimate_number_padding', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(4));
+  static const VerificationMeta _estimateNumberSeparatorMeta =
+      const VerificationMeta('estimateNumberSeparator');
+  @override
+  late final GeneratedColumn<String> estimateNumberSeparator =
+      GeneratedColumn<String>('estimate_number_separator', aliasedName, false,
+          type: DriftSqlType.string,
+          requiredDuringInsert: false,
+          defaultValue: const Constant('-'));
+  static const VerificationMeta _estimateNextSequenceMeta =
+      const VerificationMeta('estimateNextSequence');
+  @override
+  late final GeneratedColumn<int> estimateNextSequence = GeneratedColumn<int>(
+      'estimate_next_sequence', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(1));
+  static const VerificationMeta _purchaseNumberPrefixMeta =
+      const VerificationMeta('purchaseNumberPrefix');
+  @override
+  late final GeneratedColumn<String> purchaseNumberPrefix =
+      GeneratedColumn<String>('purchase_number_prefix', aliasedName, false,
+          type: DriftSqlType.string,
+          requiredDuringInsert: false,
+          defaultValue: const Constant('PUR'));
+  static const VerificationMeta _purchaseNumberFormatMeta =
+      const VerificationMeta('purchaseNumberFormat');
+  @override
+  late final GeneratedColumn<String> purchaseNumberFormat =
+      GeneratedColumn<String>('purchase_number_format', aliasedName, false,
+          type: DriftSqlType.string,
+          requiredDuringInsert: false,
+          defaultValue: const Constant('{PREFIX}-{SEQ}'));
+  static const VerificationMeta _purchaseNumberPaddingMeta =
+      const VerificationMeta('purchaseNumberPadding');
+  @override
+  late final GeneratedColumn<int> purchaseNumberPadding = GeneratedColumn<int>(
+      'purchase_number_padding', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(4));
+  static const VerificationMeta _purchaseNumberSeparatorMeta =
+      const VerificationMeta('purchaseNumberSeparator');
+  @override
+  late final GeneratedColumn<String> purchaseNumberSeparator =
+      GeneratedColumn<String>('purchase_number_separator', aliasedName, false,
+          type: DriftSqlType.string,
+          requiredDuringInsert: false,
+          defaultValue: const Constant('-'));
+  static const VerificationMeta _purchaseNextSequenceMeta =
+      const VerificationMeta('purchaseNextSequence');
+  @override
+  late final GeneratedColumn<int> purchaseNextSequence = GeneratedColumn<int>(
+      'purchase_next_sequence', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(1));
+  static const VerificationMeta _defaultIncludeBankDetailsInvoiceMeta =
+      const VerificationMeta('defaultIncludeBankDetailsInvoice');
+  @override
+  late final GeneratedColumn<bool> defaultIncludeBankDetailsInvoice =
+      GeneratedColumn<bool>(
+          'default_include_bank_details_invoice', aliasedName, false,
+          type: DriftSqlType.bool,
+          requiredDuringInsert: false,
+          defaultConstraints: GeneratedColumn.constraintIsAlways(
+              'CHECK ("default_include_bank_details_invoice" IN (0, 1))'),
+          defaultValue: const Constant(true));
+  static const VerificationMeta _defaultIncludeBankDetailsEstimateMeta =
+      const VerificationMeta('defaultIncludeBankDetailsEstimate');
+  @override
+  late final GeneratedColumn<bool> defaultIncludeBankDetailsEstimate =
+      GeneratedColumn<bool>(
+          'default_include_bank_details_estimate', aliasedName, false,
+          type: DriftSqlType.bool,
+          requiredDuringInsert: false,
+          defaultConstraints: GeneratedColumn.constraintIsAlways(
+              'CHECK ("default_include_bank_details_estimate" IN (0, 1))'),
+          defaultValue: const Constant(true));
   static const VerificationMeta _updatedAtMeta =
       const VerificationMeta('updatedAt');
   @override
@@ -128,6 +270,23 @@ class $BusinessProfileTable extends BusinessProfile
         bankAccountNo,
         bankIfsc,
         bankBranchAddress,
+        invoiceNumberPrefix,
+        invoiceNumberFormat,
+        invoiceNumberPadding,
+        invoiceNumberSeparator,
+        invoiceNextSequence,
+        estimateNumberPrefix,
+        estimateNumberFormat,
+        estimateNumberPadding,
+        estimateNumberSeparator,
+        estimateNextSequence,
+        purchaseNumberPrefix,
+        purchaseNumberFormat,
+        purchaseNumberPadding,
+        purchaseNumberSeparator,
+        purchaseNextSequence,
+        defaultIncludeBankDetailsInvoice,
+        defaultIncludeBankDetailsEstimate,
         updatedAt
       ];
   @override
@@ -204,6 +363,112 @@ class $BusinessProfileTable extends BusinessProfile
           bankBranchAddress.isAcceptableOrUnknown(
               data['bank_branch_address']!, _bankBranchAddressMeta));
     }
+    if (data.containsKey('invoice_number_prefix')) {
+      context.handle(
+          _invoiceNumberPrefixMeta,
+          invoiceNumberPrefix.isAcceptableOrUnknown(
+              data['invoice_number_prefix']!, _invoiceNumberPrefixMeta));
+    }
+    if (data.containsKey('invoice_number_format')) {
+      context.handle(
+          _invoiceNumberFormatMeta,
+          invoiceNumberFormat.isAcceptableOrUnknown(
+              data['invoice_number_format']!, _invoiceNumberFormatMeta));
+    }
+    if (data.containsKey('invoice_number_padding')) {
+      context.handle(
+          _invoiceNumberPaddingMeta,
+          invoiceNumberPadding.isAcceptableOrUnknown(
+              data['invoice_number_padding']!, _invoiceNumberPaddingMeta));
+    }
+    if (data.containsKey('invoice_number_separator')) {
+      context.handle(
+          _invoiceNumberSeparatorMeta,
+          invoiceNumberSeparator.isAcceptableOrUnknown(
+              data['invoice_number_separator']!, _invoiceNumberSeparatorMeta));
+    }
+    if (data.containsKey('invoice_next_sequence')) {
+      context.handle(
+          _invoiceNextSequenceMeta,
+          invoiceNextSequence.isAcceptableOrUnknown(
+              data['invoice_next_sequence']!, _invoiceNextSequenceMeta));
+    }
+    if (data.containsKey('estimate_number_prefix')) {
+      context.handle(
+          _estimateNumberPrefixMeta,
+          estimateNumberPrefix.isAcceptableOrUnknown(
+              data['estimate_number_prefix']!, _estimateNumberPrefixMeta));
+    }
+    if (data.containsKey('estimate_number_format')) {
+      context.handle(
+          _estimateNumberFormatMeta,
+          estimateNumberFormat.isAcceptableOrUnknown(
+              data['estimate_number_format']!, _estimateNumberFormatMeta));
+    }
+    if (data.containsKey('estimate_number_padding')) {
+      context.handle(
+          _estimateNumberPaddingMeta,
+          estimateNumberPadding.isAcceptableOrUnknown(
+              data['estimate_number_padding']!, _estimateNumberPaddingMeta));
+    }
+    if (data.containsKey('estimate_number_separator')) {
+      context.handle(
+          _estimateNumberSeparatorMeta,
+          estimateNumberSeparator.isAcceptableOrUnknown(
+              data['estimate_number_separator']!,
+              _estimateNumberSeparatorMeta));
+    }
+    if (data.containsKey('estimate_next_sequence')) {
+      context.handle(
+          _estimateNextSequenceMeta,
+          estimateNextSequence.isAcceptableOrUnknown(
+              data['estimate_next_sequence']!, _estimateNextSequenceMeta));
+    }
+    if (data.containsKey('purchase_number_prefix')) {
+      context.handle(
+          _purchaseNumberPrefixMeta,
+          purchaseNumberPrefix.isAcceptableOrUnknown(
+              data['purchase_number_prefix']!, _purchaseNumberPrefixMeta));
+    }
+    if (data.containsKey('purchase_number_format')) {
+      context.handle(
+          _purchaseNumberFormatMeta,
+          purchaseNumberFormat.isAcceptableOrUnknown(
+              data['purchase_number_format']!, _purchaseNumberFormatMeta));
+    }
+    if (data.containsKey('purchase_number_padding')) {
+      context.handle(
+          _purchaseNumberPaddingMeta,
+          purchaseNumberPadding.isAcceptableOrUnknown(
+              data['purchase_number_padding']!, _purchaseNumberPaddingMeta));
+    }
+    if (data.containsKey('purchase_number_separator')) {
+      context.handle(
+          _purchaseNumberSeparatorMeta,
+          purchaseNumberSeparator.isAcceptableOrUnknown(
+              data['purchase_number_separator']!,
+              _purchaseNumberSeparatorMeta));
+    }
+    if (data.containsKey('purchase_next_sequence')) {
+      context.handle(
+          _purchaseNextSequenceMeta,
+          purchaseNextSequence.isAcceptableOrUnknown(
+              data['purchase_next_sequence']!, _purchaseNextSequenceMeta));
+    }
+    if (data.containsKey('default_include_bank_details_invoice')) {
+      context.handle(
+          _defaultIncludeBankDetailsInvoiceMeta,
+          defaultIncludeBankDetailsInvoice.isAcceptableOrUnknown(
+              data['default_include_bank_details_invoice']!,
+              _defaultIncludeBankDetailsInvoiceMeta));
+    }
+    if (data.containsKey('default_include_bank_details_estimate')) {
+      context.handle(
+          _defaultIncludeBankDetailsEstimateMeta,
+          defaultIncludeBankDetailsEstimate.isAcceptableOrUnknown(
+              data['default_include_bank_details_estimate']!,
+              _defaultIncludeBankDetailsEstimateMeta));
+    }
     if (data.containsKey('updated_at')) {
       context.handle(_updatedAtMeta,
           updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
@@ -243,6 +508,51 @@ class $BusinessProfileTable extends BusinessProfile
           .read(DriftSqlType.string, data['${effectivePrefix}bank_ifsc']),
       bankBranchAddress: attachedDatabase.typeMapping.read(
           DriftSqlType.string, data['${effectivePrefix}bank_branch_address']),
+      invoiceNumberPrefix: attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}invoice_number_prefix'])!,
+      invoiceNumberFormat: attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}invoice_number_format'])!,
+      invoiceNumberPadding: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}invoice_number_padding'])!,
+      invoiceNumberSeparator: attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}invoice_number_separator'])!,
+      invoiceNextSequence: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}invoice_next_sequence'])!,
+      estimateNumberPrefix: attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}estimate_number_prefix'])!,
+      estimateNumberFormat: attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}estimate_number_format'])!,
+      estimateNumberPadding: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}estimate_number_padding'])!,
+      estimateNumberSeparator: attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}estimate_number_separator'])!,
+      estimateNextSequence: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}estimate_next_sequence'])!,
+      purchaseNumberPrefix: attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}purchase_number_prefix'])!,
+      purchaseNumberFormat: attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}purchase_number_format'])!,
+      purchaseNumberPadding: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}purchase_number_padding'])!,
+      purchaseNumberSeparator: attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}purchase_number_separator'])!,
+      purchaseNextSequence: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}purchase_next_sequence'])!,
+      defaultIncludeBankDetailsInvoice: attachedDatabase.typeMapping.read(
+          DriftSqlType.bool,
+          data['${effectivePrefix}default_include_bank_details_invoice'])!,
+      defaultIncludeBankDetailsEstimate: attachedDatabase.typeMapping.read(
+          DriftSqlType.bool,
+          data['${effectivePrefix}default_include_bank_details_estimate'])!,
       updatedAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at'])!,
     );
@@ -269,6 +579,23 @@ class BusinessProfileData extends DataClass
   final String? bankAccountNo;
   final String? bankIfsc;
   final String? bankBranchAddress;
+  final String invoiceNumberPrefix;
+  final String invoiceNumberFormat;
+  final int invoiceNumberPadding;
+  final String invoiceNumberSeparator;
+  final int invoiceNextSequence;
+  final String estimateNumberPrefix;
+  final String estimateNumberFormat;
+  final int estimateNumberPadding;
+  final String estimateNumberSeparator;
+  final int estimateNextSequence;
+  final String purchaseNumberPrefix;
+  final String purchaseNumberFormat;
+  final int purchaseNumberPadding;
+  final String purchaseNumberSeparator;
+  final int purchaseNextSequence;
+  final bool defaultIncludeBankDetailsInvoice;
+  final bool defaultIncludeBankDetailsEstimate;
   final DateTime updatedAt;
   const BusinessProfileData(
       {required this.id,
@@ -284,6 +611,23 @@ class BusinessProfileData extends DataClass
       this.bankAccountNo,
       this.bankIfsc,
       this.bankBranchAddress,
+      required this.invoiceNumberPrefix,
+      required this.invoiceNumberFormat,
+      required this.invoiceNumberPadding,
+      required this.invoiceNumberSeparator,
+      required this.invoiceNextSequence,
+      required this.estimateNumberPrefix,
+      required this.estimateNumberFormat,
+      required this.estimateNumberPadding,
+      required this.estimateNumberSeparator,
+      required this.estimateNextSequence,
+      required this.purchaseNumberPrefix,
+      required this.purchaseNumberFormat,
+      required this.purchaseNumberPadding,
+      required this.purchaseNumberSeparator,
+      required this.purchaseNextSequence,
+      required this.defaultIncludeBankDetailsInvoice,
+      required this.defaultIncludeBankDetailsEstimate,
       required this.updatedAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -323,6 +667,27 @@ class BusinessProfileData extends DataClass
     if (!nullToAbsent || bankBranchAddress != null) {
       map['bank_branch_address'] = Variable<String>(bankBranchAddress);
     }
+    map['invoice_number_prefix'] = Variable<String>(invoiceNumberPrefix);
+    map['invoice_number_format'] = Variable<String>(invoiceNumberFormat);
+    map['invoice_number_padding'] = Variable<int>(invoiceNumberPadding);
+    map['invoice_number_separator'] = Variable<String>(invoiceNumberSeparator);
+    map['invoice_next_sequence'] = Variable<int>(invoiceNextSequence);
+    map['estimate_number_prefix'] = Variable<String>(estimateNumberPrefix);
+    map['estimate_number_format'] = Variable<String>(estimateNumberFormat);
+    map['estimate_number_padding'] = Variable<int>(estimateNumberPadding);
+    map['estimate_number_separator'] =
+        Variable<String>(estimateNumberSeparator);
+    map['estimate_next_sequence'] = Variable<int>(estimateNextSequence);
+    map['purchase_number_prefix'] = Variable<String>(purchaseNumberPrefix);
+    map['purchase_number_format'] = Variable<String>(purchaseNumberFormat);
+    map['purchase_number_padding'] = Variable<int>(purchaseNumberPadding);
+    map['purchase_number_separator'] =
+        Variable<String>(purchaseNumberSeparator);
+    map['purchase_next_sequence'] = Variable<int>(purchaseNextSequence);
+    map['default_include_bank_details_invoice'] =
+        Variable<bool>(defaultIncludeBankDetailsInvoice);
+    map['default_include_bank_details_estimate'] =
+        Variable<bool>(defaultIncludeBankDetailsEstimate);
     map['updated_at'] = Variable<DateTime>(updatedAt);
     return map;
   }
@@ -362,6 +727,24 @@ class BusinessProfileData extends DataClass
       bankBranchAddress: bankBranchAddress == null && nullToAbsent
           ? const Value.absent()
           : Value(bankBranchAddress),
+      invoiceNumberPrefix: Value(invoiceNumberPrefix),
+      invoiceNumberFormat: Value(invoiceNumberFormat),
+      invoiceNumberPadding: Value(invoiceNumberPadding),
+      invoiceNumberSeparator: Value(invoiceNumberSeparator),
+      invoiceNextSequence: Value(invoiceNextSequence),
+      estimateNumberPrefix: Value(estimateNumberPrefix),
+      estimateNumberFormat: Value(estimateNumberFormat),
+      estimateNumberPadding: Value(estimateNumberPadding),
+      estimateNumberSeparator: Value(estimateNumberSeparator),
+      estimateNextSequence: Value(estimateNextSequence),
+      purchaseNumberPrefix: Value(purchaseNumberPrefix),
+      purchaseNumberFormat: Value(purchaseNumberFormat),
+      purchaseNumberPadding: Value(purchaseNumberPadding),
+      purchaseNumberSeparator: Value(purchaseNumberSeparator),
+      purchaseNextSequence: Value(purchaseNextSequence),
+      defaultIncludeBankDetailsInvoice: Value(defaultIncludeBankDetailsInvoice),
+      defaultIncludeBankDetailsEstimate:
+          Value(defaultIncludeBankDetailsEstimate),
       updatedAt: Value(updatedAt),
     );
   }
@@ -384,6 +767,40 @@ class BusinessProfileData extends DataClass
       bankIfsc: serializer.fromJson<String?>(json['bankIfsc']),
       bankBranchAddress:
           serializer.fromJson<String?>(json['bankBranchAddress']),
+      invoiceNumberPrefix:
+          serializer.fromJson<String>(json['invoiceNumberPrefix']),
+      invoiceNumberFormat:
+          serializer.fromJson<String>(json['invoiceNumberFormat']),
+      invoiceNumberPadding:
+          serializer.fromJson<int>(json['invoiceNumberPadding']),
+      invoiceNumberSeparator:
+          serializer.fromJson<String>(json['invoiceNumberSeparator']),
+      invoiceNextSequence:
+          serializer.fromJson<int>(json['invoiceNextSequence']),
+      estimateNumberPrefix:
+          serializer.fromJson<String>(json['estimateNumberPrefix']),
+      estimateNumberFormat:
+          serializer.fromJson<String>(json['estimateNumberFormat']),
+      estimateNumberPadding:
+          serializer.fromJson<int>(json['estimateNumberPadding']),
+      estimateNumberSeparator:
+          serializer.fromJson<String>(json['estimateNumberSeparator']),
+      estimateNextSequence:
+          serializer.fromJson<int>(json['estimateNextSequence']),
+      purchaseNumberPrefix:
+          serializer.fromJson<String>(json['purchaseNumberPrefix']),
+      purchaseNumberFormat:
+          serializer.fromJson<String>(json['purchaseNumberFormat']),
+      purchaseNumberPadding:
+          serializer.fromJson<int>(json['purchaseNumberPadding']),
+      purchaseNumberSeparator:
+          serializer.fromJson<String>(json['purchaseNumberSeparator']),
+      purchaseNextSequence:
+          serializer.fromJson<int>(json['purchaseNextSequence']),
+      defaultIncludeBankDetailsInvoice:
+          serializer.fromJson<bool>(json['defaultIncludeBankDetailsInvoice']),
+      defaultIncludeBankDetailsEstimate:
+          serializer.fromJson<bool>(json['defaultIncludeBankDetailsEstimate']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
     );
   }
@@ -404,6 +821,28 @@ class BusinessProfileData extends DataClass
       'bankAccountNo': serializer.toJson<String?>(bankAccountNo),
       'bankIfsc': serializer.toJson<String?>(bankIfsc),
       'bankBranchAddress': serializer.toJson<String?>(bankBranchAddress),
+      'invoiceNumberPrefix': serializer.toJson<String>(invoiceNumberPrefix),
+      'invoiceNumberFormat': serializer.toJson<String>(invoiceNumberFormat),
+      'invoiceNumberPadding': serializer.toJson<int>(invoiceNumberPadding),
+      'invoiceNumberSeparator':
+          serializer.toJson<String>(invoiceNumberSeparator),
+      'invoiceNextSequence': serializer.toJson<int>(invoiceNextSequence),
+      'estimateNumberPrefix': serializer.toJson<String>(estimateNumberPrefix),
+      'estimateNumberFormat': serializer.toJson<String>(estimateNumberFormat),
+      'estimateNumberPadding': serializer.toJson<int>(estimateNumberPadding),
+      'estimateNumberSeparator':
+          serializer.toJson<String>(estimateNumberSeparator),
+      'estimateNextSequence': serializer.toJson<int>(estimateNextSequence),
+      'purchaseNumberPrefix': serializer.toJson<String>(purchaseNumberPrefix),
+      'purchaseNumberFormat': serializer.toJson<String>(purchaseNumberFormat),
+      'purchaseNumberPadding': serializer.toJson<int>(purchaseNumberPadding),
+      'purchaseNumberSeparator':
+          serializer.toJson<String>(purchaseNumberSeparator),
+      'purchaseNextSequence': serializer.toJson<int>(purchaseNextSequence),
+      'defaultIncludeBankDetailsInvoice':
+          serializer.toJson<bool>(defaultIncludeBankDetailsInvoice),
+      'defaultIncludeBankDetailsEstimate':
+          serializer.toJson<bool>(defaultIncludeBankDetailsEstimate),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
     };
   }
@@ -422,6 +861,23 @@ class BusinessProfileData extends DataClass
           Value<String?> bankAccountNo = const Value.absent(),
           Value<String?> bankIfsc = const Value.absent(),
           Value<String?> bankBranchAddress = const Value.absent(),
+          String? invoiceNumberPrefix,
+          String? invoiceNumberFormat,
+          int? invoiceNumberPadding,
+          String? invoiceNumberSeparator,
+          int? invoiceNextSequence,
+          String? estimateNumberPrefix,
+          String? estimateNumberFormat,
+          int? estimateNumberPadding,
+          String? estimateNumberSeparator,
+          int? estimateNextSequence,
+          String? purchaseNumberPrefix,
+          String? purchaseNumberFormat,
+          int? purchaseNumberPadding,
+          String? purchaseNumberSeparator,
+          int? purchaseNextSequence,
+          bool? defaultIncludeBankDetailsInvoice,
+          bool? defaultIncludeBankDetailsEstimate,
           DateTime? updatedAt}) =>
       BusinessProfileData(
         id: id ?? this.id,
@@ -441,6 +897,30 @@ class BusinessProfileData extends DataClass
         bankBranchAddress: bankBranchAddress.present
             ? bankBranchAddress.value
             : this.bankBranchAddress,
+        invoiceNumberPrefix: invoiceNumberPrefix ?? this.invoiceNumberPrefix,
+        invoiceNumberFormat: invoiceNumberFormat ?? this.invoiceNumberFormat,
+        invoiceNumberPadding: invoiceNumberPadding ?? this.invoiceNumberPadding,
+        invoiceNumberSeparator:
+            invoiceNumberSeparator ?? this.invoiceNumberSeparator,
+        invoiceNextSequence: invoiceNextSequence ?? this.invoiceNextSequence,
+        estimateNumberPrefix: estimateNumberPrefix ?? this.estimateNumberPrefix,
+        estimateNumberFormat: estimateNumberFormat ?? this.estimateNumberFormat,
+        estimateNumberPadding:
+            estimateNumberPadding ?? this.estimateNumberPadding,
+        estimateNumberSeparator:
+            estimateNumberSeparator ?? this.estimateNumberSeparator,
+        estimateNextSequence: estimateNextSequence ?? this.estimateNextSequence,
+        purchaseNumberPrefix: purchaseNumberPrefix ?? this.purchaseNumberPrefix,
+        purchaseNumberFormat: purchaseNumberFormat ?? this.purchaseNumberFormat,
+        purchaseNumberPadding:
+            purchaseNumberPadding ?? this.purchaseNumberPadding,
+        purchaseNumberSeparator:
+            purchaseNumberSeparator ?? this.purchaseNumberSeparator,
+        purchaseNextSequence: purchaseNextSequence ?? this.purchaseNextSequence,
+        defaultIncludeBankDetailsInvoice: defaultIncludeBankDetailsInvoice ??
+            this.defaultIncludeBankDetailsInvoice,
+        defaultIncludeBankDetailsEstimate: defaultIncludeBankDetailsEstimate ??
+            this.defaultIncludeBankDetailsEstimate,
         updatedAt: updatedAt ?? this.updatedAt,
       );
   BusinessProfileData copyWithCompanion(BusinessProfileCompanion data) {
@@ -467,6 +947,59 @@ class BusinessProfileData extends DataClass
       bankBranchAddress: data.bankBranchAddress.present
           ? data.bankBranchAddress.value
           : this.bankBranchAddress,
+      invoiceNumberPrefix: data.invoiceNumberPrefix.present
+          ? data.invoiceNumberPrefix.value
+          : this.invoiceNumberPrefix,
+      invoiceNumberFormat: data.invoiceNumberFormat.present
+          ? data.invoiceNumberFormat.value
+          : this.invoiceNumberFormat,
+      invoiceNumberPadding: data.invoiceNumberPadding.present
+          ? data.invoiceNumberPadding.value
+          : this.invoiceNumberPadding,
+      invoiceNumberSeparator: data.invoiceNumberSeparator.present
+          ? data.invoiceNumberSeparator.value
+          : this.invoiceNumberSeparator,
+      invoiceNextSequence: data.invoiceNextSequence.present
+          ? data.invoiceNextSequence.value
+          : this.invoiceNextSequence,
+      estimateNumberPrefix: data.estimateNumberPrefix.present
+          ? data.estimateNumberPrefix.value
+          : this.estimateNumberPrefix,
+      estimateNumberFormat: data.estimateNumberFormat.present
+          ? data.estimateNumberFormat.value
+          : this.estimateNumberFormat,
+      estimateNumberPadding: data.estimateNumberPadding.present
+          ? data.estimateNumberPadding.value
+          : this.estimateNumberPadding,
+      estimateNumberSeparator: data.estimateNumberSeparator.present
+          ? data.estimateNumberSeparator.value
+          : this.estimateNumberSeparator,
+      estimateNextSequence: data.estimateNextSequence.present
+          ? data.estimateNextSequence.value
+          : this.estimateNextSequence,
+      purchaseNumberPrefix: data.purchaseNumberPrefix.present
+          ? data.purchaseNumberPrefix.value
+          : this.purchaseNumberPrefix,
+      purchaseNumberFormat: data.purchaseNumberFormat.present
+          ? data.purchaseNumberFormat.value
+          : this.purchaseNumberFormat,
+      purchaseNumberPadding: data.purchaseNumberPadding.present
+          ? data.purchaseNumberPadding.value
+          : this.purchaseNumberPadding,
+      purchaseNumberSeparator: data.purchaseNumberSeparator.present
+          ? data.purchaseNumberSeparator.value
+          : this.purchaseNumberSeparator,
+      purchaseNextSequence: data.purchaseNextSequence.present
+          ? data.purchaseNextSequence.value
+          : this.purchaseNextSequence,
+      defaultIncludeBankDetailsInvoice:
+          data.defaultIncludeBankDetailsInvoice.present
+              ? data.defaultIncludeBankDetailsInvoice.value
+              : this.defaultIncludeBankDetailsInvoice,
+      defaultIncludeBankDetailsEstimate:
+          data.defaultIncludeBankDetailsEstimate.present
+              ? data.defaultIncludeBankDetailsEstimate.value
+              : this.defaultIncludeBankDetailsEstimate,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
     );
   }
@@ -487,27 +1020,64 @@ class BusinessProfileData extends DataClass
           ..write('bankAccountNo: $bankAccountNo, ')
           ..write('bankIfsc: $bankIfsc, ')
           ..write('bankBranchAddress: $bankBranchAddress, ')
+          ..write('invoiceNumberPrefix: $invoiceNumberPrefix, ')
+          ..write('invoiceNumberFormat: $invoiceNumberFormat, ')
+          ..write('invoiceNumberPadding: $invoiceNumberPadding, ')
+          ..write('invoiceNumberSeparator: $invoiceNumberSeparator, ')
+          ..write('invoiceNextSequence: $invoiceNextSequence, ')
+          ..write('estimateNumberPrefix: $estimateNumberPrefix, ')
+          ..write('estimateNumberFormat: $estimateNumberFormat, ')
+          ..write('estimateNumberPadding: $estimateNumberPadding, ')
+          ..write('estimateNumberSeparator: $estimateNumberSeparator, ')
+          ..write('estimateNextSequence: $estimateNextSequence, ')
+          ..write('purchaseNumberPrefix: $purchaseNumberPrefix, ')
+          ..write('purchaseNumberFormat: $purchaseNumberFormat, ')
+          ..write('purchaseNumberPadding: $purchaseNumberPadding, ')
+          ..write('purchaseNumberSeparator: $purchaseNumberSeparator, ')
+          ..write('purchaseNextSequence: $purchaseNextSequence, ')
+          ..write(
+              'defaultIncludeBankDetailsInvoice: $defaultIncludeBankDetailsInvoice, ')
+          ..write(
+              'defaultIncludeBankDetailsEstimate: $defaultIncludeBankDetailsEstimate, ')
           ..write('updatedAt: $updatedAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(
-      id,
-      businessName,
-      addressLine,
-      phone,
-      email,
-      panNumber,
-      gstNumber,
-      logoPath,
-      signaturePath,
-      bankName,
-      bankAccountNo,
-      bankIfsc,
-      bankBranchAddress,
-      updatedAt);
+  int get hashCode => Object.hashAll([
+        id,
+        businessName,
+        addressLine,
+        phone,
+        email,
+        panNumber,
+        gstNumber,
+        logoPath,
+        signaturePath,
+        bankName,
+        bankAccountNo,
+        bankIfsc,
+        bankBranchAddress,
+        invoiceNumberPrefix,
+        invoiceNumberFormat,
+        invoiceNumberPadding,
+        invoiceNumberSeparator,
+        invoiceNextSequence,
+        estimateNumberPrefix,
+        estimateNumberFormat,
+        estimateNumberPadding,
+        estimateNumberSeparator,
+        estimateNextSequence,
+        purchaseNumberPrefix,
+        purchaseNumberFormat,
+        purchaseNumberPadding,
+        purchaseNumberSeparator,
+        purchaseNextSequence,
+        defaultIncludeBankDetailsInvoice,
+        defaultIncludeBankDetailsEstimate,
+        updatedAt
+      ]);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -525,6 +1095,25 @@ class BusinessProfileData extends DataClass
           other.bankAccountNo == this.bankAccountNo &&
           other.bankIfsc == this.bankIfsc &&
           other.bankBranchAddress == this.bankBranchAddress &&
+          other.invoiceNumberPrefix == this.invoiceNumberPrefix &&
+          other.invoiceNumberFormat == this.invoiceNumberFormat &&
+          other.invoiceNumberPadding == this.invoiceNumberPadding &&
+          other.invoiceNumberSeparator == this.invoiceNumberSeparator &&
+          other.invoiceNextSequence == this.invoiceNextSequence &&
+          other.estimateNumberPrefix == this.estimateNumberPrefix &&
+          other.estimateNumberFormat == this.estimateNumberFormat &&
+          other.estimateNumberPadding == this.estimateNumberPadding &&
+          other.estimateNumberSeparator == this.estimateNumberSeparator &&
+          other.estimateNextSequence == this.estimateNextSequence &&
+          other.purchaseNumberPrefix == this.purchaseNumberPrefix &&
+          other.purchaseNumberFormat == this.purchaseNumberFormat &&
+          other.purchaseNumberPadding == this.purchaseNumberPadding &&
+          other.purchaseNumberSeparator == this.purchaseNumberSeparator &&
+          other.purchaseNextSequence == this.purchaseNextSequence &&
+          other.defaultIncludeBankDetailsInvoice ==
+              this.defaultIncludeBankDetailsInvoice &&
+          other.defaultIncludeBankDetailsEstimate ==
+              this.defaultIncludeBankDetailsEstimate &&
           other.updatedAt == this.updatedAt);
 }
 
@@ -542,6 +1131,23 @@ class BusinessProfileCompanion extends UpdateCompanion<BusinessProfileData> {
   final Value<String?> bankAccountNo;
   final Value<String?> bankIfsc;
   final Value<String?> bankBranchAddress;
+  final Value<String> invoiceNumberPrefix;
+  final Value<String> invoiceNumberFormat;
+  final Value<int> invoiceNumberPadding;
+  final Value<String> invoiceNumberSeparator;
+  final Value<int> invoiceNextSequence;
+  final Value<String> estimateNumberPrefix;
+  final Value<String> estimateNumberFormat;
+  final Value<int> estimateNumberPadding;
+  final Value<String> estimateNumberSeparator;
+  final Value<int> estimateNextSequence;
+  final Value<String> purchaseNumberPrefix;
+  final Value<String> purchaseNumberFormat;
+  final Value<int> purchaseNumberPadding;
+  final Value<String> purchaseNumberSeparator;
+  final Value<int> purchaseNextSequence;
+  final Value<bool> defaultIncludeBankDetailsInvoice;
+  final Value<bool> defaultIncludeBankDetailsEstimate;
   final Value<DateTime> updatedAt;
   const BusinessProfileCompanion({
     this.id = const Value.absent(),
@@ -557,6 +1163,23 @@ class BusinessProfileCompanion extends UpdateCompanion<BusinessProfileData> {
     this.bankAccountNo = const Value.absent(),
     this.bankIfsc = const Value.absent(),
     this.bankBranchAddress = const Value.absent(),
+    this.invoiceNumberPrefix = const Value.absent(),
+    this.invoiceNumberFormat = const Value.absent(),
+    this.invoiceNumberPadding = const Value.absent(),
+    this.invoiceNumberSeparator = const Value.absent(),
+    this.invoiceNextSequence = const Value.absent(),
+    this.estimateNumberPrefix = const Value.absent(),
+    this.estimateNumberFormat = const Value.absent(),
+    this.estimateNumberPadding = const Value.absent(),
+    this.estimateNumberSeparator = const Value.absent(),
+    this.estimateNextSequence = const Value.absent(),
+    this.purchaseNumberPrefix = const Value.absent(),
+    this.purchaseNumberFormat = const Value.absent(),
+    this.purchaseNumberPadding = const Value.absent(),
+    this.purchaseNumberSeparator = const Value.absent(),
+    this.purchaseNextSequence = const Value.absent(),
+    this.defaultIncludeBankDetailsInvoice = const Value.absent(),
+    this.defaultIncludeBankDetailsEstimate = const Value.absent(),
     this.updatedAt = const Value.absent(),
   });
   BusinessProfileCompanion.insert({
@@ -573,6 +1196,23 @@ class BusinessProfileCompanion extends UpdateCompanion<BusinessProfileData> {
     this.bankAccountNo = const Value.absent(),
     this.bankIfsc = const Value.absent(),
     this.bankBranchAddress = const Value.absent(),
+    this.invoiceNumberPrefix = const Value.absent(),
+    this.invoiceNumberFormat = const Value.absent(),
+    this.invoiceNumberPadding = const Value.absent(),
+    this.invoiceNumberSeparator = const Value.absent(),
+    this.invoiceNextSequence = const Value.absent(),
+    this.estimateNumberPrefix = const Value.absent(),
+    this.estimateNumberFormat = const Value.absent(),
+    this.estimateNumberPadding = const Value.absent(),
+    this.estimateNumberSeparator = const Value.absent(),
+    this.estimateNextSequence = const Value.absent(),
+    this.purchaseNumberPrefix = const Value.absent(),
+    this.purchaseNumberFormat = const Value.absent(),
+    this.purchaseNumberPadding = const Value.absent(),
+    this.purchaseNumberSeparator = const Value.absent(),
+    this.purchaseNextSequence = const Value.absent(),
+    this.defaultIncludeBankDetailsInvoice = const Value.absent(),
+    this.defaultIncludeBankDetailsEstimate = const Value.absent(),
     this.updatedAt = const Value.absent(),
   }) : businessName = Value(businessName);
   static Insertable<BusinessProfileData> custom({
@@ -589,6 +1229,23 @@ class BusinessProfileCompanion extends UpdateCompanion<BusinessProfileData> {
     Expression<String>? bankAccountNo,
     Expression<String>? bankIfsc,
     Expression<String>? bankBranchAddress,
+    Expression<String>? invoiceNumberPrefix,
+    Expression<String>? invoiceNumberFormat,
+    Expression<int>? invoiceNumberPadding,
+    Expression<String>? invoiceNumberSeparator,
+    Expression<int>? invoiceNextSequence,
+    Expression<String>? estimateNumberPrefix,
+    Expression<String>? estimateNumberFormat,
+    Expression<int>? estimateNumberPadding,
+    Expression<String>? estimateNumberSeparator,
+    Expression<int>? estimateNextSequence,
+    Expression<String>? purchaseNumberPrefix,
+    Expression<String>? purchaseNumberFormat,
+    Expression<int>? purchaseNumberPadding,
+    Expression<String>? purchaseNumberSeparator,
+    Expression<int>? purchaseNextSequence,
+    Expression<bool>? defaultIncludeBankDetailsInvoice,
+    Expression<bool>? defaultIncludeBankDetailsEstimate,
     Expression<DateTime>? updatedAt,
   }) {
     return RawValuesInsertable({
@@ -605,6 +1262,42 @@ class BusinessProfileCompanion extends UpdateCompanion<BusinessProfileData> {
       if (bankAccountNo != null) 'bank_account_no': bankAccountNo,
       if (bankIfsc != null) 'bank_ifsc': bankIfsc,
       if (bankBranchAddress != null) 'bank_branch_address': bankBranchAddress,
+      if (invoiceNumberPrefix != null)
+        'invoice_number_prefix': invoiceNumberPrefix,
+      if (invoiceNumberFormat != null)
+        'invoice_number_format': invoiceNumberFormat,
+      if (invoiceNumberPadding != null)
+        'invoice_number_padding': invoiceNumberPadding,
+      if (invoiceNumberSeparator != null)
+        'invoice_number_separator': invoiceNumberSeparator,
+      if (invoiceNextSequence != null)
+        'invoice_next_sequence': invoiceNextSequence,
+      if (estimateNumberPrefix != null)
+        'estimate_number_prefix': estimateNumberPrefix,
+      if (estimateNumberFormat != null)
+        'estimate_number_format': estimateNumberFormat,
+      if (estimateNumberPadding != null)
+        'estimate_number_padding': estimateNumberPadding,
+      if (estimateNumberSeparator != null)
+        'estimate_number_separator': estimateNumberSeparator,
+      if (estimateNextSequence != null)
+        'estimate_next_sequence': estimateNextSequence,
+      if (purchaseNumberPrefix != null)
+        'purchase_number_prefix': purchaseNumberPrefix,
+      if (purchaseNumberFormat != null)
+        'purchase_number_format': purchaseNumberFormat,
+      if (purchaseNumberPadding != null)
+        'purchase_number_padding': purchaseNumberPadding,
+      if (purchaseNumberSeparator != null)
+        'purchase_number_separator': purchaseNumberSeparator,
+      if (purchaseNextSequence != null)
+        'purchase_next_sequence': purchaseNextSequence,
+      if (defaultIncludeBankDetailsInvoice != null)
+        'default_include_bank_details_invoice':
+            defaultIncludeBankDetailsInvoice,
+      if (defaultIncludeBankDetailsEstimate != null)
+        'default_include_bank_details_estimate':
+            defaultIncludeBankDetailsEstimate,
       if (updatedAt != null) 'updated_at': updatedAt,
     });
   }
@@ -623,6 +1316,23 @@ class BusinessProfileCompanion extends UpdateCompanion<BusinessProfileData> {
       Value<String?>? bankAccountNo,
       Value<String?>? bankIfsc,
       Value<String?>? bankBranchAddress,
+      Value<String>? invoiceNumberPrefix,
+      Value<String>? invoiceNumberFormat,
+      Value<int>? invoiceNumberPadding,
+      Value<String>? invoiceNumberSeparator,
+      Value<int>? invoiceNextSequence,
+      Value<String>? estimateNumberPrefix,
+      Value<String>? estimateNumberFormat,
+      Value<int>? estimateNumberPadding,
+      Value<String>? estimateNumberSeparator,
+      Value<int>? estimateNextSequence,
+      Value<String>? purchaseNumberPrefix,
+      Value<String>? purchaseNumberFormat,
+      Value<int>? purchaseNumberPadding,
+      Value<String>? purchaseNumberSeparator,
+      Value<int>? purchaseNextSequence,
+      Value<bool>? defaultIncludeBankDetailsInvoice,
+      Value<bool>? defaultIncludeBankDetailsEstimate,
       Value<DateTime>? updatedAt}) {
     return BusinessProfileCompanion(
       id: id ?? this.id,
@@ -638,6 +1348,30 @@ class BusinessProfileCompanion extends UpdateCompanion<BusinessProfileData> {
       bankAccountNo: bankAccountNo ?? this.bankAccountNo,
       bankIfsc: bankIfsc ?? this.bankIfsc,
       bankBranchAddress: bankBranchAddress ?? this.bankBranchAddress,
+      invoiceNumberPrefix: invoiceNumberPrefix ?? this.invoiceNumberPrefix,
+      invoiceNumberFormat: invoiceNumberFormat ?? this.invoiceNumberFormat,
+      invoiceNumberPadding: invoiceNumberPadding ?? this.invoiceNumberPadding,
+      invoiceNumberSeparator:
+          invoiceNumberSeparator ?? this.invoiceNumberSeparator,
+      invoiceNextSequence: invoiceNextSequence ?? this.invoiceNextSequence,
+      estimateNumberPrefix: estimateNumberPrefix ?? this.estimateNumberPrefix,
+      estimateNumberFormat: estimateNumberFormat ?? this.estimateNumberFormat,
+      estimateNumberPadding:
+          estimateNumberPadding ?? this.estimateNumberPadding,
+      estimateNumberSeparator:
+          estimateNumberSeparator ?? this.estimateNumberSeparator,
+      estimateNextSequence: estimateNextSequence ?? this.estimateNextSequence,
+      purchaseNumberPrefix: purchaseNumberPrefix ?? this.purchaseNumberPrefix,
+      purchaseNumberFormat: purchaseNumberFormat ?? this.purchaseNumberFormat,
+      purchaseNumberPadding:
+          purchaseNumberPadding ?? this.purchaseNumberPadding,
+      purchaseNumberSeparator:
+          purchaseNumberSeparator ?? this.purchaseNumberSeparator,
+      purchaseNextSequence: purchaseNextSequence ?? this.purchaseNextSequence,
+      defaultIncludeBankDetailsInvoice: defaultIncludeBankDetailsInvoice ??
+          this.defaultIncludeBankDetailsInvoice,
+      defaultIncludeBankDetailsEstimate: defaultIncludeBankDetailsEstimate ??
+          this.defaultIncludeBankDetailsEstimate,
       updatedAt: updatedAt ?? this.updatedAt,
     );
   }
@@ -684,6 +1418,70 @@ class BusinessProfileCompanion extends UpdateCompanion<BusinessProfileData> {
     if (bankBranchAddress.present) {
       map['bank_branch_address'] = Variable<String>(bankBranchAddress.value);
     }
+    if (invoiceNumberPrefix.present) {
+      map['invoice_number_prefix'] =
+          Variable<String>(invoiceNumberPrefix.value);
+    }
+    if (invoiceNumberFormat.present) {
+      map['invoice_number_format'] =
+          Variable<String>(invoiceNumberFormat.value);
+    }
+    if (invoiceNumberPadding.present) {
+      map['invoice_number_padding'] = Variable<int>(invoiceNumberPadding.value);
+    }
+    if (invoiceNumberSeparator.present) {
+      map['invoice_number_separator'] =
+          Variable<String>(invoiceNumberSeparator.value);
+    }
+    if (invoiceNextSequence.present) {
+      map['invoice_next_sequence'] = Variable<int>(invoiceNextSequence.value);
+    }
+    if (estimateNumberPrefix.present) {
+      map['estimate_number_prefix'] =
+          Variable<String>(estimateNumberPrefix.value);
+    }
+    if (estimateNumberFormat.present) {
+      map['estimate_number_format'] =
+          Variable<String>(estimateNumberFormat.value);
+    }
+    if (estimateNumberPadding.present) {
+      map['estimate_number_padding'] =
+          Variable<int>(estimateNumberPadding.value);
+    }
+    if (estimateNumberSeparator.present) {
+      map['estimate_number_separator'] =
+          Variable<String>(estimateNumberSeparator.value);
+    }
+    if (estimateNextSequence.present) {
+      map['estimate_next_sequence'] = Variable<int>(estimateNextSequence.value);
+    }
+    if (purchaseNumberPrefix.present) {
+      map['purchase_number_prefix'] =
+          Variable<String>(purchaseNumberPrefix.value);
+    }
+    if (purchaseNumberFormat.present) {
+      map['purchase_number_format'] =
+          Variable<String>(purchaseNumberFormat.value);
+    }
+    if (purchaseNumberPadding.present) {
+      map['purchase_number_padding'] =
+          Variable<int>(purchaseNumberPadding.value);
+    }
+    if (purchaseNumberSeparator.present) {
+      map['purchase_number_separator'] =
+          Variable<String>(purchaseNumberSeparator.value);
+    }
+    if (purchaseNextSequence.present) {
+      map['purchase_next_sequence'] = Variable<int>(purchaseNextSequence.value);
+    }
+    if (defaultIncludeBankDetailsInvoice.present) {
+      map['default_include_bank_details_invoice'] =
+          Variable<bool>(defaultIncludeBankDetailsInvoice.value);
+    }
+    if (defaultIncludeBankDetailsEstimate.present) {
+      map['default_include_bank_details_estimate'] =
+          Variable<bool>(defaultIncludeBankDetailsEstimate.value);
+    }
     if (updatedAt.present) {
       map['updated_at'] = Variable<DateTime>(updatedAt.value);
     }
@@ -706,6 +1504,25 @@ class BusinessProfileCompanion extends UpdateCompanion<BusinessProfileData> {
           ..write('bankAccountNo: $bankAccountNo, ')
           ..write('bankIfsc: $bankIfsc, ')
           ..write('bankBranchAddress: $bankBranchAddress, ')
+          ..write('invoiceNumberPrefix: $invoiceNumberPrefix, ')
+          ..write('invoiceNumberFormat: $invoiceNumberFormat, ')
+          ..write('invoiceNumberPadding: $invoiceNumberPadding, ')
+          ..write('invoiceNumberSeparator: $invoiceNumberSeparator, ')
+          ..write('invoiceNextSequence: $invoiceNextSequence, ')
+          ..write('estimateNumberPrefix: $estimateNumberPrefix, ')
+          ..write('estimateNumberFormat: $estimateNumberFormat, ')
+          ..write('estimateNumberPadding: $estimateNumberPadding, ')
+          ..write('estimateNumberSeparator: $estimateNumberSeparator, ')
+          ..write('estimateNextSequence: $estimateNextSequence, ')
+          ..write('purchaseNumberPrefix: $purchaseNumberPrefix, ')
+          ..write('purchaseNumberFormat: $purchaseNumberFormat, ')
+          ..write('purchaseNumberPadding: $purchaseNumberPadding, ')
+          ..write('purchaseNumberSeparator: $purchaseNumberSeparator, ')
+          ..write('purchaseNextSequence: $purchaseNextSequence, ')
+          ..write(
+              'defaultIncludeBankDetailsInvoice: $defaultIncludeBankDetailsInvoice, ')
+          ..write(
+              'defaultIncludeBankDetailsEstimate: $defaultIncludeBankDetailsEstimate, ')
           ..write('updatedAt: $updatedAt')
           ..write(')'))
         .toString();
@@ -1641,6 +2458,16 @@ class $DocumentsTable extends Documents
   late final GeneratedColumn<String> notes = GeneratedColumn<String>(
       'notes', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _includeBankDetailsMeta =
+      const VerificationMeta('includeBankDetails');
+  @override
+  late final GeneratedColumn<bool> includeBankDetails = GeneratedColumn<bool>(
+      'include_bank_details', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("include_bank_details" IN (0, 1))'),
+      defaultValue: const Constant(true));
   static const VerificationMeta _createdAtMeta =
       const VerificationMeta('createdAt');
   @override
@@ -1679,6 +2506,7 @@ class $DocumentsTable extends Documents
         amountInWords,
         status,
         notes,
+        includeBankDetails,
         createdAt,
         updatedAt
       ];
@@ -1803,6 +2631,12 @@ class $DocumentsTable extends Documents
       context.handle(
           _notesMeta, notes.isAcceptableOrUnknown(data['notes']!, _notesMeta));
     }
+    if (data.containsKey('include_bank_details')) {
+      context.handle(
+          _includeBankDetailsMeta,
+          includeBankDetails.isAcceptableOrUnknown(
+              data['include_bank_details']!, _includeBankDetailsMeta));
+    }
     if (data.containsKey('created_at')) {
       context.handle(_createdAtMeta,
           createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
@@ -1860,6 +2694,8 @@ class $DocumentsTable extends Documents
           .read(DriftSqlType.string, data['${effectivePrefix}status'])!,
       notes: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}notes']),
+      includeBankDetails: attachedDatabase.typeMapping.read(
+          DriftSqlType.bool, data['${effectivePrefix}include_bank_details'])!,
       createdAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
       updatedAt: attachedDatabase.typeMapping
@@ -1909,6 +2745,9 @@ class Document extends DataClass implements Insertable<Document> {
   /// See status values above. Default 'draft' for both types.
   final String status;
   final String? notes;
+
+  /// Whether to render Business Profile bank details on PDF for this document.
+  final bool includeBankDetails;
   final DateTime createdAt;
   final DateTime updatedAt;
   const Document(
@@ -1932,6 +2771,7 @@ class Document extends DataClass implements Insertable<Document> {
       this.amountInWords,
       required this.status,
       this.notes,
+      required this.includeBankDetails,
       required this.createdAt,
       required this.updatedAt});
   @override
@@ -1977,6 +2817,7 @@ class Document extends DataClass implements Insertable<Document> {
     if (!nullToAbsent || notes != null) {
       map['notes'] = Variable<String>(notes);
     }
+    map['include_bank_details'] = Variable<bool>(includeBankDetails);
     map['created_at'] = Variable<DateTime>(createdAt);
     map['updated_at'] = Variable<DateTime>(updatedAt);
     return map;
@@ -2023,6 +2864,7 @@ class Document extends DataClass implements Insertable<Document> {
       status: Value(status),
       notes:
           notes == null && nullToAbsent ? const Value.absent() : Value(notes),
+      includeBankDetails: Value(includeBankDetails),
       createdAt: Value(createdAt),
       updatedAt: Value(updatedAt),
     );
@@ -2053,6 +2895,7 @@ class Document extends DataClass implements Insertable<Document> {
       amountInWords: serializer.fromJson<String?>(json['amountInWords']),
       status: serializer.fromJson<String>(json['status']),
       notes: serializer.fromJson<String?>(json['notes']),
+      includeBankDetails: serializer.fromJson<bool>(json['includeBankDetails']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
     );
@@ -2081,6 +2924,7 @@ class Document extends DataClass implements Insertable<Document> {
       'amountInWords': serializer.toJson<String?>(amountInWords),
       'status': serializer.toJson<String>(status),
       'notes': serializer.toJson<String?>(notes),
+      'includeBankDetails': serializer.toJson<bool>(includeBankDetails),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
     };
@@ -2107,6 +2951,7 @@ class Document extends DataClass implements Insertable<Document> {
           Value<String?> amountInWords = const Value.absent(),
           String? status,
           Value<String?> notes = const Value.absent(),
+          bool? includeBankDetails,
           DateTime? createdAt,
           DateTime? updatedAt}) =>
       Document(
@@ -2138,6 +2983,7 @@ class Document extends DataClass implements Insertable<Document> {
             amountInWords.present ? amountInWords.value : this.amountInWords,
         status: status ?? this.status,
         notes: notes.present ? notes.value : this.notes,
+        includeBankDetails: includeBankDetails ?? this.includeBankDetails,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt,
       );
@@ -2184,6 +3030,9 @@ class Document extends DataClass implements Insertable<Document> {
           : this.amountInWords,
       status: data.status.present ? data.status.value : this.status,
       notes: data.notes.present ? data.notes.value : this.notes,
+      includeBankDetails: data.includeBankDetails.present
+          ? data.includeBankDetails.value
+          : this.includeBankDetails,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
     );
@@ -2212,6 +3061,7 @@ class Document extends DataClass implements Insertable<Document> {
           ..write('amountInWords: $amountInWords, ')
           ..write('status: $status, ')
           ..write('notes: $notes, ')
+          ..write('includeBankDetails: $includeBankDetails, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt')
           ..write(')'))
@@ -2240,6 +3090,7 @@ class Document extends DataClass implements Insertable<Document> {
         amountInWords,
         status,
         notes,
+        includeBankDetails,
         createdAt,
         updatedAt
       ]);
@@ -2267,6 +3118,7 @@ class Document extends DataClass implements Insertable<Document> {
           other.amountInWords == this.amountInWords &&
           other.status == this.status &&
           other.notes == this.notes &&
+          other.includeBankDetails == this.includeBankDetails &&
           other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt);
 }
@@ -2292,6 +3144,7 @@ class DocumentsCompanion extends UpdateCompanion<Document> {
   final Value<String?> amountInWords;
   final Value<String> status;
   final Value<String?> notes;
+  final Value<bool> includeBankDetails;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
   const DocumentsCompanion({
@@ -2315,6 +3168,7 @@ class DocumentsCompanion extends UpdateCompanion<Document> {
     this.amountInWords = const Value.absent(),
     this.status = const Value.absent(),
     this.notes = const Value.absent(),
+    this.includeBankDetails = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
   });
@@ -2339,6 +3193,7 @@ class DocumentsCompanion extends UpdateCompanion<Document> {
     this.amountInWords = const Value.absent(),
     this.status = const Value.absent(),
     this.notes = const Value.absent(),
+    this.includeBankDetails = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
   })  : documentNumber = Value(documentNumber),
@@ -2366,6 +3221,7 @@ class DocumentsCompanion extends UpdateCompanion<Document> {
     Expression<String>? amountInWords,
     Expression<String>? status,
     Expression<String>? notes,
+    Expression<bool>? includeBankDetails,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
   }) {
@@ -2390,6 +3246,8 @@ class DocumentsCompanion extends UpdateCompanion<Document> {
       if (amountInWords != null) 'amount_in_words': amountInWords,
       if (status != null) 'status': status,
       if (notes != null) 'notes': notes,
+      if (includeBankDetails != null)
+        'include_bank_details': includeBankDetails,
       if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
     });
@@ -2416,6 +3274,7 @@ class DocumentsCompanion extends UpdateCompanion<Document> {
       Value<String?>? amountInWords,
       Value<String>? status,
       Value<String?>? notes,
+      Value<bool>? includeBankDetails,
       Value<DateTime>? createdAt,
       Value<DateTime>? updatedAt}) {
     return DocumentsCompanion(
@@ -2439,6 +3298,7 @@ class DocumentsCompanion extends UpdateCompanion<Document> {
       amountInWords: amountInWords ?? this.amountInWords,
       status: status ?? this.status,
       notes: notes ?? this.notes,
+      includeBankDetails: includeBankDetails ?? this.includeBankDetails,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
@@ -2507,6 +3367,9 @@ class DocumentsCompanion extends UpdateCompanion<Document> {
     if (notes.present) {
       map['notes'] = Variable<String>(notes.value);
     }
+    if (includeBankDetails.present) {
+      map['include_bank_details'] = Variable<bool>(includeBankDetails.value);
+    }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
     }
@@ -2539,6 +3402,7 @@ class DocumentsCompanion extends UpdateCompanion<Document> {
           ..write('amountInWords: $amountInWords, ')
           ..write('status: $status, ')
           ..write('notes: $notes, ')
+          ..write('includeBankDetails: $includeBankDetails, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt')
           ..write(')'))
@@ -2572,6 +3436,15 @@ class $DocumentLineItemsTable extends DocumentLineItems
   late final GeneratedColumn<int> itemId = GeneratedColumn<int>(
       'item_id', aliasedName, true,
       type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _itemTypeMeta =
+      const VerificationMeta('itemType');
+  @override
+  late final GeneratedColumn<String> itemType = GeneratedColumn<String>(
+      'item_type', aliasedName, false,
+      additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 20),
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant('product'));
   static const VerificationMeta _itemNameMeta =
       const VerificationMeta('itemName');
   @override
@@ -2669,6 +3542,7 @@ class $DocumentLineItemsTable extends DocumentLineItems
         id,
         documentId,
         itemId,
+        itemType,
         itemName,
         hsnSacCode,
         quantity,
@@ -2706,6 +3580,10 @@ class $DocumentLineItemsTable extends DocumentLineItems
     if (data.containsKey('item_id')) {
       context.handle(_itemIdMeta,
           itemId.isAcceptableOrUnknown(data['item_id']!, _itemIdMeta));
+    }
+    if (data.containsKey('item_type')) {
+      context.handle(_itemTypeMeta,
+          itemType.isAcceptableOrUnknown(data['item_type']!, _itemTypeMeta));
     }
     if (data.containsKey('item_name')) {
       context.handle(_itemNameMeta,
@@ -2784,6 +3662,8 @@ class $DocumentLineItemsTable extends DocumentLineItems
           .read(DriftSqlType.int, data['${effectivePrefix}document_id'])!,
       itemId: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}item_id']),
+      itemType: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}item_type'])!,
       itemName: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}item_name'])!,
       hsnSacCode: attachedDatabase.typeMapping
@@ -2826,6 +3706,9 @@ class DocumentLineItem extends DataClass
 
   /// FK → items.id — nullable when the line is an ad-hoc / custom entry.
   final int? itemId;
+
+  /// Item type: 'product' or 'service'
+  final String itemType;
   final String itemName;
   final String? hsnSacCode;
   final double quantity;
@@ -2856,6 +3739,7 @@ class DocumentLineItem extends DataClass
       {required this.id,
       required this.documentId,
       this.itemId,
+      required this.itemType,
       required this.itemName,
       this.hsnSacCode,
       required this.quantity,
@@ -2876,6 +3760,7 @@ class DocumentLineItem extends DataClass
     if (!nullToAbsent || itemId != null) {
       map['item_id'] = Variable<int>(itemId);
     }
+    map['item_type'] = Variable<String>(itemType);
     map['item_name'] = Variable<String>(itemName);
     if (!nullToAbsent || hsnSacCode != null) {
       map['hsn_sac_code'] = Variable<String>(hsnSacCode);
@@ -2899,6 +3784,7 @@ class DocumentLineItem extends DataClass
       documentId: Value(documentId),
       itemId:
           itemId == null && nullToAbsent ? const Value.absent() : Value(itemId),
+      itemType: Value(itemType),
       itemName: Value(itemName),
       hsnSacCode: hsnSacCode == null && nullToAbsent
           ? const Value.absent()
@@ -2923,6 +3809,7 @@ class DocumentLineItem extends DataClass
       id: serializer.fromJson<int>(json['id']),
       documentId: serializer.fromJson<int>(json['documentId']),
       itemId: serializer.fromJson<int?>(json['itemId']),
+      itemType: serializer.fromJson<String>(json['itemType']),
       itemName: serializer.fromJson<String>(json['itemName']),
       hsnSacCode: serializer.fromJson<String?>(json['hsnSacCode']),
       quantity: serializer.fromJson<double>(json['quantity']),
@@ -2944,6 +3831,7 @@ class DocumentLineItem extends DataClass
       'id': serializer.toJson<int>(id),
       'documentId': serializer.toJson<int>(documentId),
       'itemId': serializer.toJson<int?>(itemId),
+      'itemType': serializer.toJson<String>(itemType),
       'itemName': serializer.toJson<String>(itemName),
       'hsnSacCode': serializer.toJson<String?>(hsnSacCode),
       'quantity': serializer.toJson<double>(quantity),
@@ -2963,6 +3851,7 @@ class DocumentLineItem extends DataClass
           {int? id,
           int? documentId,
           Value<int?> itemId = const Value.absent(),
+          String? itemType,
           String? itemName,
           Value<String?> hsnSacCode = const Value.absent(),
           double? quantity,
@@ -2979,6 +3868,7 @@ class DocumentLineItem extends DataClass
         id: id ?? this.id,
         documentId: documentId ?? this.documentId,
         itemId: itemId.present ? itemId.value : this.itemId,
+        itemType: itemType ?? this.itemType,
         itemName: itemName ?? this.itemName,
         hsnSacCode: hsnSacCode.present ? hsnSacCode.value : this.hsnSacCode,
         quantity: quantity ?? this.quantity,
@@ -2998,6 +3888,7 @@ class DocumentLineItem extends DataClass
       documentId:
           data.documentId.present ? data.documentId.value : this.documentId,
       itemId: data.itemId.present ? data.itemId.value : this.itemId,
+      itemType: data.itemType.present ? data.itemType.value : this.itemType,
       itemName: data.itemName.present ? data.itemName.value : this.itemName,
       hsnSacCode:
           data.hsnSacCode.present ? data.hsnSacCode.value : this.hsnSacCode,
@@ -3029,6 +3920,7 @@ class DocumentLineItem extends DataClass
           ..write('id: $id, ')
           ..write('documentId: $documentId, ')
           ..write('itemId: $itemId, ')
+          ..write('itemType: $itemType, ')
           ..write('itemName: $itemName, ')
           ..write('hsnSacCode: $hsnSacCode, ')
           ..write('quantity: $quantity, ')
@@ -3050,6 +3942,7 @@ class DocumentLineItem extends DataClass
       id,
       documentId,
       itemId,
+      itemType,
       itemName,
       hsnSacCode,
       quantity,
@@ -3069,6 +3962,7 @@ class DocumentLineItem extends DataClass
           other.id == this.id &&
           other.documentId == this.documentId &&
           other.itemId == this.itemId &&
+          other.itemType == this.itemType &&
           other.itemName == this.itemName &&
           other.hsnSacCode == this.hsnSacCode &&
           other.quantity == this.quantity &&
@@ -3087,6 +3981,7 @@ class DocumentLineItemsCompanion extends UpdateCompanion<DocumentLineItem> {
   final Value<int> id;
   final Value<int> documentId;
   final Value<int?> itemId;
+  final Value<String> itemType;
   final Value<String> itemName;
   final Value<String?> hsnSacCode;
   final Value<double> quantity;
@@ -3103,6 +3998,7 @@ class DocumentLineItemsCompanion extends UpdateCompanion<DocumentLineItem> {
     this.id = const Value.absent(),
     this.documentId = const Value.absent(),
     this.itemId = const Value.absent(),
+    this.itemType = const Value.absent(),
     this.itemName = const Value.absent(),
     this.hsnSacCode = const Value.absent(),
     this.quantity = const Value.absent(),
@@ -3120,6 +4016,7 @@ class DocumentLineItemsCompanion extends UpdateCompanion<DocumentLineItem> {
     this.id = const Value.absent(),
     required int documentId,
     this.itemId = const Value.absent(),
+    this.itemType = const Value.absent(),
     required String itemName,
     this.hsnSacCode = const Value.absent(),
     this.quantity = const Value.absent(),
@@ -3138,6 +4035,7 @@ class DocumentLineItemsCompanion extends UpdateCompanion<DocumentLineItem> {
     Expression<int>? id,
     Expression<int>? documentId,
     Expression<int>? itemId,
+    Expression<String>? itemType,
     Expression<String>? itemName,
     Expression<String>? hsnSacCode,
     Expression<double>? quantity,
@@ -3155,6 +4053,7 @@ class DocumentLineItemsCompanion extends UpdateCompanion<DocumentLineItem> {
       if (id != null) 'id': id,
       if (documentId != null) 'document_id': documentId,
       if (itemId != null) 'item_id': itemId,
+      if (itemType != null) 'item_type': itemType,
       if (itemName != null) 'item_name': itemName,
       if (hsnSacCode != null) 'hsn_sac_code': hsnSacCode,
       if (quantity != null) 'quantity': quantity,
@@ -3174,6 +4073,7 @@ class DocumentLineItemsCompanion extends UpdateCompanion<DocumentLineItem> {
       {Value<int>? id,
       Value<int>? documentId,
       Value<int?>? itemId,
+      Value<String>? itemType,
       Value<String>? itemName,
       Value<String?>? hsnSacCode,
       Value<double>? quantity,
@@ -3190,6 +4090,7 @@ class DocumentLineItemsCompanion extends UpdateCompanion<DocumentLineItem> {
       id: id ?? this.id,
       documentId: documentId ?? this.documentId,
       itemId: itemId ?? this.itemId,
+      itemType: itemType ?? this.itemType,
       itemName: itemName ?? this.itemName,
       hsnSacCode: hsnSacCode ?? this.hsnSacCode,
       quantity: quantity ?? this.quantity,
@@ -3216,6 +4117,9 @@ class DocumentLineItemsCompanion extends UpdateCompanion<DocumentLineItem> {
     }
     if (itemId.present) {
       map['item_id'] = Variable<int>(itemId.value);
+    }
+    if (itemType.present) {
+      map['item_type'] = Variable<String>(itemType.value);
     }
     if (itemName.present) {
       map['item_name'] = Variable<String>(itemName.value);
@@ -3262,6 +4166,7 @@ class DocumentLineItemsCompanion extends UpdateCompanion<DocumentLineItem> {
           ..write('id: $id, ')
           ..write('documentId: $documentId, ')
           ..write('itemId: $itemId, ')
+          ..write('itemType: $itemType, ')
           ..write('itemName: $itemName, ')
           ..write('hsnSacCode: $hsnSacCode, ')
           ..write('quantity: $quantity, ')
@@ -5511,6 +6416,23 @@ typedef $$BusinessProfileTableCreateCompanionBuilder = BusinessProfileCompanion
   Value<String?> bankAccountNo,
   Value<String?> bankIfsc,
   Value<String?> bankBranchAddress,
+  Value<String> invoiceNumberPrefix,
+  Value<String> invoiceNumberFormat,
+  Value<int> invoiceNumberPadding,
+  Value<String> invoiceNumberSeparator,
+  Value<int> invoiceNextSequence,
+  Value<String> estimateNumberPrefix,
+  Value<String> estimateNumberFormat,
+  Value<int> estimateNumberPadding,
+  Value<String> estimateNumberSeparator,
+  Value<int> estimateNextSequence,
+  Value<String> purchaseNumberPrefix,
+  Value<String> purchaseNumberFormat,
+  Value<int> purchaseNumberPadding,
+  Value<String> purchaseNumberSeparator,
+  Value<int> purchaseNextSequence,
+  Value<bool> defaultIncludeBankDetailsInvoice,
+  Value<bool> defaultIncludeBankDetailsEstimate,
   Value<DateTime> updatedAt,
 });
 typedef $$BusinessProfileTableUpdateCompanionBuilder = BusinessProfileCompanion
@@ -5528,6 +6450,23 @@ typedef $$BusinessProfileTableUpdateCompanionBuilder = BusinessProfileCompanion
   Value<String?> bankAccountNo,
   Value<String?> bankIfsc,
   Value<String?> bankBranchAddress,
+  Value<String> invoiceNumberPrefix,
+  Value<String> invoiceNumberFormat,
+  Value<int> invoiceNumberPadding,
+  Value<String> invoiceNumberSeparator,
+  Value<int> invoiceNextSequence,
+  Value<String> estimateNumberPrefix,
+  Value<String> estimateNumberFormat,
+  Value<int> estimateNumberPadding,
+  Value<String> estimateNumberSeparator,
+  Value<int> estimateNextSequence,
+  Value<String> purchaseNumberPrefix,
+  Value<String> purchaseNumberFormat,
+  Value<int> purchaseNumberPadding,
+  Value<String> purchaseNumberSeparator,
+  Value<int> purchaseNextSequence,
+  Value<bool> defaultIncludeBankDetailsInvoice,
+  Value<bool> defaultIncludeBankDetailsEstimate,
   Value<DateTime> updatedAt,
 });
 
@@ -5579,6 +6518,76 @@ class $$BusinessProfileTableFilterComposer
   ColumnFilters<String> get bankBranchAddress => $composableBuilder(
       column: $table.bankBranchAddress,
       builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get invoiceNumberPrefix => $composableBuilder(
+      column: $table.invoiceNumberPrefix,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get invoiceNumberFormat => $composableBuilder(
+      column: $table.invoiceNumberFormat,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get invoiceNumberPadding => $composableBuilder(
+      column: $table.invoiceNumberPadding,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get invoiceNumberSeparator => $composableBuilder(
+      column: $table.invoiceNumberSeparator,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get invoiceNextSequence => $composableBuilder(
+      column: $table.invoiceNextSequence,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get estimateNumberPrefix => $composableBuilder(
+      column: $table.estimateNumberPrefix,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get estimateNumberFormat => $composableBuilder(
+      column: $table.estimateNumberFormat,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get estimateNumberPadding => $composableBuilder(
+      column: $table.estimateNumberPadding,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get estimateNumberSeparator => $composableBuilder(
+      column: $table.estimateNumberSeparator,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get estimateNextSequence => $composableBuilder(
+      column: $table.estimateNextSequence,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get purchaseNumberPrefix => $composableBuilder(
+      column: $table.purchaseNumberPrefix,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get purchaseNumberFormat => $composableBuilder(
+      column: $table.purchaseNumberFormat,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get purchaseNumberPadding => $composableBuilder(
+      column: $table.purchaseNumberPadding,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get purchaseNumberSeparator => $composableBuilder(
+      column: $table.purchaseNumberSeparator,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get purchaseNextSequence => $composableBuilder(
+      column: $table.purchaseNextSequence,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get defaultIncludeBankDetailsInvoice =>
+      $composableBuilder(
+          column: $table.defaultIncludeBankDetailsInvoice,
+          builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get defaultIncludeBankDetailsEstimate =>
+      $composableBuilder(
+          column: $table.defaultIncludeBankDetailsEstimate,
+          builder: (column) => ColumnFilters(column));
 
   ColumnFilters<DateTime> get updatedAt => $composableBuilder(
       column: $table.updatedAt, builder: (column) => ColumnFilters(column));
@@ -5636,6 +6645,76 @@ class $$BusinessProfileTableOrderingComposer
       column: $table.bankBranchAddress,
       builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<String> get invoiceNumberPrefix => $composableBuilder(
+      column: $table.invoiceNumberPrefix,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get invoiceNumberFormat => $composableBuilder(
+      column: $table.invoiceNumberFormat,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get invoiceNumberPadding => $composableBuilder(
+      column: $table.invoiceNumberPadding,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get invoiceNumberSeparator => $composableBuilder(
+      column: $table.invoiceNumberSeparator,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get invoiceNextSequence => $composableBuilder(
+      column: $table.invoiceNextSequence,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get estimateNumberPrefix => $composableBuilder(
+      column: $table.estimateNumberPrefix,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get estimateNumberFormat => $composableBuilder(
+      column: $table.estimateNumberFormat,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get estimateNumberPadding => $composableBuilder(
+      column: $table.estimateNumberPadding,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get estimateNumberSeparator => $composableBuilder(
+      column: $table.estimateNumberSeparator,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get estimateNextSequence => $composableBuilder(
+      column: $table.estimateNextSequence,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get purchaseNumberPrefix => $composableBuilder(
+      column: $table.purchaseNumberPrefix,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get purchaseNumberFormat => $composableBuilder(
+      column: $table.purchaseNumberFormat,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get purchaseNumberPadding => $composableBuilder(
+      column: $table.purchaseNumberPadding,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get purchaseNumberSeparator => $composableBuilder(
+      column: $table.purchaseNumberSeparator,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get purchaseNextSequence => $composableBuilder(
+      column: $table.purchaseNextSequence,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get defaultIncludeBankDetailsInvoice =>
+      $composableBuilder(
+          column: $table.defaultIncludeBankDetailsInvoice,
+          builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get defaultIncludeBankDetailsEstimate =>
+      $composableBuilder(
+          column: $table.defaultIncludeBankDetailsEstimate,
+          builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
       column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
 }
@@ -5688,6 +6767,61 @@ class $$BusinessProfileTableAnnotationComposer
   GeneratedColumn<String> get bankBranchAddress => $composableBuilder(
       column: $table.bankBranchAddress, builder: (column) => column);
 
+  GeneratedColumn<String> get invoiceNumberPrefix => $composableBuilder(
+      column: $table.invoiceNumberPrefix, builder: (column) => column);
+
+  GeneratedColumn<String> get invoiceNumberFormat => $composableBuilder(
+      column: $table.invoiceNumberFormat, builder: (column) => column);
+
+  GeneratedColumn<int> get invoiceNumberPadding => $composableBuilder(
+      column: $table.invoiceNumberPadding, builder: (column) => column);
+
+  GeneratedColumn<String> get invoiceNumberSeparator => $composableBuilder(
+      column: $table.invoiceNumberSeparator, builder: (column) => column);
+
+  GeneratedColumn<int> get invoiceNextSequence => $composableBuilder(
+      column: $table.invoiceNextSequence, builder: (column) => column);
+
+  GeneratedColumn<String> get estimateNumberPrefix => $composableBuilder(
+      column: $table.estimateNumberPrefix, builder: (column) => column);
+
+  GeneratedColumn<String> get estimateNumberFormat => $composableBuilder(
+      column: $table.estimateNumberFormat, builder: (column) => column);
+
+  GeneratedColumn<int> get estimateNumberPadding => $composableBuilder(
+      column: $table.estimateNumberPadding, builder: (column) => column);
+
+  GeneratedColumn<String> get estimateNumberSeparator => $composableBuilder(
+      column: $table.estimateNumberSeparator, builder: (column) => column);
+
+  GeneratedColumn<int> get estimateNextSequence => $composableBuilder(
+      column: $table.estimateNextSequence, builder: (column) => column);
+
+  GeneratedColumn<String> get purchaseNumberPrefix => $composableBuilder(
+      column: $table.purchaseNumberPrefix, builder: (column) => column);
+
+  GeneratedColumn<String> get purchaseNumberFormat => $composableBuilder(
+      column: $table.purchaseNumberFormat, builder: (column) => column);
+
+  GeneratedColumn<int> get purchaseNumberPadding => $composableBuilder(
+      column: $table.purchaseNumberPadding, builder: (column) => column);
+
+  GeneratedColumn<String> get purchaseNumberSeparator => $composableBuilder(
+      column: $table.purchaseNumberSeparator, builder: (column) => column);
+
+  GeneratedColumn<int> get purchaseNextSequence => $composableBuilder(
+      column: $table.purchaseNextSequence, builder: (column) => column);
+
+  GeneratedColumn<bool> get defaultIncludeBankDetailsInvoice =>
+      $composableBuilder(
+          column: $table.defaultIncludeBankDetailsInvoice,
+          builder: (column) => column);
+
+  GeneratedColumn<bool> get defaultIncludeBankDetailsEstimate =>
+      $composableBuilder(
+          column: $table.defaultIncludeBankDetailsEstimate,
+          builder: (column) => column);
+
   GeneratedColumn<DateTime> get updatedAt =>
       $composableBuilder(column: $table.updatedAt, builder: (column) => column);
 }
@@ -5732,6 +6866,24 @@ class $$BusinessProfileTableTableManager extends RootTableManager<
             Value<String?> bankAccountNo = const Value.absent(),
             Value<String?> bankIfsc = const Value.absent(),
             Value<String?> bankBranchAddress = const Value.absent(),
+            Value<String> invoiceNumberPrefix = const Value.absent(),
+            Value<String> invoiceNumberFormat = const Value.absent(),
+            Value<int> invoiceNumberPadding = const Value.absent(),
+            Value<String> invoiceNumberSeparator = const Value.absent(),
+            Value<int> invoiceNextSequence = const Value.absent(),
+            Value<String> estimateNumberPrefix = const Value.absent(),
+            Value<String> estimateNumberFormat = const Value.absent(),
+            Value<int> estimateNumberPadding = const Value.absent(),
+            Value<String> estimateNumberSeparator = const Value.absent(),
+            Value<int> estimateNextSequence = const Value.absent(),
+            Value<String> purchaseNumberPrefix = const Value.absent(),
+            Value<String> purchaseNumberFormat = const Value.absent(),
+            Value<int> purchaseNumberPadding = const Value.absent(),
+            Value<String> purchaseNumberSeparator = const Value.absent(),
+            Value<int> purchaseNextSequence = const Value.absent(),
+            Value<bool> defaultIncludeBankDetailsInvoice = const Value.absent(),
+            Value<bool> defaultIncludeBankDetailsEstimate =
+                const Value.absent(),
             Value<DateTime> updatedAt = const Value.absent(),
           }) =>
               BusinessProfileCompanion(
@@ -5748,6 +6900,24 @@ class $$BusinessProfileTableTableManager extends RootTableManager<
             bankAccountNo: bankAccountNo,
             bankIfsc: bankIfsc,
             bankBranchAddress: bankBranchAddress,
+            invoiceNumberPrefix: invoiceNumberPrefix,
+            invoiceNumberFormat: invoiceNumberFormat,
+            invoiceNumberPadding: invoiceNumberPadding,
+            invoiceNumberSeparator: invoiceNumberSeparator,
+            invoiceNextSequence: invoiceNextSequence,
+            estimateNumberPrefix: estimateNumberPrefix,
+            estimateNumberFormat: estimateNumberFormat,
+            estimateNumberPadding: estimateNumberPadding,
+            estimateNumberSeparator: estimateNumberSeparator,
+            estimateNextSequence: estimateNextSequence,
+            purchaseNumberPrefix: purchaseNumberPrefix,
+            purchaseNumberFormat: purchaseNumberFormat,
+            purchaseNumberPadding: purchaseNumberPadding,
+            purchaseNumberSeparator: purchaseNumberSeparator,
+            purchaseNextSequence: purchaseNextSequence,
+            defaultIncludeBankDetailsInvoice: defaultIncludeBankDetailsInvoice,
+            defaultIncludeBankDetailsEstimate:
+                defaultIncludeBankDetailsEstimate,
             updatedAt: updatedAt,
           ),
           createCompanionCallback: ({
@@ -5764,6 +6934,24 @@ class $$BusinessProfileTableTableManager extends RootTableManager<
             Value<String?> bankAccountNo = const Value.absent(),
             Value<String?> bankIfsc = const Value.absent(),
             Value<String?> bankBranchAddress = const Value.absent(),
+            Value<String> invoiceNumberPrefix = const Value.absent(),
+            Value<String> invoiceNumberFormat = const Value.absent(),
+            Value<int> invoiceNumberPadding = const Value.absent(),
+            Value<String> invoiceNumberSeparator = const Value.absent(),
+            Value<int> invoiceNextSequence = const Value.absent(),
+            Value<String> estimateNumberPrefix = const Value.absent(),
+            Value<String> estimateNumberFormat = const Value.absent(),
+            Value<int> estimateNumberPadding = const Value.absent(),
+            Value<String> estimateNumberSeparator = const Value.absent(),
+            Value<int> estimateNextSequence = const Value.absent(),
+            Value<String> purchaseNumberPrefix = const Value.absent(),
+            Value<String> purchaseNumberFormat = const Value.absent(),
+            Value<int> purchaseNumberPadding = const Value.absent(),
+            Value<String> purchaseNumberSeparator = const Value.absent(),
+            Value<int> purchaseNextSequence = const Value.absent(),
+            Value<bool> defaultIncludeBankDetailsInvoice = const Value.absent(),
+            Value<bool> defaultIncludeBankDetailsEstimate =
+                const Value.absent(),
             Value<DateTime> updatedAt = const Value.absent(),
           }) =>
               BusinessProfileCompanion.insert(
@@ -5780,6 +6968,24 @@ class $$BusinessProfileTableTableManager extends RootTableManager<
             bankAccountNo: bankAccountNo,
             bankIfsc: bankIfsc,
             bankBranchAddress: bankBranchAddress,
+            invoiceNumberPrefix: invoiceNumberPrefix,
+            invoiceNumberFormat: invoiceNumberFormat,
+            invoiceNumberPadding: invoiceNumberPadding,
+            invoiceNumberSeparator: invoiceNumberSeparator,
+            invoiceNextSequence: invoiceNextSequence,
+            estimateNumberPrefix: estimateNumberPrefix,
+            estimateNumberFormat: estimateNumberFormat,
+            estimateNumberPadding: estimateNumberPadding,
+            estimateNumberSeparator: estimateNumberSeparator,
+            estimateNextSequence: estimateNextSequence,
+            purchaseNumberPrefix: purchaseNumberPrefix,
+            purchaseNumberFormat: purchaseNumberFormat,
+            purchaseNumberPadding: purchaseNumberPadding,
+            purchaseNumberSeparator: purchaseNumberSeparator,
+            purchaseNextSequence: purchaseNextSequence,
+            defaultIncludeBankDetailsInvoice: defaultIncludeBankDetailsInvoice,
+            defaultIncludeBankDetailsEstimate:
+                defaultIncludeBankDetailsEstimate,
             updatedAt: updatedAt,
           ),
           withReferenceMapper: (p0) => p0
@@ -6296,6 +7502,7 @@ typedef $$DocumentsTableCreateCompanionBuilder = DocumentsCompanion Function({
   Value<String?> amountInWords,
   Value<String> status,
   Value<String?> notes,
+  Value<bool> includeBankDetails,
   Value<DateTime> createdAt,
   Value<DateTime> updatedAt,
 });
@@ -6320,6 +7527,7 @@ typedef $$DocumentsTableUpdateCompanionBuilder = DocumentsCompanion Function({
   Value<String?> amountInWords,
   Value<String> status,
   Value<String?> notes,
+  Value<bool> includeBankDetails,
   Value<DateTime> createdAt,
   Value<DateTime> updatedAt,
 });
@@ -6396,6 +7604,10 @@ class $$DocumentsTableFilterComposer
 
   ColumnFilters<String> get notes => $composableBuilder(
       column: $table.notes, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get includeBankDetails => $composableBuilder(
+      column: $table.includeBankDetails,
+      builder: (column) => ColumnFilters(column));
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
       column: $table.createdAt, builder: (column) => ColumnFilters(column));
@@ -6482,6 +7694,10 @@ class $$DocumentsTableOrderingComposer
   ColumnOrderings<String> get notes => $composableBuilder(
       column: $table.notes, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<bool> get includeBankDetails => $composableBuilder(
+      column: $table.includeBankDetails,
+      builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
       column: $table.createdAt, builder: (column) => ColumnOrderings(column));
 
@@ -6558,6 +7774,9 @@ class $$DocumentsTableAnnotationComposer
   GeneratedColumn<String> get notes =>
       $composableBuilder(column: $table.notes, builder: (column) => column);
 
+  GeneratedColumn<bool> get includeBankDetails => $composableBuilder(
+      column: $table.includeBankDetails, builder: (column) => column);
+
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
 
@@ -6608,6 +7827,7 @@ class $$DocumentsTableTableManager extends RootTableManager<
             Value<String?> amountInWords = const Value.absent(),
             Value<String> status = const Value.absent(),
             Value<String?> notes = const Value.absent(),
+            Value<bool> includeBankDetails = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<DateTime> updatedAt = const Value.absent(),
           }) =>
@@ -6632,6 +7852,7 @@ class $$DocumentsTableTableManager extends RootTableManager<
             amountInWords: amountInWords,
             status: status,
             notes: notes,
+            includeBankDetails: includeBankDetails,
             createdAt: createdAt,
             updatedAt: updatedAt,
           ),
@@ -6656,6 +7877,7 @@ class $$DocumentsTableTableManager extends RootTableManager<
             Value<String?> amountInWords = const Value.absent(),
             Value<String> status = const Value.absent(),
             Value<String?> notes = const Value.absent(),
+            Value<bool> includeBankDetails = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<DateTime> updatedAt = const Value.absent(),
           }) =>
@@ -6680,6 +7902,7 @@ class $$DocumentsTableTableManager extends RootTableManager<
             amountInWords: amountInWords,
             status: status,
             notes: notes,
+            includeBankDetails: includeBankDetails,
             createdAt: createdAt,
             updatedAt: updatedAt,
           ),
@@ -6707,6 +7930,7 @@ typedef $$DocumentLineItemsTableCreateCompanionBuilder
   Value<int> id,
   required int documentId,
   Value<int?> itemId,
+  Value<String> itemType,
   required String itemName,
   Value<String?> hsnSacCode,
   Value<double> quantity,
@@ -6725,6 +7949,7 @@ typedef $$DocumentLineItemsTableUpdateCompanionBuilder
   Value<int> id,
   Value<int> documentId,
   Value<int?> itemId,
+  Value<String> itemType,
   Value<String> itemName,
   Value<String?> hsnSacCode,
   Value<double> quantity,
@@ -6756,6 +7981,9 @@ class $$DocumentLineItemsTableFilterComposer
 
   ColumnFilters<int> get itemId => $composableBuilder(
       column: $table.itemId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get itemType => $composableBuilder(
+      column: $table.itemType, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<String> get itemName => $composableBuilder(
       column: $table.itemName, builder: (column) => ColumnFilters(column));
@@ -6813,6 +8041,9 @@ class $$DocumentLineItemsTableOrderingComposer
 
   ColumnOrderings<int> get itemId => $composableBuilder(
       column: $table.itemId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get itemType => $composableBuilder(
+      column: $table.itemType, builder: (column) => ColumnOrderings(column));
 
   ColumnOrderings<String> get itemName => $composableBuilder(
       column: $table.itemName, builder: (column) => ColumnOrderings(column));
@@ -6872,6 +8103,9 @@ class $$DocumentLineItemsTableAnnotationComposer
 
   GeneratedColumn<int> get itemId =>
       $composableBuilder(column: $table.itemId, builder: (column) => column);
+
+  GeneratedColumn<String> get itemType =>
+      $composableBuilder(column: $table.itemType, builder: (column) => column);
 
   GeneratedColumn<String> get itemName =>
       $composableBuilder(column: $table.itemName, builder: (column) => column);
@@ -6941,6 +8175,7 @@ class $$DocumentLineItemsTableTableManager extends RootTableManager<
             Value<int> id = const Value.absent(),
             Value<int> documentId = const Value.absent(),
             Value<int?> itemId = const Value.absent(),
+            Value<String> itemType = const Value.absent(),
             Value<String> itemName = const Value.absent(),
             Value<String?> hsnSacCode = const Value.absent(),
             Value<double> quantity = const Value.absent(),
@@ -6958,6 +8193,7 @@ class $$DocumentLineItemsTableTableManager extends RootTableManager<
             id: id,
             documentId: documentId,
             itemId: itemId,
+            itemType: itemType,
             itemName: itemName,
             hsnSacCode: hsnSacCode,
             quantity: quantity,
@@ -6975,6 +8211,7 @@ class $$DocumentLineItemsTableTableManager extends RootTableManager<
             Value<int> id = const Value.absent(),
             required int documentId,
             Value<int?> itemId = const Value.absent(),
+            Value<String> itemType = const Value.absent(),
             required String itemName,
             Value<String?> hsnSacCode = const Value.absent(),
             Value<double> quantity = const Value.absent(),
@@ -6992,6 +8229,7 @@ class $$DocumentLineItemsTableTableManager extends RootTableManager<
             id: id,
             documentId: documentId,
             itemId: itemId,
+            itemType: itemType,
             itemName: itemName,
             hsnSacCode: hsnSacCode,
             quantity: quantity,

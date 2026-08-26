@@ -7,6 +7,8 @@ import '../tables/purchase_bills_table.dart';
 import '../tables/purchase_line_items_table.dart';
 import '../tables/purchase_payments_table.dart';
 
+import '../../services/document_numbering_service.dart';
+
 part 'purchase_bills_dao.g.dart';
 
 class PurchaseBillWithLines {
@@ -37,6 +39,67 @@ class SalesVsPurchasesSummary {
 class PurchaseBillsDao extends DatabaseAccessor<AppDatabase>
     with _$PurchaseBillsDaoMixin {
   PurchaseBillsDao(super.db);
+
+  // ── Document Numbering ────────────────────────────────────────────────────────
+
+  Future<String> nextPurchaseBillNumber({DateTime? date}) async {
+    final profile = await db.businessProfileDao.getProfile();
+    final count = await (selectOnly(purchaseBills)
+          ..addColumns([purchaseBills.id.count()]))
+        .map((r) => r.read(purchaseBills.id.count()))
+        .getSingle();
+    final docCount = (count ?? 0) + 1;
+
+    final prefix = profile?.purchaseNumberPrefix ?? 'PUR';
+    final format = profile?.purchaseNumberFormat ?? '{PREFIX}-{SEQ}';
+    final padding = profile?.purchaseNumberPadding ?? 4;
+    final separator = profile?.purchaseNumberSeparator ?? '-';
+    final seq = profile?.purchaseNextSequence ?? 1;
+    final nextSeq = seq > docCount ? seq : docCount;
+
+    return DocumentNumberingService.formatDocumentNumber(
+      template: format,
+      prefix: prefix,
+      sequence: nextSeq,
+      padding: padding,
+      separator: separator,
+      date: date,
+    );
+  }
+
+  Future<String> consumeNextPurchaseBillNumber({DateTime? date}) async {
+    final profile = await db.businessProfileDao.getProfile();
+    final count = await (selectOnly(purchaseBills)
+          ..addColumns([purchaseBills.id.count()]))
+        .map((r) => r.read(purchaseBills.id.count()))
+        .getSingle();
+    final docCount = (count ?? 0) + 1;
+
+    final prefix = profile?.purchaseNumberPrefix ?? 'PUR';
+    final format = profile?.purchaseNumberFormat ?? '{PREFIX}-{SEQ}';
+    final padding = profile?.purchaseNumberPadding ?? 4;
+    final separator = profile?.purchaseNumberSeparator ?? '-';
+    final seq = profile?.purchaseNextSequence ?? 1;
+    final nextSeq = seq > docCount ? seq : docCount;
+
+    final billNum = DocumentNumberingService.formatDocumentNumber(
+      template: format,
+      prefix: prefix,
+      sequence: nextSeq,
+      padding: padding,
+      separator: separator,
+      date: date,
+    );
+
+    await db.businessProfileDao.upsertProfile(
+      BusinessProfileCompanion(
+        purchaseNextSequence: Value(nextSeq + 1),
+        updatedAt: Value(DateTime.now()),
+      ),
+    );
+
+    return billNum;
+  }
 
   // ── Read Purchase Bills ──────────────────────────────────────────────────────
 

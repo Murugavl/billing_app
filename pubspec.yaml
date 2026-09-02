@@ -39,6 +39,11 @@ dependencies:
   # Image picking (for business logo, product images)
   image_picker: ^1.1.2
 
+  # Contact picker (Pick from Contacts on Add Customer screen)
+  flutter_contacts: ^1.1.9+2
+  # Runtime permission status check (non-prompting check for READ_CONTACTS)
+  permission_handler: ^11.3.1
+
   # Google Fonts (Inter for professional typography)
   google_fonts: ^8.2.1
   shared_preferences: ^2.2.3
